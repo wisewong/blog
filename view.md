@@ -260,7 +260,14 @@
    1. 线程安全
    2. 线程池大小，名称，阻塞队列，拒绝策略
 
+- CAS 有什么缺陷，如何解决
+   1. ABA问题，添加版本号解决 参见AtomicStampedReference
+   2. 自旋循环增加CPU空转开销
 
+- synchronized 和 lock
+   1. synchronized是JVM级别的，lock是代码级别的实现
+   2. lock粒度更细，支持读写锁分离和公平锁/非公平锁
+   3. lock使用了CAS，必须再finally手动释放锁
 
 ### JVM相关
 - 运行时数据区
@@ -273,6 +280,9 @@
 # 框架相关
 
 ## Spring
+
+
+
 ## Mybatis
 ## Dubbo
 ## 消息队列

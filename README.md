@@ -1,4 +1,2 @@
-# wisewong.github.io
-Personal Website
-
-## 一个个人网站
+# 个人网站
+Please --> [八行书](https://wisewong.github.io/)

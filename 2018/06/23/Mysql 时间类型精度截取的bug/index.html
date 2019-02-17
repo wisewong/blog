@@ -96,18 +96,19 @@
 
 
 
-  <meta name="description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的server">
+  <meta name="description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的ser">
+<meta name="keywords" content="Mysql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql 时间类型精度截取的bug">
 <meta property="og:url" content="http://yoursite.com/2018/06/23/Mysql 时间类型精度截取的bug/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的server">
+<meta property="og:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的ser">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20180623180117338?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.990Z">
+<meta property="og:updated_time" content="2019-02-17T15:44:04.681Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql 时间类型精度截取的bug">
-<meta name="twitter:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的server">
+<meta name="twitter:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。  首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。  当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断  db的ser">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180623180117338?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 
 
@@ -401,11 +402,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 23:44:04" itemprop="dateModified" datetime="2019-02-17T23:44:04+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -435,7 +454,10 @@
       
 
       
-        <p>mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 </p>
+        <meta name="referrer" content="no-referrer">
+
+
+<p>mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 </p>
 <p>首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。 </p>
 <p>当mysql-connector-java版本&lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&gt;5.1.22后，秒以下的值将不会截断 </p>
 <p>db的server端会对超出精度位数的数据进行四舍五入!! </p>
@@ -617,6 +639,12 @@ select * from time_test;
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
+          
+        </div>
+      
 
       
       
@@ -768,19 +796,7 @@ select * from time_test;
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -877,7 +893,17 @@ select * from time_test;
                     
                       
                     
-                    <span class="site-state-item-count">42</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -909,7 +935,7 @@ select * from time_test;
                   
                     
                   
-                  <a href="mailto:yourname@gmail.com" title="E-Mail &rarr; mailto:yourname@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  <a href="mailto:z941030@163.com" title="E-Mail &rarr; mailto:z941030@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                 </span>
               
                 <span class="links-of-author-item">

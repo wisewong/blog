@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>LeetCode-53-Maximum Subarray | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Find the contiguous subarray within an array (containing at least one number) which has the largest sum. 
+For example, given the array  [−2,1,−3,4,−1,2,1,−5,4] ,the contiguous subarray  [4,−1,2,1] has">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="LeetCode-53-Maximum Subarray | Sage Wong">
+    <meta name="twitter:description" content="Find the contiguous subarray within an array (containing at least one number) which has the largest sum. 
+For example, given the array  [−2,1,−3,4,−1,2,1,−5,4] ,the contiguous subarray  [4,−1,2,1] has">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="LeetCode-53-Maximum Subarray | Sage Wong">
+    <meta property="og:description" content="Find the contiguous subarray within an array (containing at least one number) which has the largest sum. 
+For example, given the array  [−2,1,−3,4,−1,2,1,−5,4] ,the contiguous subarray  [4,−1,2,1] has">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/06/22/LeetCode-53-Maximum Subarray/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-06-22T15:29:22.000Z" class="post-list__meta--date date">2016-06-22</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">LeetCode-53-Maximum Subarray</h1>
+  </header>
+
+  <section class="post">
+    <p>Find the contiguous subarray within an array (containing at least one number) which has the largest sum. </p>
+<p>For example, given the array  <code>[−2,1,−3,4,−1,2,1,−5,4]</code> ,<br>the contiguous subarray  <code>[4,−1,2,1]</code> has the largest sum =  <code>6</code> . </p>
+<p>题意：就是求最大字数组和。 </p>
+<p>思路： </p>
+<p>DP问题，O(n)内可破 </p>
+<p>对于位置arr[0]~arr[i]，最大字数组和 </p>
+<p>arr[0]                  i==0 </p>
+<p>maxSum[i]= </p>
+<p>max{ maxSum[i-1]+  arr[i]  , arr[i] }     0&lt;i&lt;arr.length </p>
+<p>具体来说该题没必要采用maxSum数组，用一个变量记住最大字数组和即可。 </p>
+<p>Java代码如下： </p>
+<pre><code>public class Solution {
+    public int maxSubArray(int[] nums) {
+        int max = nums[0],maxEndingHere = nums[0];
+        for (int i = 1; i &lt; nums.length; i++) {
+            maxEndingHere = Math.max(maxEndingHere+nums[i],nums[i]);
+            max = Math.max(maxEndingHere,max);
+        }
+        return max;
+    }
+}
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/06/23/LeetCode-62-Unique Paths/" title="LeetCode-62-Unique Paths">LeetCode-62-Unique Paths</a></h2>
+                <p class="excerpt">
+                
+                A robot is located at the top-left corner of a  m  x  n  grid (marked ‘Start’ in the diagram below). 
+The robot can only move either down or right at 
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-06-22T23:50:46.000Z" class="post-list__meta--date date">2016-06-23</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/06/23/LeetCode-62-Unique Paths/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/06/22/LeetCode-15-3Sum/" title="LeetCode-15-3Sum">LeetCode-15-3Sum</a></h2>
+                <p class="excerpt">
+                
+                Given an array  S  of  n  integers, are there elements  a  ,  b  ,  c  in  S  such that  a  +  b  +  c  = 0? Find all unique triplets in the array whi
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-06-22T14:47:35.000Z" class="post-list__meta--date date">2016-06-22</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/06/22/LeetCode-15-3Sum/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

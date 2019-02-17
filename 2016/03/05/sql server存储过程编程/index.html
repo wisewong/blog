@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>sql server存储过程编程 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="存储过程  是一组完成特定功能的SQL 语句集合，经编译后存储在数据库中。 
+存储过程作为一个单元进行处理并以一个名称来标识。它能向用户返回数据、向数据库表中写入或修改数据等操作。 
+用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。 
+存储过程的作用 
+执行速度快; 
+减少网络流量; 
+作为一种安全机制。通过设置用户只可能使用存储过程访问数据，限制用户不能直接操作数据库中的">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="sql server存储过程编程 | Sage Wong">
+    <meta name="twitter:description" content="存储过程  是一组完成特定功能的SQL 语句集合，经编译后存储在数据库中。 
+存储过程作为一个单元进行处理并以一个名称来标识。它能向用户返回数据、向数据库表中写入或修改数据等操作。 
+用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。 
+存储过程的作用 
+执行速度快; 
+减少网络流量; 
+作为一种安全机制。通过设置用户只可能使用存储过程访问数据，限制用户不能直接操作数据库中的">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="sql server存储过程编程 | Sage Wong">
+    <meta property="og:description" content="存储过程  是一组完成特定功能的SQL 语句集合，经编译后存储在数据库中。 
+存储过程作为一个单元进行处理并以一个名称来标识。它能向用户返回数据、向数据库表中写入或修改数据等操作。 
+用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。 
+存储过程的作用 
+执行速度快; 
+减少网络流量; 
+作为一种安全机制。通过设置用户只可能使用存储过程访问数据，限制用户不能直接操作数据库中的">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/03/05/sql server存储过程编程/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-03-05T03:36:50.000Z" class="post-list__meta--date date">2016-03-05</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">sql server存储过程编程</h1>
+  </header>
+
+  <section class="post">
+    <p>存储过程  是一组完成特定功能的SQL 语句集合，经编译后存储在数据库中。 </p>
+<p>存储过程作为一个单元进行处理并以一个名称来标识。它能向用户返回数据、向数据库表中写入或修改数据等操作。 </p>
+<p>用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。 </p>
+<p>存储过程的作用 </p>
+<p>执行速度快; </p>
+<p>减少网络流量; </p>
+<p>作为一种安全机制。通过设置用户只可能使用存储过程访问数据，限制用户不能直接操作数据库中的敏感数据，以保障数据的安全性; </p>
+<p>屏蔽T-SQL命令，提供交互查询的客户接口，增加数据库应用的方便性。 </p>
+<p>存储过程和函数的异同 </p>
+<p>本质上没区别。 </p>
+<p>不同： </p>
+<p>函数只能返回一个变量的限制。而存储过程可以返回多个。 </p>
+<p>函数是可以嵌入在SQL中使用的,可以在select中调用，而存储过程不行。 </p>
+<p>存储过程的种类 </p>
+<p>1. 系统存储过程 </p>
+<p>系统存储过程由系统提供，在安装SQL Server 2008 后自动装入，定义在系统数据master中，其存储过程名前缀是sp_。 </p>
+<ol start="2">
+<li>扩展存储过程 </li>
+</ol>
+<p>扩展存储过程用windows动态链接库实现，任何能够创建动态链接库的编程工具都可以用于创建扩展存储过程的dll，这就使得扩展存储过程的功能不收SQL语句的限制。其存储过程名前缀是xp_。 </p>
+<p>3.用户自定义存储过程 </p>
+<p>用户自定义存储过程是在用户数据库中创建的存储过程，用以完成特定的数据库操作任务，也称为用户存储过程。本地存储过程通常只能应用于创建它的数据库，并且存储过程名不能使用sp_前缀，以免系统误解。 </p>
+<p>永久存储过程 </p>
+<p>临时存储过程 </p>
+<p>前缀“#”:局部临时存储过程 </p>
+<p>前缀“##”：全局临时存储过程 </p>
+<p>例如： </p>
+<pre><code>SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*上两句是 SQL-92 设置语句，使 SQL Server 2000/2005/2008 遵从 SQL-92 规则。 
+--当 SET QUOTED_IDENTIFIER 为 ON 时，标识符可以由双引号分隔，
+而文字必须由单引号分隔。当 SET QUOTED_IDENTIFIER 为 OFF 时，
+标识符不可加引号，且必须符合所有 Transact-SQL 标识符规则。 
+SQL-92 标准要求在对空值进行等于 (=) 或不等于 (&lt;&gt;) 比较时取值为 FALSE。
+当 SET ANSI_NULLS 为 ON 时，即使 column_name 中包含空值，
+使用 WHERE column_name = NULL 的 SELECT 语句仍返回零行。
+即使 column_name 中包含非空值，使用 WHERE column_name &lt;&gt; NULL 的 
+SELECT 语句仍会返回零行。 
+--当 SET ANSI_NULLS 为 OFF 时，等于 (=) 和不等于 (&lt;&gt;) 比较运算符不遵从 
+SQL-92 标准。使用 WHERE column_name = NULL 的 SELECT 语句返回 column_name
+中包含空值的行。使用 WHERE column_name &lt;&gt; NULL 的 SELECT 语句返回列中包含非空值的行。此外，使用 WHERE column_name &lt;&gt; XYZ_value 的 SELECT 语句返回所有不为 XYZ_value 也不为 NULL 的行。 
+*/
+-----------------------
+
+SET ANSI_NULLS ON    --用于和NULL的比较，如：null=null在off时会返回true,在on时为false   
+SET QUOTED_IDENTIFIER ON  --
+go
+
+use test
+go
+-----------------------------------------------------------------
+
+/*系统存储过程*/
+
+EXEC sp_who   --显示当前用户、会话和进程的信息
+EXEC sp_who sa   
+
+EXEC sp_helpdb  test    --显示指定数据库的信息 
+
+EXEC sp_monitor   --显示sql server的统计信息,
+                  --比如上次运行sp_monitor的时间，
+                  --当前运行sp_monitor的时间，cpu处理sql server工作所用的秒数等信息
+
+EXEC sp_help   --显示数据库对象信息
+EXEC sp_help student  --显示存储过程的参数及其数据类型
+
+exec sp_helptext student   --显示存储过程的定义
+
+exec sp_depends sc  --显示和存储过程相关的数据库对象 
+
+exec sp_stored_procedures  --显示当前数据库中的存储过程列表
+go
+</code></pre><p>创建存储过程 </p>
+<p>CREATE PROC[EDURE ] procedure_name </p>
+<p>[ {@parameter data_type} [ = default] </p>
+<p>[OUTPUT] ] [,…n] </p>
+<p>[with {recompile|encryption|recompile,encryption}] [FOR REPLICATION] </p>
+<p>AS </p>
+<p>sql_statement […n ] </p>
+<p>其中： </p>
+<p>@parameter  ：过程中的参数。在该语句中可以声明一个或多个参数。用户必须在执行过程时提供每个所声明参数的值，使用@符号作为第一个字符来指定参数名称。 </p>
+<p>data_type  ：参数的数据类型。 </p>
+<p>Default  ：参数的默认值。 </p>
+<p>OUTPUT  ：表明参数是返回参数。 </p>
+<p>Recompile  : 该过程在运行时编译 </p>
+<p>例如： </p>
+<pre><code>/*普通存储过程*/
+
+/*例: 创建存储过程maxgrade，输出所有学生的最高分：*/
+create procedure maxgrade
+as 
+begin
+  set nocount on  -- 使返回的结果中不包含受Transact-SQL语句影响的行数的信息。   
+  select max(grade) as &apos;最高分&apos; from sc
+end
+go
+
+select * from sc
+exec  maxgrade
+go
+
+-- drop proc maxgrade
+-----------------------------------------------------------------------------------
+
+use test
+
+/*临时存储过程*/
+/*创建临时存储过程#s_g，检索所有学生的成绩记录，包括学号、姓名、所选课程号和成绩：*/
+
+create procedure #s_g
+as
+    select student.sno,student.sname,sc.cno,sc.grade
+    from student,sc
+    where student.sno=sc.sno 
+    order by student.sno
+go
+
+exec #s_g        --执行该存储过程：
+go
+----------------------------------------------------------------------------------------------
+
+/*加密存储过程*/
+/*创建加密存储过程s_a，查询学生的平均年龄*/
+
+create procedure s_a
+with encryption
+as
+    select avg(sage) from student
+
+go
+
+exec s_a       
+exec sp_helptext s_a
+exec sp_helptext maxgrade
+go
+</code></pre><p>执行存储过程 </p>
+<p>执行存储过程使用EXECUTE语句，其格式为： </p>
+<p>[ [ EXEC [ UTE ] ] </p>
+<p>{ [ @return_status =] </p>
+<p>{ procedure_name| @procedure_name_var} </p>
+<p>[ [ @parameter = ] </p>
+<p>{ value|@variable[OUTPUT] | [DEFAULT]}] </p>
+<p>[ , …n ] </p>
+<p>[with recompile]} </p>
+<p>各个参数的含义： </p>
+<p>@return_status  保存存储过程的返回状态 </p>
+<p>procedure_name  调用的存储过程的名称 </p>
+<p>@parameter  过程参数 </p>
+<p>Value  过程参数的值 </p>
+<p>@variable  用来保存参数或返回参数的变量 </p>
+<p>OUTPUT  指定存储过程必须返回的一个参数 </p>
+<p>DEFAULT  默认参数值 </p>
+<p>存储过程的参数 </p>
+<p>1. 使用参数 </p>
+<p>带参数的存储过程的一般格式如下： </p>
+<p>CREATE PROCEDURE 存储过程名( 参数列表 ) </p>
+<p>AS SQL语句 </p>
+<p>例如： </p>
+<pre><code>/*带参数的存储过程*/
+/*创建存储过程insert_sc向表中插入一条记录*/
+
+CREATE PROCEDURE insert_sc(@sno int,@cno int,@grade int)
+AS 
+INSERT INTO sc(sno,cno,grade) VALUES (@sno,@cno,@grade)
+GO
+
+
+
+declare @a int   --保存存储过程返回的状态；
+exec @a=insert_sc 1,3,100  --带参数的存储过程的执行方式一
+select @a
+select * from sc
+
+--或
+exec insert_sc @sno=2,@cno=3,@grade=99   --带参数的存储过程的执行方式二
+select * from sc
+
+drop proc insert_sc
+go
+</code></pre><p>2. 使用默认参数 </p>
+<p>在设计存储过程时，可以为参数提供一个默认值，默认值必须为常量或者NULL。其一般格式如下： </p>
+<p>CREATE PROCEDURE 存储过程名( 参数1=默认值1, 参数2=默认值2,… ) </p>
+<p>AS SQL语句 </p>
+<p>在调用存储过程时，如果不指定对应的实参值，则自动用对应的默认值代替。 </p>
+<p>例如： </p>
+<pre><code>/*在存储过程中使用默认值*/
+
+create proc select_student(@sno int=1)
+as 
+select student.sno,student.sname,sc.cno,sc.grade
+    from student,sc
+    where student.sno=@sno and student.sno=sc.sno
+go
+
+exec select_student   --不指定参数调用，则使用默认参数值1
+exec select_student 2  --指定参数调用
+
+drop proc select_student
+go
+</code></pre><p>3. 使用返回参数 </p>
+<p>在创建存储过程时，可以定义返回参数。在执行存储过程时，可以将结果给返回参数。返回参数用OUTPUT进行说明。 </p>
+<p>例如： </p>
+<pre><code>/*例:创建一个存储过程average，它返回两个参数@st_name和@st_avg，
+分别代表了姓名和平均成绩，即查询指定学号的学生的姓名和平均成绩*/
+
+create procedure average
+    (@st_sno int,     
+     @st_sname char(10) output,
+     @st_avg float output)
+as 
+    select @st_sname=student.sname, @st_avg=avg(sc.grade)
+    from student,sc
+    where student.sno=sc.sno and student.sno=@st_sno
+    group by student.sname
+go
+
+--执行以上存储过程average，查询学号为“1”的学生姓名和平均分：
+declare @st_sname char(10), @st_avg float
+exec average 2,@st_sname output, @st_avg output
+select @st_sname as &apos;姓名&apos;, @st_avg  as &apos;平均分&apos; --或select &apos;平均分&apos;=@st_avg
+go
+
+--drop proc average
+go
+</code></pre><p>4. 存储过程的返回值 </p>
+<p>存储过程在执行后都会返回一个整型值（称为“返回代码”），指示存储过程的执行状态。 </p>
+<p>如果执行成功，返回0；否则返回-1～-99之间的数值（例如-1表示找不到对象，-2表示数据类型错误，-5表示语法错误等）。 </p>
+<p>也可以使用RETURN语句指定一个返回值。 </p>
+<p>例如： </p>
+<pre><code>/*存储过程在执行后都会返回一个整型值，如成功执行返回0；如失败则返回-1至-99*/
+/*也可以使用return语句来指定一个返回值*/
+
+
+/*例: 创建存储过程maxgrade，输出所有学生的最高分：*/
+create procedure maxgrade1
+as 
+begin
+  set nocount on  -- 使返回的结果中不包含受Transact-SQL语句影响的行数的信息。   
+  select max(grade) as &apos;最高分&apos; from sc
+end
+go
+
+
+declare @ret_int int   --保存返回值
+exec @ret_int=maxgrade1  --执行该存储过程
+print @ret_int
+
+drop proc maxgrade1
+</code></pre><p>在调用存储过程时的两种传递参数的方式： </p>
+<p>方式一： </p>
+<p>EXEC 存储过程名 实参列表 </p>
+<p>方式二： </p>
+<p>EXEC 存储过程名 参数1=值1,参数2=值2,… </p>
+<p>例如： </p>
+<pre><code>/*例: 创建存储过程test_ret根据输入的参数来判断返回值：*/
+create proc test_ret(@input_int int=0)
+as 
+begin
+    if @input_int=0
+        return 0   --输入的参数等于0，则返回0
+    if @input_int&gt;0
+        return 1000    --输入的参数大于0，则返回1000
+    if @input_int&lt;0
+        return -1000    --输入的参数大于0，则返回-1000
+end
+
+declare @ret_int int   --保存返回值
+exec @ret_int=test_ret 1   --执行该存储过程
+print &apos;返回值&apos;
+print &apos;--------&apos;
+print @ret_int
+
+
+declare @ret_int int   --保存返回值
+exec @ret_int=test_ret 0
+print @ret_int
+
+
+declare @ret_int int   --保存返回值
+exec @ret_int=test_ret -1
+print @ret_int
+
+drop proc test_ret
+</code></pre><p>查看、修改和删除存储过程 </p>
+<p>使用SQL Server管理控制器查看或修改存储过程 </p>
+<p>使用sp_helptext存储过程来查看存储过程的定义信息 </p>
+<p>使用SQL Server管理控制器删除存储过程 </p>
+<p>使用DROP PROCEDURE删除存储过程 </p>
+<p>例如： </p>
+<pre><code>/*修改存储过程*/
+/*修改存储过程s_a，查询学生的最大年龄，不加密了！*/
+
+alter procedure s_a
+as
+    select max(sage) from student
+go
+
+exec s_a       
+exec sp_helptext s_a
+go
+----------------------------------------------------------------------------------------------
+
+/*删除存储过程*/
+
+drop procedure s_a
+
+
+
+
+
+/*例:编写一个程序，先创建一个存储过程studproc，输出95031班的所有学生，
+利用sysobjects和syscommnts两个系统表输出该存储过程的id和text列。
+然后利用ALTER PROCEDURE语句修改该存储过程，将其改为加密方式，最后在输出该存储过程的
+id和text列。*/
+
+use school
+go
+
+create procedure studproc
+as 
+    select * from student where sclass=&apos;95031&apos;
+go
+
+--通过以下语句输出studproc存储过程的id和text列
+select sysobjects.id,syscomments.text
+    from sysobjects,syscomments
+    where sysobjects.name=&apos;studproc&apos; and sysobjects.type=&apos;p&apos; and sysobjects.id=syscomments.id
+
+--修改该存储过程：
+alter procedure studproc
+with encryption 
+as 
+    select * from student where sclass=&apos;95031&apos;
+go
+
+--再通过以下语句输出studproc存储过程的id和text列
+select sysobjects.id,syscomments.text
+    from sysobjects,syscomments
+    where sysobjects.name=&apos;studproc&apos; and sysobjects.type=&apos;p&apos; and sysobjects.id=syscomments.id
+
+---------------------------------
+
+/*例: 更名用户存储过程studproc1为studproc*/
+
+use school
+go
+
+exec sp_rename studproc,studproc1
+
+---------------------------------
+
+/*使用DROP PROCEDURE语句删除用户存储过程stud_degree和stud1_degree。*/
+
+USE school
+GO
+DROP PROCEDURE stud_degree,stud1_degree
+GO
+</code></pre><p>存储过程示例： </p>
+<pre><code>/*示例：
+
+下面的存储过程从四个表的联接中返回所有作者（提供了姓名）、
+出版的书籍以及出版社。该存储过程不使用任何参数。*/
+
+CREATE PROCEDURE au_info_all
+AS
+SELECT au_lname, au_fname, title, pub_name
+   FROM authors a INNER JOIN titleauthor ta
+      ON a.au_id = ta.au_id INNER JOIN titles t
+      ON t.title_id = ta.title_id INNER JOIN publishers p
+      ON t.pub_id = p.pub_id
+GO
+/*该存储过程可以通过以下方法执行：*/
+
+EXECUTE au_info_all
+-- Or
+EXEC au_info_all
+
+/*如果该过程是批处理中的第一条语句，则可使用：*/
+
+au_info_all
+
+---------------------------------
+/*下面的存储过程从四个表的联接中只返回指定的作者（提供了姓名）、出版的书籍以及出版社。
+该存储过程接受与传递的参数精确匹配的值。*/
+
+USE pubs
+IF EXISTS (SELECT name FROM sysobjects 
+         WHERE name = &apos;au_info&apos; AND type = &apos;P&apos;)
+   DROP PROCEDURE au_info
+GO
+USE pubs
+GO
+CREATE PROCEDURE au_info 
+   @lastname varchar(40), 
+   @firstname varchar(20) 
+AS 
+SELECT au_lname, au_fname, title, pub_name
+   FROM authors a INNER JOIN titleauthor ta
+      ON a.au_id = ta.au_id INNER JOIN titles t
+      ON t.title_id = ta.title_id INNER JOIN publishers p
+      ON t.pub_id = p.pub_id
+   WHERE  au_fname = @firstname
+      AND au_lname = @lastname
+GO
+
+/*au_info 存储过程可以通过以下方法执行：*/
+
+EXECUTE au_info &apos;Dull&apos;, &apos;Ann&apos;
+-- Or
+EXECUTE au_info @lastname = &apos;Dull&apos;, @firstname = &apos;Ann&apos;
+-- Or
+EXECUTE au_info @firstname = &apos;Ann&apos;, @lastname = &apos;Dull&apos;
+-- Or
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/13/OS存储器管理(二)/" title="OS存储器管理(二)">OS存储器管理(二)</a></h2>
+                <p class="excerpt">
+                
+                离散分配 
+分页(Paging)，  分段，段页式 
+一、分页 
+一个进程的物理地址可以是非连续的； 
+将物理内存分成固定大小的块，称为块（frame）； 
+将逻辑内存分为同样大小的块，称为页（page）； 
+将连续的页分配并存放到不连续的若干内存块中； 
+建立页表，记录每一页对应的存储块的块号，将
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-13T14:46:17.000Z" class="post-list__meta--date date">2016-03-13</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/03/13/OS存储器管理(二)/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/03/sql server 触发器/" title="sql server 触发器">sql server 触发器</a></h2>
+                <p class="excerpt">
+                
+                触发器  是一种特殊类型的存储过程。触发器可包含复杂的T-SQL语句。触发器不能通过名称被直接调用，也不允许设置参数。它是建立在触发事件上的。 
+触发器可以强制执行一定的业务规则，以保持数据完整性、检查数据有效性、实现数据库管理任务和一些附加功能。 
+触发器的分类：  DML、 DDL、 登录触发器
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-03T14:56:27.000Z" class="post-list__meta--date date">2016-03-03</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/03/03/sql server 触发器/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

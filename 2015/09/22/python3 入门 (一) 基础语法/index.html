@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>python3 入门 (一) 基础语法 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="1.编码问题 
+默认情况下，Python 3源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串。 也可以为源码文件指定不同的编码，在文件头部加上： 
+coding=gbk2.关键字 
+保留字即关键字，Python的标准库提供了一个keyword module，可以输出当前版本的所有关键字： 
+&amp;gt;&amp;gt;&amp;gt; import keyword
+&amp;gt;&amp;gt;&amp;gt; key">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="python3 入门 (一) 基础语法 | Sage Wong">
+    <meta name="twitter:description" content="1.编码问题 
+默认情况下，Python 3源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串。 也可以为源码文件指定不同的编码，在文件头部加上： 
+coding=gbk2.关键字 
+保留字即关键字，Python的标准库提供了一个keyword module，可以输出当前版本的所有关键字： 
+&amp;gt;&amp;gt;&amp;gt; import keyword
+&amp;gt;&amp;gt;&amp;gt; key">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="python3 入门 (一) 基础语法 | Sage Wong">
+    <meta property="og:description" content="1.编码问题 
+默认情况下，Python 3源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串。 也可以为源码文件指定不同的编码，在文件头部加上： 
+coding=gbk2.关键字 
+保留字即关键字，Python的标准库提供了一个keyword module，可以输出当前版本的所有关键字： 
+&amp;gt;&amp;gt;&amp;gt; import keyword
+&amp;gt;&amp;gt;&amp;gt; key">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/09/22/python3 入门 (一) 基础语法/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-09-22T10:59:37.000Z" class="post-list__meta--date date">2015-09-22</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">python3 入门 (一) 基础语法</h1>
+  </header>
+
+  <section class="post">
+    <p>1.编码问题 </p>
+<p>默认情况下，Python 3源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串。 也可以为源码文件指定不同的编码，在文件头部加上： </p>
+<h1 id="coding-gbk"><a href="#coding-gbk" class="headerlink" title="coding=gbk"></a>coding=gbk</h1><p>2.关键字 </p>
+<p>保留字即关键字，Python的标准库提供了一个keyword module，可以输出当前版本的所有关键字： </p>
+<pre><code>&gt;&gt;&gt; import keyword
+&gt;&gt;&gt; keyword.kwlist
+
+[&apos;False&apos;, &apos;None&apos;, &apos;True&apos;, &apos;and&apos;, &apos;as&apos;, &apos;assert&apos;, &apos;break&apos;, &apos;class&apos;, &apos;continue&apos;, &apos;def&apos;, &apos;del&apos;, &apos;elif&apos;, &apos;else&apos;, &apos;except&apos;, &apos;finally&apos;, &apos;for&apos;, &apos;from&apos;, &apos;global&apos;, &apos;if&apos;, &apos;import&apos;, &apos;in&apos;, &apos;is&apos;, &apos;lambda&apos;, &apos;nonlocal&apos;, &apos;not&apos;, &apos;or&apos;, &apos;pass&apos;, &apos;raise&apos;, &apos;return&apos;, &apos;try&apos;, &apos;while&apos;, &apos;with&apos;, &apos;yield&apos;]
+</code></pre><p>3.注释 </p>
+<p>Python中单行注释以#开头，多行注释用三个单引号（’’’）或者三个双引号（”””）将注释括起来。 </p>
+<p>4.变量 </p>
+<p>Python中的变量不需要声明。每个变量在使用前都必须赋值，变量赋值以后该变量才会被创建 </p>
+<p>Python 3支持int、float、bool、complex（复数）。 </p>
+<p>数值运算  ： </p>
+<ul>
+<li>Python可以同时为多个变量赋值，如a, b = 1, 2。 </li>
+<li>一个变量可以通过赋值指向不同类型的对象。 </li>
+<li>数值的除法（/）总是返回一个浮点数，要获取整数使用//操作符。 </li>
+<li>在混合计算时，Python会把整型转换成为浮点数。 </li>
+</ul>
+<p>字符串  ： </p>
+<p>python中的字符串str用单引号(‘ ‘)或双引号(“ “)括起来，同时使用反斜杠(\)转义特殊字符 </p>
+<p>字符串可以使用 + 运算符串连接在一起，或者用 * 运算符重复 </p>
+<pre><code>text = &apos;ice&apos;+&apos; cream&apos;
+print(text)
+
+text = &apos;ice cream &apos;*3
+print(text)
+</code></pre><p>使用三引号(‘’’…’’’或”””…”””)可以指定一个多行字符串 </p>
+<pre><code>text =&apos;&apos;&apos;啦啦啦
+喔呵呵呵呵
+呵呵你妹&apos;&apos;&apos;
+print(text)
+text = &apos;ice\
+        cream&apos;
+print(text)
+</code></pre><p>如果不想让反斜杠发生转义，可以在字符串前面添加一个 r 或 R  ,  表示原始字符串。 </p>
+<p>如 r”this is a line with \n” 则\n会显示，并不是换行 </p>
+<pre><code>text1 = r&apos;E:\notice&apos;
+text2 = &quot;let&apos;s go!&quot;
+text3 = r&apos;this is a line with \n&apos;
+print(text1)  # E:\notice
+print(text2)  # let&apos;s go!
+print(text3)  # this is a line with \n
+</code></pre><p>字符串有两种索引方式，第一种是从左往右，从0开始依次增加；第二种是从右往左，从-1开始依次减少。 </p>
+<p>python中没有单独的字符类型，一个字符就是长度为1的字符串 </p>
+<pre><code>text = &apos;ice cream&apos;
+print(len(text))
+
+print(text[0])  # i
+print(text[-9])  # i
+
+print(text[8])  # m
+print(text[-1])  # m
+</code></pre><p>python字符串不能被改变。向一个索引位置赋值会导致错误 </p>
+<pre><code>text = &apos;ice cream&apos;
+text[0] = &apos;t&apos;  # 报错
+print(text)
+</code></pre><p>还可以对字符串进行切片，获取一段子串。用冒号分隔两个索引，形式为变量[头下标:尾下标]。 </p>
+<p>截取的范围是前闭后开的，并且两个索引都可以省略： </p>
+<pre><code>text = &apos;ice cream&apos;
+print(text[:3])  # ice
+print(text[4:9])  # cream
+print(text[4:])  # cream
+</code></pre><p>5.三目运算符 </p>
+<pre><code>x = 100
+y = 200
+z = x if x &gt; y else y
+print(z)
+</code></pre><p>6.分支 </p>
+<p>if-else 语句与其他语言类似，不再赘述 </p>
+<p>if-elif-else 语句，相当于c或java语言中的if-else if-else ： </p>
+<pre><code>while True:
+    score = int(input(&quot;Please input your score : &quot;))
+    if 90 &lt;= score &lt;= 100:
+        print(&apos;A&apos;)
+    elif score &gt;= 80:
+        print(&apos;B&apos;)
+    elif score &gt;= 70:
+        print(&apos;C&apos;)
+    elif score &gt;= 60:
+        print(&apos;D&apos;)
+    else:
+        print(&apos;Your score is too low&apos;)
+</code></pre><p>7.循环 </p>
+<p>while循环  语句一般形式： </p>
+<p>while  判断条件  ： </p>
+<p>statements </p>
+<pre><code>import random
+
+print(&quot;hello world!\n&quot;)
+number = random.randint(1, 10)
+temp = input(&quot;Please input a number : &quot;)
+i = int(temp)
+
+while i != number:
+    print(&quot;wrong...&quot;)
+    if i &lt; number:
+        print(&quot;required a bigger number&quot;)
+    else:
+        print(&quot;required a smaller number&quot;)
+    temp = input(&quot;Please input a number : &quot;)
+    i = int(temp)
+
+print(&quot;yes...&quot;)
+</code></pre><p>for循环  的一般格式如下： </p>
+<p>for  <variable> in  <sequence> : </sequence></variable></p>
+<statements>
+
+<p>else: </p>
+<statements>
+
+
+<pre><code>languaegs = [&apos;C&apos;,&apos;c++&apos;,&apos;java&apos;,&apos;python&apos;]
+for language in languaegs:
+    print(language, len(language))
+</code></pre><p>循环语句可以有else子句 </p>
+<p>它在穷尽列表(以for循环)或条件变为假(以while循环)循环终止时被执行 </p>
+<p>但循环被break终止时不执行.如下查寻质数的循环例子 </p>
+<pre><code>for num in range(2, 10):
+    for x in range(2, num):
+        if num%x == 0:
+            print(num, &apos;equals&apos;, x, &apos;*&apos;, num//x)
+            break
+    else:
+        # 循环中没有找到元素
+        print(num, &apos;is a prime number&apos;)
+</code></pre><p>如果需要遍历数字序列，可以使用内置range()函数： </p>
+<pre><code># range()函数,含头不含尾
+# 0~4
+for i in range(5):
+    print(i)
+
+# 2~7
+for i in range(2, 8):
+    print(i)
+
+# 1~9 步长为3
+for i in range(1, 10, 3):
+    print(i)
+</code></pre><p>range()函数与for循环结合： </p>
+<pre><code>languaegs = [&apos;c&apos;,&apos;c++&apos;,&apos;java&apos;,&apos;python&apos;]
+for i in range(len(languaegs)):
+    print(i, &apos;:&apos;, languaegs[i])
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+</statements></statements>
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/09/23/python3 入门 (二) 列表的使用/" title="python3 入门 (二) 列表的使用">python3 入门 (二) 列表的使用</a></h2>
+                <p class="excerpt">
+                
+                列表  用于组织其它数值，即写在方括号之间、用逗号分隔开的数值列表。列表内的项目不必全是相同的类型。 
+列表的定义 
+student = [&amp;apos;Tom&amp;apos;, &amp;apos;Jack&amp;apos;, &amp;apos;Avril&amp;apos;]
+添加元素 
+
+将另一个列表直接赋值给该列表 
+使用”
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-09-23T05:31:38.000Z" class="post-list__meta--date date">2015-09-23</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/09/23/python3 入门 (二) 列表的使用/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/08/29/数据的分页处理/" title="数据的分页处理">数据的分页处理</a></h2>
+                <p class="excerpt">
+                
+                当页面中要显示的内容过多需要分多页显示、或是数据量过大内存吃不消时，需要分页处理。 
+原理：每次从数据库中取出一定量的数据，通过jsp页面显示 
+实现： 
+①写一个类封装分页的页面 
+②从数据库中取出一个页面的数据，将信息封装到分页页面对象中 
+③根据情况，将分页的页面对象设置到request对象、
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-08-29T04:19:25.000Z" class="post-list__meta--date date">2015-08-29</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/08/29/数据的分页处理/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

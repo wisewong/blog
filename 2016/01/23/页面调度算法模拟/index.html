@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>页面调度算法模拟 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="模拟实现的算法：FIFO，Optimal（最佳置换），LRU，Clock，改进的Clock算法 
+一、先入先出（FIFO）: 
+最简单的页面置换算法是先入先出（FIFO）法。这种算法的实质是，总是选择在主存中停留时间最长（即最老）的一页置换，即先进入内存的页，先退出内存。理由是：最早调入内存的页，其不再被使用的可能性比刚调入内存的可能性大。建立一个FIFO队列，收容所有在内存中的页。被置换页面总是">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="页面调度算法模拟 | Sage Wong">
+    <meta name="twitter:description" content="模拟实现的算法：FIFO，Optimal（最佳置换），LRU，Clock，改进的Clock算法 
+一、先入先出（FIFO）: 
+最简单的页面置换算法是先入先出（FIFO）法。这种算法的实质是，总是选择在主存中停留时间最长（即最老）的一页置换，即先进入内存的页，先退出内存。理由是：最早调入内存的页，其不再被使用的可能性比刚调入内存的可能性大。建立一个FIFO队列，收容所有在内存中的页。被置换页面总是">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="页面调度算法模拟 | Sage Wong">
+    <meta property="og:description" content="模拟实现的算法：FIFO，Optimal（最佳置换），LRU，Clock，改进的Clock算法 
+一、先入先出（FIFO）: 
+最简单的页面置换算法是先入先出（FIFO）法。这种算法的实质是，总是选择在主存中停留时间最长（即最老）的一页置换，即先进入内存的页，先退出内存。理由是：最早调入内存的页，其不再被使用的可能性比刚调入内存的可能性大。建立一个FIFO队列，收容所有在内存中的页。被置换页面总是">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/01/23/页面调度算法模拟/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-01-23T15:18:50.000Z" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">页面调度算法模拟</h1>
+  </header>
+
+  <section class="post">
+    <p>模拟实现的算法：FIFO，Optimal（最佳置换），LRU，Clock，改进的Clock算法 </p>
+<p>一、先入先出（FIFO）: </p>
+<p>最简单的页面置换算法是先入先出（FIFO）法。这种算法的实质是，总是选择在主存中停留时间最长（即最老）的一页置换，即先进入内存的页，先退出内存。理由是：最早调入内存的页，其不再被使用的可能性比刚调入内存的可能性大。建立一个FIFO队列，收容所有在内存中的页。被置换页面总是在队列头上进行。当一个页面被放入内存时，就把它插在队尾上。 </p>
+<p>这种算法只是在按线性顺序访问地址空间时才是理想的，否则效率不高。因为那些常被访问的页，往往在主存中也停留得最久，结果它们因变“老”而不得不被置换出去。 </p>
+<p>FIFO的另一个缺点是，它会产生Belady现象,即在增加存储块的情况下，反而使缺页中断率增加了。 </p>
+<p>模拟算法如下： </p>
+<pre><code>package paging;
+
+import java.util.LinkedList;
+
+/**
+ * FIFO(先进先出)页面置换算法
+ *
+ * @author wz
+ * @date 15/11/30.
+ */
+public class FIFO {
+    private LinkedList&lt;Integer&gt; memoryBlock;
+
+    void pageReplacement(int[] pageString, int memBlockNum) {
+        memoryBlock = new LinkedList&lt;&gt;();
+        int pageFaultCount = 0, pageReplaceCount = 0;
+        for (int i = 0; i &lt; pageString.length; i++) {
+            if (memoryBlock.contains(pageString[i]))
+                continue;
+            if (memoryBlock.size() &gt;= memBlockNum) {
+                memoryBlock.pollFirst();
+//                memoryBlock.set(0, pageString[i]);
+                pageReplaceCount++;
+            }
+            memoryBlock.add(pageString[i]);
+            pageFaultCount++;
+        }
+        System.out.println(&quot;缺页中断率: &quot;+pageFaultCount/(double)pageString.length);
+        System.out.println(&quot;页面置换次数: &quot;+pageReplaceCount);
+    }
+}
+</code></pre><p>二、Optimal（最佳置换） </p>
+<p>这是一种理想情况下的页面置换算法，但实际上是不可能实现的。该算法的基本思想是：发生缺页时，有些页面在内存中，其中有一页将很快被访问（也包含紧接着的下一条指令的那页），而其他页面则可能要到10、100或者1000条指令后才会被访问，每个页面都可以用在该页面首次被访问前所要执行的指令数进行标记。最佳页面置换算法只是简单地规定：标记最大的页应该被置换。这个算法唯一的一个问题就是它无法实现。当缺页发生时，操作系统无法知道各个页面下一次是在什么时候被访问。虽然这个算法不可能实现，但是最佳页面置换算法可以用于对可实现算法的性能进行衡量比较。 </p>
+<p>当请求页面不在内存中时，选择已在内存中的永不使用的或者是在最长时间内不再被访问的页面置换出去，将请求的页面换入。 </p>
+<p>模拟算法如下： </p>
+<pre><code>package paging;
+
+import java.util.LinkedList;
+
+/**
+ * Optimal(最佳)置换算法
+ *
+ * @author wz
+ * @date 15/11/30.
+ */
+public class Optimal {
+    private LinkedList&lt;Integer&gt; memoryBlock;
+
+    void pageReplacement(int[] pageString, int memBlockNum) {
+        memoryBlock = new LinkedList&lt;&gt;();
+        int maxDistIndex,willVisit,replaceIndex = -1;
+        int pageFaultCount = 0, pageReplaceCount = 0;
+        for (int i = 0; i &lt; pageString.length; i++) {
+            if (memoryBlock.contains(pageString[i]))
+                continue;
+            if (memoryBlock.size() &gt;= memBlockNum) {
+                // 查找最长时间内不被访问的页
+                maxDistIndex = -1;
+                for (int j = 0; j &lt; memBlockNum; j++) {
+                    willVisit = 0;
+                    for (int k = i+1; k &lt; pageString.length; k++) {
+                        if (memoryBlock.get(j) == pageString[k]) {
+                            if (k &gt; maxDistIndex){
+                                maxDistIndex = k;
+                                replaceIndex = j;
+                            }
+                            willVisit = 1;
+                            break;
+                        }
+                    }
+                    if (willVisit == 0){
+                        replaceIndex = j;
+                        break;
+                    }
+                }
+                memoryBlock.set(replaceIndex, pageString[i]);
+                pageReplaceCount++;
+            } else
+                memoryBlock.add(pageString[i]);
+            pageFaultCount++;
+        }
+        System.out.println(&quot;缺页中断率: &quot;+pageFaultCount/(double)pageString.length);
+        System.out.println(&quot;页面置换次数: &quot;+pageReplaceCount);
+    }
+}
+</code></pre><h3 id="三、最近最久未使用（LRU）算法"><a href="#三、最近最久未使用（LRU）算法" class="headerlink" title="三、最近最久未使用（LRU）算法"></a>三、最近最久未使用（LRU）算法</h3><p>当请求页面不在内存中时，将最近最久未用的页面置换出去。用栈来存储内存中的页面，将栈底页面换出，将请求页面换入压入栈顶。 </p>
+<p>LRU算法是与每个页面最后使用的时间有关的。当必须置换一个页面时，LRU算法选择过去一段时间里最久未被使用的页面。<br>LRU算法是经常采用的页面置换算法，并被认为是相当好的，但是存在如何实现它的问题。LRU算法需要实际硬件的支持。其问题是怎么确定最后使用时间的顺序，对此有两种可行的办法：<br>1.计数器。最简单的情况是使每个页表项对应一个使用时间字段，并给CPU增加一个逻辑时钟或计数器。每次存储访问，该时钟都加1。每当访问一个页面时，时钟寄存器的内容就被复制到相应页表项的使用时间字段中。这样我们就可以始终保留着每个页面最后访问的“时间”。在置换页面时，选择该时间值最小的页面。这样做，[1] 不仅要查页表，而且当页表改变时（因CPU调度）要 维护这个页表中的时间，还要考虑到时钟值溢出的问题。<br>2.栈。用一个栈保留页号。每当访问一个页面时，就把它从栈中取出放在栈顶上。这样一来，栈顶总是放有目前使用最多的页，而栈底放着目前最少使用的页。由于要从栈的中间移走一项，所以要用具有头尾指针的双向链连起来。在最坏的情况下，移走一页并把它放在栈顶上需要改动6个指针。每次修改都要有开销，但需要置换哪个页面却可直接得到，用不着查找，因为尾指针指向栈底，其中有被置换页。 </p>
+<p>此处使用栈，模拟算法如下： </p>
+<pre><code>package paging;
+
+import java.util.LinkedList;
+
+/**
+ * LRU(最近最久未使用)页面置换算法
+ *
+ * @author wz
+ * @date 15/11/30.
+ */
+public class LRU {
+    private LinkedList&lt;Integer&gt; memoryBlock;
+
+    void pageReplacement(int[] pageString, int memBlockNum) {
+        memoryBlock = new LinkedList&lt;&gt;();
+        int pageFaultCount = 0, pageReplaceCount = 0;
+        for (int i = 0; i &lt; pageString.length; i++) {
+            if (memoryBlock.contains(pageString[i])){
+                memoryBlock.addLast(memoryBlock.remove(memoryBlock.indexOf(pageString[i])));
+                continue;
+            }else if (memoryBlock.size() &gt;= memBlockNum) {
+                memoryBlock.pollFirst();
+                pageReplaceCount++;
+            }
+            memoryBlock.addLast(pageString[i]);
+            pageFaultCount++;
+        }
+        System.out.println(&quot;缺页中断率: &quot;+pageFaultCount/(double)pageString.length);
+        System.out.println(&quot;页面置换次数: &quot;+pageReplaceCount);
+    }
+
+}
+</code></pre><p>四、Clock算法 </p>
+<p>当某一页首次装入内存中时，则将该页框的使用位设置为1；当该页随后被访问到时（在访问产生缺页中断之后），它的使用位也会被设置为1。 </p>
+<p>当请求页面不在内存中时，查找内存中的页面，每当遇到一个使用位为1的页框时，就将该位重新置为0；如果在这个过程开始时，缓冲区中所有页框的使用位均为0时，则选择遇到的第一个页框置换；如果所有页框的使用位均为1时，则指针在缓冲区中完整地循环一周，把所有使用位都置为0，再次循环遍历，置换第一个遇到的使用位为0的页面。 </p>
+<p>模拟算法如下： </p>
+<pre><code>package paging;
+
+import java.util.LinkedList;
+
+/**
+ * 简单Clock置换算法
+ *
+ * @author wz
+ * @date 15/11/30.
+ */
+public class Clock {
+    private LinkedList&lt;Integer&gt; memoryBlock;
+    private int[] accessed;
+
+    void pageReplacement(int[] pageString, int memBlockNum) {
+        memoryBlock = new LinkedList&lt;&gt;();
+        accessed = new int[memBlockNum];
+        int pageFaultCount = 0, pageReplaceCount = 0;
+        for (int i = 0; i &lt; pageString.length; i++) {
+            if (memoryBlock.contains(pageString[i])){
+                accessed[memoryBlock.indexOf(pageString[i])] = 1;
+                continue;
+            }else if (memoryBlock.size() &gt;= memBlockNum) {
+                for (int j = 0; j &lt; accessed.length;j++) {
+                    accessed[j] ^= 1;   //取反
+                    if(accessed[j]==1){
+                        memoryBlock.set(j,pageString[i]);
+                        break;
+                    }
+                    if (j == accessed.length-1)
+                        j = -1;
+                }
+                pageReplaceCount++;
+            } else{
+                memoryBlock.addLast(pageString[i]);
+                accessed[memoryBlock.size()-1] = 1;
+            }
+            pageFaultCount++;
+        }
+        System.out.println(&quot;缺页中断率: &quot;+pageFaultCount/(double)pageString.length);
+        System.out.println(&quot;页面置换次数: &quot;+pageReplaceCount);
+    }
+}
+</code></pre><p>五、改进的Clock算法 </p>
+<p>在将一个页面换出时，如果该页已被修改过，便须将它重新写到磁盘上；但如果该页未被修改过，则不必将它拷回磁盘。同时满足这两条件的页面作为首先淘汰的页。由访问位A和修改位M可以组合成下面四种类型的页面： </p>
+<p>1.（A=0，M=0）：表示该页最近既未被访问、又未被修改，是最佳淘汰页。 </p>
+<p>2. （A=0，M=1）：表示该页最近未被访问，但已被修改，并不是很好的淘汰页。 </p>
+<p>3. （A=1，M=0）：最近已被访问，但未被修改，该页有可能再被访问。 </p>
+<p>4. （A=1，M=1）：最近已被访问且被修改，该页有可能再被访问. </p>
+<p>在进行页面置换时，其执行过程可分成以下三次遍历： </p>
+<p>（1）从指针所指示的当前位置开始，扫描循环队列，寻找A=0且M=0的第一类页面，将所遇到的第一个页面作为所选中的淘汰页。在第一次扫描期间不改变访问位A。 </p>
+<p>（2）如果第一步失败，即查找一周后未遇到第一类页面，则开始第二轮扫描，寻找A=0且M=1的第二类页面，将所遇到的第一个这类页面作为淘汰页。在第二轮扫描期间，将所有经过的页面的访问位置0。 </p>
+<p>（3）如果第二步也失败，即未找到第二类页面，则将指针返回到开始的位置，并将所有的访问位复0。然后，重复第一步，如果仍失败，必要时再重复第二步，此时就一定能够找到被淘汰的页。 </p>
+<p>模拟算法如下： </p>
+<pre><code>package paging;
+
+import java.util.LinkedList;
+
+/**
+ * 改进的Clock置换算法
+ *
+ * @author wz
+ * @date 15/11/30.
+ */
+public class ClockImprove {
+    private LinkedList&lt;Integer&gt; memoryBlock;
+    private int[] accessed;
+    private int[] modified;
+
+    void pageReplacement(int[] pageString, int[] modifyStatus, int memBlockNum) {
+        int index;
+        memoryBlock = new LinkedList&lt;&gt;();
+        accessed = new int[memBlockNum];
+        modified = new int[memBlockNum];
+        int pageFaultCount = 0, pageReplaceCount = 0;
+        for (int i = 0; i &lt; pageString.length; i++) {
+            if (memoryBlock.contains(pageString[i])){
+                index = memoryBlock.indexOf(pageString[i]);
+                accessed[index] = 1;
+                if (modified[index]==0)
+                    modified[index]=modifyStatus[i];
+                continue;
+            } else if (memoryBlock.size() &gt;= memBlockNum) {
+                index=-1;
+                while (true){
+                    for (int j = 0; j &lt; accessed.length; j++) {
+                        if (accessed[j] == 0 &amp;&amp; modified[j]==0){
+                            index=j;
+                            break;
+                        }
+                    }
+                    if (index &gt;= 0)
+                        break;
+                    for (int j = 0; j &lt; accessed.length; j++) {
+                        if (accessed[j] == 0 &amp;&amp; modified[j]==1){
+                            index = j;
+                            break;
+                        }
+                        accessed[j]=0;
+                    }
+                    if (index &gt;= 0)
+                        break;
+                }
+                memoryBlock.set(index,pageString[i]);
+                pageReplaceCount++;
+            } else{
+                memoryBlock.addLast(pageString[i]);
+                index = memoryBlock.size()-1;
+            }
+            accessed[index] = 1;
+            modified[index]=modifyStatus[i];
+            pageFaultCount++;
+        }
+        System.out.println(&quot;缺页中断率: &quot;+pageFaultCount/(double)pageString.length);
+        System.out.println(&quot;页面置换次数: &quot;+pageReplaceCount);
+    }
+}
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/01/24/OS存储器管理(一)/" title="OS存储器管理(一)">OS存储器管理(一)</a></h2>
+                <p class="excerpt">
+                
+                存储器的层次： 
+分为  寄存器  、  主存（内存）  和  辅存（外存）  三个层次。 
+主存  ：  高速缓冲存储器、主存储器、磁盘缓冲存储器， 
+主存又称为可执行存储器； 
+辅存  ：  固定磁盘存储器、可移动的外部存储器； 
+其可长期保存数据，但不能被处理器直接访问。 
+此处针对的是在OS
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-01-23T18:30:46.000Z" class="post-list__meta--date date">2016-01-24</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/01/24/OS存储器管理(一)/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/12/27/处理机进程调度模拟/" title="处理机进程调度模拟">处理机进程调度模拟</a></h2>
+                <p class="excerpt">
+                
+                一、进程调度 
+无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。 
+处理机调度分为三个层次： 
+高级调度 
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-12-27T05:53:02.000Z" class="post-list__meta--date date">2015-12-27</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/12/27/处理机进程调度模拟/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

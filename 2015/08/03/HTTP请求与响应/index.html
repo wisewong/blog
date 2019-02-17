@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>HTTP请求与响应 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="Http协议对浏览器发出的Request格式以及对Web服务器发出的Response格式有具体的规定。 
+请求部分由三部分组成： 
+
+Requset line  ：请求行,位于第一行 
+Request headers  ：请求消息头,从第二行开始至第一个空行结束 
+Request  body  ：请求正文,从第一个空行之后的都是正文 
+
+响应部分也由三部分组成： 
+
+Response  line">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="HTTP请求与响应 | Sage Wong">
+    <meta name="twitter:description" content="Http协议对浏览器发出的Request格式以及对Web服务器发出的Response格式有具体的规定。 
+请求部分由三部分组成： 
+
+Requset line  ：请求行,位于第一行 
+Request headers  ：请求消息头,从第二行开始至第一个空行结束 
+Request  body  ：请求正文,从第一个空行之后的都是正文 
+
+响应部分也由三部分组成： 
+
+Response  line">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="HTTP请求与响应 | Sage Wong">
+    <meta property="og:description" content="Http协议对浏览器发出的Request格式以及对Web服务器发出的Response格式有具体的规定。 
+请求部分由三部分组成： 
+
+Requset line  ：请求行,位于第一行 
+Request headers  ：请求消息头,从第二行开始至第一个空行结束 
+Request  body  ：请求正文,从第一个空行之后的都是正文 
+
+响应部分也由三部分组成： 
+
+Response  line">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/08/03/HTTP请求与响应/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-08-03T09:02:03.000Z" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-meta__tags tags">于 
+  <a class="tag-link" href="/tags/http/">http</a>, <a class="tag-link" href="/tags/request/">request</a>, <a class="tag-link" href="/tags/response/">response</a>
+ </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">HTTP请求与响应</h1>
+  </header>
+
+  <section class="post">
+    <p>Http协议对浏览器发出的Request格式以及对Web服务器发出的Response格式有具体的规定。 </p>
+<p>请求部分由三部分组成： </p>
+<ul>
+<li>Requset line  ：请求行,位于第一行 </li>
+<li>Request headers  ：请求消息头,从第二行开始至第一个空行结束 </li>
+<li>Request  body  ：请求正文,从第一个空行之后的都是正文 </li>
+</ul>
+<p>响应部分也由三部分组成： </p>
+<ul>
+<li>Response  line  ：响应行,位于第一行 </li>
+<li>Response  headers  ：响应消息头,从第二行开始至第一个空行结束 </li>
+<li>Response  body  ：响应正文,从第一个空行之后的都是正文 </li>
+</ul>
+<p>一、Http请求 </p>
+<p>Http请求具体格式如下： </p>
+<p>Method Path-to-resource Http/Version-number   </p>
+<hr>
+<p>User-agent 浏览器的类型 </p>
+<p>Accept 浏览器接受的MIME类型 </p>
+<p>Accept language 用户选择的接受语言 </p>
+<p>Accept-charset 用户首选的编码字符集 </p>
+<p>……   </p>
+<p>空行   </p>
+<p>Option Request Body   </p>
+<p>①请求行： </p>
+<p>1.Method为请求方式，包括  OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE  ，常用的是GET和POST </p>
+<p>GET  的特点：默认的请求方式。<br>当请求的资源路径为/SdustExam/Login.jsp?username=admin&amp;password=123456时，GET方式会把表单的请求的数据放在请求的URI的后面，?username=admin&amp;password=123456，这样会暴露数据，而且请求行长度有限。 </p>
+<p>POST  的特点(经常使用的)：借助HTML中的form表单。<form action="Login.jsp" method="post">请求参数出现在正文部分，长度木有限制，相对安全  。 </form></p>
+<p>2.Path-to-resource ：请求的资源的URI。例如/SdustExam/Login.jsp </p>
+<p>3.Http/Version-number：客户端使用的协议的版本，有HTTP/1.0和HTTP/1.1。 </p>
+<p>HTTP/1.0：特点：每次请求服务器上的资源都要建立新的连接，响应完毕后都会关闭连接。是无状态的协议。<br>HTTP/1.1:特点：在一次TCP/IP连接的基础上可以发出多次请求和得到多次的响应。比1.0多了一些请求和响应头。 </p>
+<p>②请求消息头 </p>
+<p>向服务器传递附加信息 </p>
+<p>Accept  :通知服务器，浏览器可以接受的MIME类型。（文件系统中用文件扩展名区分数据的类型。网络上用MIME类型来区分数据类型。Tomcat\conf\web.xml）<br>MIME类型名称  ：大类型/小类型 如text/html、text/css等等<br>Accept-Charset  :通知服务器，浏览器支持的字符集，如gbk,utf-8<br>Accept-Encoding  :通知服务器，浏览器能够解码的数据压缩方式。比如：gzip<br>Accept-language  :通知服务器，所希望的语言<br>Host  ：请求的主机和端口<br>Referer  ：是一个URL地址。取值是当前页面之前的那个页面地址的。防盗链用<br>Content-Type  :通知服务器，请求正文的MIME类型。取值：application/x-www-form-urlencoded默认值,对应的是form表单的enctype属性<br>If-Modified-Since  :通知服务器，缓存的文件的最后修改时间。<br>User-Agent  :通知服务器，浏览器类型.<br>Content-Length  :表示请求消息正文的长度<br>Connection  :表示是否需要持久连接。如果服务器看到这里的值为“Keep -Alive”，或者看到请求使用的是HTTP 1.1(HTTP 1.1默认进行持久连接 )<br>Cookie  :这是最重要的请求头信息之一（会话有关） </p>
+<p>二、http响应 </p>
+<p>http响应具体格式如下： </p>
+<p>Http/Version-number  Statuscode  message   </p>
+<hr>
+<p>Server 服务器的类型信息 </p>
+<p>Content-type 响应的MIME类型信息 </p>
+<p>Content-length 被包含在相应类型中的字符数量 </p>
+<p>……   </p>
+<p>空行   </p>
+<p>Option Response Body   </p>
+<p>①响应行： </p>
+<p>Http/Version-number：服务器用的协议版本<br>Statuscode：响应码。代表服务器处理的结果的一种表示，常用的响应码有：<br>200：正常<br>302/307：重定向<br>304:服务器的资源没有被修改<br>404：请求的资源不存在<br>500：服务器报错了<br>message：响应码描述。例如200的描述为OK </p>
+<p>②  响应消息头： </p>
+<p>Location  :通知客户端，指示新的资源的位置（结合302/307来用。请求重定向）<br>Server  :通知客户端，服务器的类型<br>Content-Encoding  :通知客户端，响应正文的压缩编码方式。常用的是gzip。<br>Content-Length  ：通知客户端响应正文的数据大小<br>Content-Type  :通知客户端响应正文的MIME类型<br>Refresh  ：让浏览器自动刷新。取值为整数（刷新的时间间隔，单位是秒）<br>Refresh:3<br>Refresh:3;URL=其他资源的URI<br>Content-Disposition  ：通知客户端，以下载的方式打开资源。<br>Content-Disposition  ：attachment;filename=1.jpg<br>Set-Cookie  :SS=Q0=5Lb_nQ; path=/search服务器端发送的Cookie（会话有关）<br>Expires  : -1 网页的有效时间。单位是毫秒，-1为通知客户端不要缓存<br>Cache-Control  : no-cache (1.1)  通知客户端不要缓存<br>Pragma  : no-cache (1.0) 通知客户端不要缓存 </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/08/03/数据结构之链表、栈和队列   java代码实现/" title="数据结构之链表、栈和队列   java代码实现">数据结构之链表、栈和队列   java代码实现</a></h2>
+                <p class="excerpt">
+                
+                定义抽象节点类Node： 
+package cn.wzbrilliant.datastructure;
+
+/**
+ * 节点
+ * @author ice
+ *
+ */
+public abstract class Node {
+    private Node next;
+
+    public N
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-08-03T15:30:21.000Z" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/数据结构/">数据结构</a>, <a class="tag-link" href="/tags/栈/">栈</a>, <a class="tag-link" href="/tags/链表/">链表</a>, <a class="tag-link" href="/tags/队列/">队列</a>
+</span><a class="btn-border-small" href="/2015/08/03/数据结构之链表、栈和队列   java代码实现/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/06/29/JavaScript 数据类型/" title="JavaScript 数据类型">JavaScript 数据类型</a></h2>
+                <p class="excerpt">
+                
+                在javascript中,数据类型分为两类：  基本数据类型  和  引用数据类型  。javascript中声明变量使用关键字  var  。 
+一、基本数据类型 
+javascrip含有五种基本数据类型：  undefined  ，  null  ，  boolean  ，  number  和
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-06-29T12:53:02.000Z" class="post-list__meta--date date">2015-06-29</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/06/29/JavaScript 数据类型/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>mysql使用基础 sql语句(一) | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="命令行输入mysql -u root -p，回车再输入密码，进入mysql。 
+终端命令以分号作为一条语句的结束，可分为多行输入，只需在最后加上分号即可。如下图： 
+   
+一、  DDL：数据定义语言 Data Definition Language    
+作用：定义数据库或者表结构的。 
+操作的对象：数据库或表的结构的。 
+关键字：CREATE ALTER DROP 
+①查询数据库： 
+显示">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="mysql使用基础 sql语句(一) | Sage Wong">
+    <meta name="twitter:description" content="命令行输入mysql -u root -p，回车再输入密码，进入mysql。 
+终端命令以分号作为一条语句的结束，可分为多行输入，只需在最后加上分号即可。如下图： 
+   
+一、  DDL：数据定义语言 Data Definition Language    
+作用：定义数据库或者表结构的。 
+操作的对象：数据库或表的结构的。 
+关键字：CREATE ALTER DROP 
+①查询数据库： 
+显示">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="mysql使用基础 sql语句(一) | Sage Wong">
+    <meta property="og:description" content="命令行输入mysql -u root -p，回车再输入密码，进入mysql。 
+终端命令以分号作为一条语句的结束，可分为多行输入，只需在最后加上分号即可。如下图： 
+   
+一、  DDL：数据定义语言 Data Definition Language    
+作用：定义数据库或者表结构的。 
+操作的对象：数据库或表的结构的。 
+关键字：CREATE ALTER DROP 
+①查询数据库： 
+显示">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/05/24/mysql使用基础 sql语句(一)/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-05-24T12:46:20.000Z" class="post-list__meta--date date">2015-05-24</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">mysql使用基础 sql语句(一)</h1>
+  </header>
+
+  <section class="post">
+    <p>命令行输入mysql -u root -p，回车再输入密码，进入mysql。 </p>
+<p>终端命令以分号作为一条语句的结束，可分为多行输入，只需在最后加上分号即可。如下图： </p>
+<p><img src="https://img-blog.csdn.net/20150524204624928?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>一、  DDL：数据定义语言 Data Definition Language    </p>
+<p>作用：定义数据库或者表结构的。 </p>
+<p>操作的对象：数据库或表的结构的。 </p>
+<p>关键字：CREATE ALTER DROP </p>
+<p>①查询数据库： </p>
+<p>显示目前有几个库,输入：  mysql&gt;SHOW DATABASES; </p>
+<p>②创建数据库： </p>
+<p>创建一个名称为mydb1的数据库：  mysql  &gt; CREATE  DATABASE  mydb1; </p>
+<p>查看数据库的创建细节 ：  mysql  &gt; SHOW  CREATE  DATABASE  mydb1; </p>
+<p>创建一个使用gbk字符集的mydb2数据库：  mysql  &gt; CREATE  DATABASE  mydb2  CHARACTER  SET  gbk; </p>
+<p>创建一个使用gbk字符集，并带校对规则的mydb3数据库：  mysql  &gt; CREATE  DATABASE  mydb3  CHARACTER  SET  gbk COLLATE gbk_chinese_ci; </p>
+<p>③删除数据库： </p>
+<p>删除前面创建的mydb3数据库：  mysql  &gt; DROP  DATABASE  mydb3; </p>
+<p>对某一数据库的操作，假设数据库为test： </p>
+<p>首先要选择数据库：  mysql  &gt; USE  test; </p>
+<p>①显示表的信息： </p>
+<p>显示当前数据库中的所有表格：  mysql&gt;SHOW TABLES; </p>
+<p>查看表结构的定义：  mysql&gt;DESC employee; </p>
+<p>查看表的创建细节：  mysql  &gt; SHOW  CREATE  TABLE  user  ; </p>
+<p>②创建表： </p>
+<p>创建一个员工表： </p>
+<p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码"></p>
+<pre><code>mysql&gt;CREATE TABLE employee(
+    id int,
+    name varchar( **200** ),
+    gender varchar( **10** ),
+    birthday date,
+    entry_date date,
+    job varchar( **200** ),
+    salary float( **8** , **2** ),
+    resume text
+);
+</code></pre><p><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码"></p>
+<p>③修改表： </p>
+<p>在上面员工表的基本上增加一个image列：  mysql  &gt; ALTER  TABLE  employee  ADD  image  blob; </p>
+<p>查看表结构的定义：  mysql  &gt; DESC  employee; </p>
+<p>修改job列，使其长度为60：  mysql  &gt; ALTER  TABLE  employee MODIFY job  varchar  (  <strong>60</strong> ); </p>
+<p>删除image列：  mysql  &gt; ALTER  TABLE  employee  DROP  image  ; </p>
+<p>表名改为user：  mysql  &gt; RENAME  TABLE  employee  TO  user  ; </p>
+<p>修改表的字符集为gbk：  mysql  &gt; ALTER  TABLE  user  CHARACTER  SET  gbk; </p>
+<p>列名name修改为username：  mysql  &gt; ALTER  TABLE  user  CHANGE name username  varchar  (  <strong>100</strong> );    </p>
+<p>④删除表： </p>
+<p>删除表employee：  DROP  TABLE  employee; </p>
+<p>鄙人博客园原博地址： <a href="http://www.cnblogs.com/z941030/p/4526400.html" target="_blank" rel="noopener"> mysql使用基础 sql语句(一) </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/05/28/jdbc基础 (三) 大文本、二进制数据处理/" title="jdbc基础 (三) 大文本、二进制数据处理">jdbc基础 (三) 大文本、二进制数据处理</a></h2>
+                <p class="excerpt">
+                
+                LOB (Large Objects)  分为：  CLOB  和  BLOB  ，即大文本和大二进制数据 
+CLOB：  用于存储大文本 
+BLOB：  用于存储二进制数据，例如图像、声音、二进制文件 
+在mysql中,只有  BLOB  ,没有CLOB，mysql存储大文本用  TEXT    
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-05-28T10:29:58.000Z" class="post-list__meta--date date">2015-05-28</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/java/">java</a>, <a class="tag-link" href="/tags/jdbc/">jdbc</a>, <a class="tag-link" href="/tags/mysql/">mysql</a>
+</span><a class="btn-border-small" href="/2015/05/28/jdbc基础 (三) 大文本、二进制数据处理/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/05/24/linux下安装openssh-server/" title="linux下安装openssh-server">linux下安装openssh-server</a></h2>
+                <p class="excerpt">
+                
+                系统是ubuntu14.04，系统默认安装了openssh-client，但没有安装openssh-server，需要手动安装 
+终端输入：  sudo apt-get install openssh-server  下载openssh-server 
+但出现下列提示： 
+　　正在读取软件包列表..
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-05-24T11:17:39.000Z" class="post-list__meta--date date">2015-05-24</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/05/24/linux下安装openssh-server/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

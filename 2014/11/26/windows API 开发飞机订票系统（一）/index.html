@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>windows API 开发飞机订票系统（一） | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="课程设计做一个飞机订票系统，c语言实现，功能如下： 
+录入： 
+可以录入航班情况（数据可以存储在一个数据文件中，数据结构、具体数据自定） 
+查询： 
+可以查询某个航线的情况（如，输入航班号，查询起降时间，起飞抵达城市，航班票价，票价折扣，确定航班是否满仓）； 
+可以输入起飞抵达城市，查询飞机航班情况； 
+订票：（订票情况可以存在一个数据文件中，结构自己设定） 
+可以订票，如果该航班已经无票，可以提">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="windows API 开发飞机订票系统（一） | Sage Wong">
+    <meta name="twitter:description" content="课程设计做一个飞机订票系统，c语言实现，功能如下： 
+录入： 
+可以录入航班情况（数据可以存储在一个数据文件中，数据结构、具体数据自定） 
+查询： 
+可以查询某个航线的情况（如，输入航班号，查询起降时间，起飞抵达城市，航班票价，票价折扣，确定航班是否满仓）； 
+可以输入起飞抵达城市，查询飞机航班情况； 
+订票：（订票情况可以存在一个数据文件中，结构自己设定） 
+可以订票，如果该航班已经无票，可以提">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="windows API 开发飞机订票系统（一） | Sage Wong">
+    <meta property="og:description" content="课程设计做一个飞机订票系统，c语言实现，功能如下： 
+录入： 
+可以录入航班情况（数据可以存储在一个数据文件中，数据结构、具体数据自定） 
+查询： 
+可以查询某个航线的情况（如，输入航班号，查询起降时间，起飞抵达城市，航班票价，票价折扣，确定航班是否满仓）； 
+可以输入起飞抵达城市，查询飞机航班情况； 
+订票：（订票情况可以存在一个数据文件中，结构自己设定） 
+可以订票，如果该航班已经无票，可以提">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2014/11/26/windows API 开发飞机订票系统（一）/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-26T15:33:02.000Z" class="post-list__meta--date date">2014-11-26</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">windows API 开发飞机订票系统（一）</h1>
+  </header>
+
+  <section class="post">
+    <p>课程设计做一个飞机订票系统，c语言实现，功能如下： </p>
+<p>录入： </p>
+<p>可以录入航班情况（数据可以存储在一个数据文件中，数据结构、具体数据自定） </p>
+<p>查询： </p>
+<p>可以查询某个航线的情况（如，输入航班号，查询起降时间，起飞抵达城市，航班票价，票价折扣，确定航班是否满仓）； </p>
+<p>可以输入起飞抵达城市，查询飞机航班情况； </p>
+<p>订票：（订票情况可以存在一个数据文件中，结构自己设定） </p>
+<p>可以订票，如果该航班已经无票，可以提供相关可选择航班； </p>
+<p>退票： 可退票，退票后修改相关数据文件； </p>
+<p>客户资料有姓名，证件号，订票数量及航班情况，订单要有编号。 </p>
+<p>修改航班信息： </p>
+<p>当航班信息改变可以修改航班数据文件 </p>
+<p>要求： </p>
+<p>根据以上功能说明，设计航班信息，订票信息的存储结构，设计程序完成功能； </p>
+<p>写惯了控制台程序，所以打算做个界面出来，时间也很充裕，于是就自学了windows API，开发环境为vs2013。 </p>
+<p>代码以及程序已打包，下载地址：<a href="http://download.csdn.net/download/u013805360/8213827" target="_blank" rel="noopener">http://download.csdn.net/download/u013805360/8213827</a> </p>
+<p>下面就开始一步一步晒代码了 </p>
+<p>下面代码是头文件 </p>
+<pre><code>// stdafx.h : 标准系统包含文件的包含文件，
+// 或是经常使用但不常更改的
+// 特定于项目的包含文件
+//
+
+#pragma once
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NON_CONFORMING_SWPRINTFS
+#define WIN32_LEAN_AND_MEAN             //  从 Windows 头文件中排除极少使用的信息
+// Windows 头文件: 
+#include &lt;windows.h&gt;
+
+// C 运行时头文件
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;memory.h&gt;
+#include &lt;tchar.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+// 包括 SDKDDKVer.h 将定义可用的最高版本的 Windows 平台。
+#include &lt;SDKDDKVer.h&gt;
+
+// TODO:  在此处引用程序需要的其他头文件
+#include&lt;commctrl.h&gt;
+#include &quot;resource.h&quot;
+
+#pragma comment(lib, &quot;comctl32.lib&quot;)
+</code></pre><p>下面是资源头文件 </p>
+<pre><code>//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ 生成的包含文件。
+// 供 Flight.rc 使用
+//
+#define IDC_MYICON                      2
+#define IDOK2                           2
+#define IDD_MYHOMEWORK_DIALOG           102
+#define IDD_ABOUTBOX                    103
+#define IDD_LOGINDLG                    103
+#define IDI_ICON1                       128
+#define IDB_BITMAP1                     133
+#define IDR_MAINFRAME                   134
+#define IDD_MAINDLG                     136
+#define IDD_NAMEDLG                     138
+#define IDB_BITMAP2                     144
+#define IDD_FLTNUM                      147
+#define IDD_ENTRY                       149
+#define IDD_MODIFYFLT                   150
+#define IDC_ID                          1002
+#define IDC_PASSWORD                    1003
+#define IDC_IDEDIT                      1005
+#define IDC_PSWEDIT                     1006
+#define IDC_LOGIN                       1007
+#define IDC_REGISTER                    1008
+#define IDC_IMAGE                       1009
+#define IDC_GETNAMEOK                   1011
+#define IDC_GETNAME                     1012
+#define IDC_GETNAMECANCEL               1014
+#define IDC_DEPARTURE                   1019
+#define IDC_DESTINATION                 1020
+#define IDC_FLIGHTNUM                   1021
+#define IDC_FLTNUM                      1022
+#define IDC_FARE                        1023
+#define IDC_LANDINGTIME                 1024
+#define IDC_DATE                        1037
+#define IDC_SEARCH                      1038
+#define IDC_TICKET                      1039
+#define IDC_RETURNTICKET                1040
+#define IDC_ENTRY                       1041
+#define IDC_MODIFYFLIGHT                1042
+#define IDC_INFORMATION                 1043
+#define IDC_TICKETNUM                   1044
+#define IDC_TAKEOFFTIME                 1051
+#define IDC_SEATNUM                     1053
+#define IDC_DISCOUNT                    1054
+#define IDC_ADDFLT                      1055
+#define IDC_QUIT                        1056
+#define IDC_MDFFLTNUM                   1058
+#define IDC_MDFDATE                     1059
+#define IDC_MODIFY                      1060
+#define IDC_STATIC                      -1
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NO_MFC                     1
+#define _APS_NEXT_RESOURCE_VALUE        152
+#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_CONTROL_VALUE         1064
+#define _APS_NEXT_SYMED_VALUE           110
+#endif
+#endif
+</code></pre><p>资源文件： </p>
+<pre><code>// Microsoft Visual C++ generated resource script.
+//
+#include &quot;resource.h&quot;
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include &quot;windows.h&quot;
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_LOGINDLG DIALOGEX 230, 120, 307, 175
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;登陆&quot;
+FONT 9, &quot;MS Shell Dlg&quot;, 0, 0, 0x1
+BEGIN
+    CTEXT           &quot;身份证号&quot;,IDC_ID,99,60,31,8,SS_CENTERIMAGE
+    CONTROL         IDB_BITMAP1,IDC_IMAGE,&quot;Static&quot;,SS_BITMAP,14,19,74,103
+    CTEXT           &quot;密码&quot;,IDC_PASSWORD,99,87,31,8,SS_CENTERIMAGE
+    EDITTEXT        IDC_IDEDIT,138,58,116,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PSWEDIT,138,84,116,13,ES_PASSWORD | ES_AUTOHSCROLL | ES_WANTRETURN
+    CTEXT           &quot;灰机订票系统&quot;,IDC_STATIC,105,18,111,24,SS_CENTERIMAGE
+    DEFPUSHBUTTON   &quot;登陆&quot;,IDC_LOGIN,139,118,39,17
+    PUSHBUTTON      &quot;注册&quot;,IDC_REGISTER,202,118,39,17
+END
+
+IDD_MAINDLG DIALOGEX 0, 0, 358, 226
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;飞机订票系统&quot;
+FONT 10, &quot;Microsoft YaHei UI&quot;, 400, 0, 0x86
+BEGIN
+    CTEXT           &quot;欢迎来到飞机订票系统&quot;,IDC_STATIC,145,16,67,8
+    EDITTEXT        IDC_DEPARTURE,38,39,57,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_DESTINATION,130,39,57,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    CONTROL         &quot;出发地：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,9,41,24,11
+    CONTROL         &quot;目的地：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,102,41,24,11
+    CONTROL         &quot;日期：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,102,70,18,8
+    CTEXT           &quot;航班号：&quot;,IDC_STATIC,10,70,26,8
+    CTEXT           &quot;航班信息&quot;,IDC_STATIC,16,120,31,8
+    CONTROL         IDB_BITMAP2,IDC_STATIC,&quot;Static&quot;,SS_BITMAP,271,27,75,70
+    EDITTEXT        IDC_FLIGHTNUM,38,68,57,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;&quot;,IDC_DATE,&quot;SysDateTimePick32&quot;,DTS_RIGHTALIGN | WS_TABSTOP,130,68,57,12
+    DEFPUSHBUTTON   &quot;查询&quot;,IDC_SEARCH,38,96,33,14
+    PUSHBUTTON      &quot;订票&quot;,IDC_TICKET,95,96,33,14
+    PUSHBUTTON      &quot;退票&quot;,IDC_RETURNTICKET,152,96,33,14
+    PUSHBUTTON      &quot;航班录入&quot;,IDC_ENTRY,229,52,43,15
+    PUSHBUTTON      &quot;修改航班信息&quot;,IDC_MODIFYFLIGHT,229,81,43,15
+    EDITTEXT        IDC_INFORMATION,18,131,322,88,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_NAMEDLG DIALOGEX 0, 0, 260, 116
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;注册&quot;
+FONT 9, &quot;Microsoft YaHei UI&quot;, 400, 0, 0x86
+BEGIN
+    EDITTEXT        IDC_GETNAME,99,47,81,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CTEXT           &quot;请输入用户真实姓名&quot;,IDC_STATIC,98,21,63,8
+    CTEXT           &quot;姓名：&quot;,IDC_STATIC,61,49,33,11
+    DEFPUSHBUTTON   &quot;确认提交&quot;,IDC_GETNAMEOK,78,83,44,16,WS_GROUP
+    PUSHBUTTON      &quot;取消&quot;,IDC_GETNAMECANCEL,146,83,44,16
+END
+
+IDD_FLTNUM DIALOGEX 0, 0, 181, 87
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;机票数量&quot;
+FONT 10, &quot;Microsoft YaHei UI&quot;, 400, 0, 0x86
+BEGIN
+    EDITTEXT        IDC_TICKETNUM,72,35,37,12,ES_AUTOHSCROLL
+    CONTROL         &quot;机票数量:&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,37,37,33,8
+    DEFPUSHBUTTON   &quot;确定&quot;,IDOK,126,34,31,13
+END
+
+IDD_ENTRY DIALOGEX 0, 0, 266, 153
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;航班录入&quot;
+FONT 10, &quot;Microsoft YaHei UI&quot;, 400, 0, 0x0
+BEGIN
+    CONTROL         &quot;请输入录入航班信息&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,103,18,59,8
+    EDITTEXT        IDC_DEPARTURE,41,35,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_DESTINATION,123,35,31,12,ES_AUTOHSCROLL | ES_WANTRETURN
+    CONTROL         &quot;出发地：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,16,36,24,11
+    CONTROL         &quot;目的地：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,98,36,24,8
+    CONTROL         &quot;日期：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,174,98,18,8
+    CTEXT           &quot;航班号：&quot;,IDC_STATIC,16,67,26,8
+    EDITTEXT        IDC_TAKEOFFTIME,206,35,35,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;价格：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,98,67,24,8
+    CONTROL         &quot;座位数：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,16,98,24,8
+    CONTROL         &quot;折扣：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,98,98,24,8
+    EDITTEXT        IDC_FLTNUM,41,65,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_FARE,123,65,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_LANDINGTIME,206,65,35,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;起飞时间：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,174,36,30,8
+    CONTROL         &quot;降落时间：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,174,67,30,8
+    EDITTEXT        IDC_SEATNUM,41,96,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_DISCOUNT,123,96,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;&quot;,IDC_DATE,&quot;SysDateTimePick32&quot;,DTS_RIGHTALIGN | WS_TABSTOP,198,96,57,12
+    DEFPUSHBUTTON   &quot;添加&quot;,IDC_ADDFLT,75,120,37,15
+    PUSHBUTTON      &quot;退出&quot;,IDC_QUIT,153,120,37,15
+END
+
+IDD_MODIFYFLT DIALOGEX 0, 0, 323, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION &quot;航班录入&quot;
+FONT 10, &quot;Microsoft YaHei UI&quot;, 400, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_MDFFLTNUM,59,34,44,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CTEXT           &quot;航班号：&quot;,IDC_STATIC,28,36,26,8
+    GROUPBOX        &quot;请输入要修改的信息&quot;,IDC_STATIC,7,65,309,128
+    LTEXT           &quot;请输入修改航班航班号&quot;,IDC_STATIC,10,14,65,8
+    CTEXT           &quot;日期：&quot;,IDC_STATIC,149,36,26,8
+    CONTROL         &quot;&quot;,IDC_MDFDATE,&quot;SysDateTimePick32&quot;,DTS_RIGHTALIGN | WS_TABSTOP,175,34,57,12
+    EDITTEXT        IDC_FARE,56,96,28,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;价格：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,23,99,24,8
+    CONTROL         &quot;座位数：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,198,99,24,8
+    CONTROL         &quot;折扣：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,110,99,24,8
+    EDITTEXT        IDC_DISCOUNT,144,96,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_SEATNUM,228,96,31,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    CONTROL         &quot;起飞时间：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,23,136,30,8
+    CONTROL         &quot;降落时间：&quot;,IDC_STATIC,&quot;Static&quot;,SS_LEFTNOWORDWRAP | WS_GROUP,111,136,30,8
+    EDITTEXT        IDC_TAKEOFFTIME,56,133,35,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    EDITTEXT        IDC_LANDINGTIME,144,133,35,12,ES_AUTOHSCROLL | ES_WANTRETURN | WS_GROUP
+    DEFPUSHBUTTON   &quot;确认修改&quot;,IDC_MODIFY,104,168,37,15
+    PUSHBUTTON      &quot;退出&quot;,IDC_QUIT,182,168,37,15
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_LOGINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 300
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 168
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 351
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 220
+    END
+
+    IDD_NAMEDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 253
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 108
+    END
+
+    IDD_FLTNUM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 174
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 80
+    END
+
+    IDD_ENTRY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 259
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 146
+    END
+
+    IDD_MODIFYFLT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 316
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    &quot;resource.h\0&quot;
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    &quot;#ifndef APSTUDIO_INVOKED\r\n&quot;
+    &quot;#include &quot;&quot;targetver.h&quot;&quot;\r\n&quot;
+    &quot;#endif\r\n&quot;
+    &quot;#define APSTUDIO_HIDDEN_SYMBOLS\r\n&quot;
+    &quot;#include &quot;&quot;windows.h&quot;&quot;\r\n&quot;
+    &quot;#undef APSTUDIO_HIDDEN_SYMBOLS\r\n&quot;
+    &quot;\0&quot;
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    &quot;\r\n&quot;
+    &quot;\0&quot;
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  &quot;login_2.bmp&quot;
+IDB_BITMAP2             BITMAP                  &quot;main_2.bmp&quot;
+IDB_BITMAP3             BITMAP                  &quot;login.bmp&quot;
+IDB_BITMAP4             BITMAP                  &quot;main.bmp&quot;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    &quot;icon.ico&quot;
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+</code></pre><p>具体实现代码见下篇博文吧，写代码的过程中还是遇到不少问题的。先附几张程序效果图，包含了一些个人二次元爱好…. </p>
+<p><img src="https://img-blog.csdn.net/20141126234234126?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">   </p>
+<p><img src="https://img-blog.csdn.net/20141126234250631?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">   </p>
+<p><img src="https://img-blog.csdn.net/20141126234258618?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">   </p>
+<p><img src="https://img-blog.csdn.net/20141126234306309?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="">   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2014/11/27/windows API 开发飞机订票系统（二）/" title="windows API 开发飞机订票系统（二）">windows API 开发飞机订票系统（二）</a></h2>
+                <p class="excerpt">
+                
+                呐，上回书说到写代码过程中遇到不少问题，在这里就一点一点慢慢道来吧。 
+首先，定义的结构体、全局变量和函数如下： 
+// Flight.c : 定义应用程序的入口点。
+//
+#include &amp;quot;stdafx.h&amp;quot;
+
+//订单
+typedef struct OrderForm{
+ 
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2014-11-27T06:54:54.000Z" class="post-list__meta--date date">2014-11-27</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2014/11/27/windows API 开发飞机订票系统（二）/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2014/11/26/关于程序提示丢失msvcr120.dll的解决办法/" title="关于程序提示丢失msvcr120.dll的解决办法">关于程序提示丢失msvcr120.dll的解决办法</a></h2>
+                <p class="excerpt">
+                
+                程序的开发环境是vs2013，程序放在别人电脑上提示丢失msvcr120.dll，找了好一会儿，发现了问题所在。 
+项目-&amp;gt;属性-&amp;gt;c/c++-&amp;gt;代码生成-&amp;gt;运行库，改为多线程(/MT)，原本为多线程DLL(/MD)，这样就解决了。 
+另外，如果从Debug变为Release
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2014-11-26T15:11:02.000Z" class="post-list__meta--date date">2014-11-26</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2014/11/26/关于程序提示丢失msvcr120.dll的解决办法/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

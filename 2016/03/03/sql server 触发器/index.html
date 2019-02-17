@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>sql server 触发器 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="触发器  是一种特殊类型的存储过程。触发器可包含复杂的T-SQL语句。触发器不能通过名称被直接调用，也不允许设置参数。它是建立在触发事件上的。 
+触发器可以强制执行一定的业务规则，以保持数据完整性、检查数据有效性、实现数据库管理任务和一些附加功能。 
+触发器的分类：  DML、 DDL、 登录触发器 
+创建触发器需要指定的选项： 
+1.触发器的名称。 
+2.在其上定义触发器的表。 
+3.触发器将何">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="sql server 触发器 | Sage Wong">
+    <meta name="twitter:description" content="触发器  是一种特殊类型的存储过程。触发器可包含复杂的T-SQL语句。触发器不能通过名称被直接调用，也不允许设置参数。它是建立在触发事件上的。 
+触发器可以强制执行一定的业务规则，以保持数据完整性、检查数据有效性、实现数据库管理任务和一些附加功能。 
+触发器的分类：  DML、 DDL、 登录触发器 
+创建触发器需要指定的选项： 
+1.触发器的名称。 
+2.在其上定义触发器的表。 
+3.触发器将何">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="sql server 触发器 | Sage Wong">
+    <meta property="og:description" content="触发器  是一种特殊类型的存储过程。触发器可包含复杂的T-SQL语句。触发器不能通过名称被直接调用，也不允许设置参数。它是建立在触发事件上的。 
+触发器可以强制执行一定的业务规则，以保持数据完整性、检查数据有效性、实现数据库管理任务和一些附加功能。 
+触发器的分类：  DML、 DDL、 登录触发器 
+创建触发器需要指定的选项： 
+1.触发器的名称。 
+2.在其上定义触发器的表。 
+3.触发器将何">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/03/03/sql server 触发器/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-03-03T14:56:27.000Z" class="post-list__meta--date date">2016-03-03</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">sql server 触发器</h1>
+  </header>
+
+  <section class="post">
+    <p>触发器  是一种特殊类型的存储过程。触发器可包含复杂的T-SQL语句。触发器不能通过名称被直接调用，也不允许设置参数。它是建立在触发事件上的。 </p>
+<p>触发器可以强制执行一定的业务规则，以保持数据完整性、检查数据有效性、实现数据库管理任务和一些附加功能。 </p>
+<p>触发器的分类：  DML、 DDL、 登录触发器 </p>
+<p>创建触发器需要指定的选项： </p>
+<p>1.触发器的名称。 </p>
+<p>2.在其上定义触发器的表。 </p>
+<p>3.触发器将何时激发。 </p>
+<p>4.激活触发器的数据修改语句。 </p>
+<p>5.执行触发操作的编程语句。 </p>
+<p>CREATE TRIGGER语句基本语法格式如下： </p>
+<p>CREATE TRIGGER     触发器名称 </p>
+<p>ON {表名 | 视图名} </p>
+<p>[with encryption] </p>
+<p>{ </p>
+<p>{ {FOR | AFTER | INSTEAD OF} </p>
+<p>{[DELETE] [,][INSERT] [,] [UPDATE]} </p>
+<p>AS </p>
+<p>sql_statement […n ] </p>
+<p>} </p>
+<p>其中： </p>
+<p>AFTER </p>
+<p>指定触发器只有在触发 SQL 语句中指定的所有操作都已成功执行后才激发。所有的引用级联操作和约束检查也必须成功完成后，才能执行此触发器。如果仅指定 FOR 关键字，则 AFTER 是默认设置。 </p>
+<p>INSTEAD OF </p>
+<p>指定执行触发器而不是执行触发 SQL 语句，从而替代触发语句的操作。 </p>
+<pre><code>/*在student表上创建触发器，
+在用户插入、修改和删除记录时，都会自动显示表中的内容：*/
+
+use test
+go
+
+create trigger trig_1 on student
+after insert,delete,update
+as 
+begin
+    set nocount on
+    select * from student
+end
+
+insert student(sno) values(5)
+
+delete student where sno=5
+
+
+exec sp_helptext trig_1    --查看触发器内容 
+exec sp_helptrigger student   --查看表上的触发器的属性
+select * from sysobjects where xtype=&apos;TR&apos;  --查看数据库中已有的触发器
+
+
+drop trigger trig_1
+</code></pre><p>inserted表和deleted表 </p>
+<p>触发器执行的时候，产生两个临时表：  inserted表  和  deleted表  。它们的结构和所在的表的结构相同，可使用这两个表测试某些数据修改的效果和设置触发器操作的条件，但不能对表中的数据进行更改。 </p>
+<p>deleted表用于存储DELETE和UPDATE语句所影响的行的副本。在执行delete或update语句时，行从触发器表中删除，并传输到deleted表中。 </p>
+<p>inserted表用于存储INSERT和UPDATE语句所影响的行的副本。在插入和更新时，新建行被同时添加到inserted表和触发器表中。Inserted表中的行是触发器表中新行的副本。 </p>
+<p>在对具有触发器的表（触发器表）进行操作时，有： </p>
+<p>执行INSERT操作，插入到触发器表中的新行被插入到inserted表中。 </p>
+<p>执行DELETE操作，从触发器表中删除的行被插入到deleted表中。 </p>
+<p>执行UPDATE操作，先从触发器表中删除旧行，然后再插入新行。删除的旧行插入到deleted表中；更改后的新行被插入到inserted 表中。 </p>
+<p>使用DML触发器 </p>
+<p>1. INSERT和UPDATE触发器 </p>
+<p>当向表中插入或者更新记录时，INSERT或者UPDATE触发器被激活。一般情况下，这两种触发器常用来检查插入或者修改后的数据是否满足要求。 </p>
+<p>INSERT触发器被触发时，新的记录增加到触发器的对应表中，并且同时也添加到一个inserted表中。 </p>
+<p>修改一个记录等于插入了一个新的记录并且删除一个旧的记录。当在一个有UPDATE触发器的表中修改记录时，表中原来的记录被移动到deleted表中，修改过的记录插入到了插入表中，触发器可以参考deleted表和inserted表以及被修改的表，以确定如何完成数据库操作。 </p>
+<p>2. DELETE触发器 </p>
+<p>DELETE触发器通常用于下面的情况： </p>
+<p>防止那些确实要删除，但是可能会引起数据一致性问题的情况，一般是用于那些用作其他表的外部键记录。 </p>
+<p>用于级联删除操作。 </p>
+<p>例如： </p>
+<pre><code>/*例：下例说明inserted表和deleted表的作用*/
+
+if exists(select name from sysobjects where name=&apos;trig_2&apos; and type=&apos;TR&apos;)
+    drop trigger trig_2
+go
+
+create trigger trig_2 
+on student
+after update                         --update触发器
+as 
+    print &apos;inserted表&apos;
+    select * from inserted
+    print &apos;deleted表&apos;
+    select * from deleted
+go
+set nocount on
+update student set sname=&apos;关二&apos; where sno=2
+--drop trigger trig_2
+
+
+create trigger trig_3 
+on student
+after insert                         --insert触发器
+as 
+    print &apos;inserted表&apos;
+    select * from inserted
+    print &apos;deleted表&apos;
+    select * from deleted
+go
+insert student values(100,&apos;刘一百&apos;,&apos;男&apos;,25)
+drop trigger trig_3
+
+
+create trigger trig_4 
+on student
+after delete                         --delete触发器
+as 
+    print &apos;inserted表&apos;
+    select * from inserted
+    print &apos;deleted表&apos;
+    select * from deleted
+go
+delete student where sno=100
+drop trigger trig_4
+</code></pre><p>修改触发器 </p>
+<p>语法格式： </p>
+<p>ALTER TRIGGER trigger_name </p>
+<p>ON ( table | view ) </p>
+<p>{ </p>
+<p>{ ( FOR | AFTER | INSTEAD OF ) } </p>
+<p>{ [ DELETE ] [ , ] [ INSERT ] [ , ] [ UPDATE ] } </p>
+<p>AS </p>
+<p>sql_statement […n ] </p>
+<p>} </p>
+<p>DDL触发器使用 </p>
+<p>例如： </p>
+<pre><code>/*DDL触发器*/
+
+/*在test数据库上创建一个DDL触发器safe，
+用来防止数据库中的任一表被修改或删除。*/
+
+create trigger safetest
+on database                         --数据库DDL触发器
+after drop_table,alter_table
+as
+begin
+    raiserror(&apos;不能修改表结构&apos;,16,2)
+    rollback
+end
+go
+
+--执行以下程序，观察结果
+alter table student add nation char(10)
+
+disable trigger safetest on database
+drop trigger safetest on database
+---------------------------------------------------------
+
+
+/*在服务器上创建一个DDL触发器tablecreat，
+用来防止在服务器上创建数据库*/
+
+create trigger trig_last
+on all server
+after create_database
+as
+begin
+    raiserror(&apos;不能创建新的数据库&apos;,16,2)
+    rollback
+end
+go
+
+--执行以下程序，观察结果
+create database test_trig
+
+disable trigger trig_last on all server
+drop trigger trig_last on all server
+</code></pre><p>删除触发器 </p>
+<p>使用SQL Server Management Studio删除触发器 </p>
+<p>使用DROP TRIGGER语句来删除触发器。其语法格式如下： </p>
+<p>DROP TRIGGER { trigger } [ , …n ] </p>
+<p>触发器禁用和启用 </p>
+<p>例如： </p>
+<pre><code>/*触发器禁用和启用*/
+
+/*禁用sc表上的触发器trig_g。*/
+alter table sc disable trigger trig_g
+disable trigger trig_g on sc
+go
+
+/*启用sc表上的触发器trig_g。*/
+alter table sc enable trigger trig_g
+enable trigger trig_g on sc
+go
+
+--执行以下程序，观察结果
+insert into sc values(1,100,1,-50)
+select * from sc
+</code></pre><p>触发器具体应用 </p>
+<p>例如： </p>
+<pre><code>/*具体应用*/
+
+/*创建触发器trig3，
+当删除student表中的学生记录时，
+应该同时删除sc表中对应的记录*/
+
+create trigger trig_5
+on student
+for delete
+as 
+ delete sc
+ where sc.sno in(select sno from deleted)
+go
+
+select * from student
+select * from sc
+go
+
+/*exec sp_help score   --查看其中外键
+
+alter table score         --删除外键
+drop CONSTRAINT FK_score_course
+
+alter table score
+drop CONSTRAINT FK_score_student*/
+
+
+delete student where sno=3
+go
+
+select * from student
+select * from sc 
+-------------------------------------------------------------
+
+
+create trigger trig_g 
+on sc
+after insert,update
+as
+begin
+    declare @g int
+    select @g=grade from inserted
+    if @g&lt;0
+    begin
+         select &apos;成绩必须&gt;=0&apos;
+         rollback
+    end
+end
+go
+
+--执行以下程序，观察结果
+insert into sc values(1,10,1,50)
+select * from sc
+
+
+/*例: 建立一个修改触发器trigno，
+该触发器防止用户修改表student的学号*/
+
+create trigger trigno
+on student
+after update
+as
+if update(sno)
+    begin
+        raiserror(&apos;不能修改学号&apos;,16,2)
+        rollback
+    end
+go
+
+--执行以下程序，观察结果
+update student set sno=&apos;2&apos; where sno=&apos;1&apos;
+select * from student
+------------------------------------------------------
+
+
+/*INSTEAD OF触发器*/
+
+/*例：在student表上创建一个INSTEAD OF触发器trig_6，
+当用户插入数据时注意观察触发器的执行。*/
+
+create trigger trig_6
+on student
+instead of insert
+as
+    select * from student
+go
+
+--执行以下程序，观察结果
+insert into student(sno,sname) values(&apos;300&apos;,&apos;白扯&apos;)
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/05/sql server存储过程编程/" title="sql server存储过程编程">sql server存储过程编程</a></h2>
+                <p class="excerpt">
+                
+                存储过程  是一组完成特定功能的SQL 语句集合，经编译后存储在数据库中。 
+存储过程作为一个单元进行处理并以一个名称来标识。它能向用户返回数据、向数据库表中写入或修改数据等操作。 
+用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。 
+存储过程的作用 
+执行速度快; 
+减少网
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-05T03:36:50.000Z" class="post-list__meta--date date">2016-03-05</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/03/05/sql server存储过程编程/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/02/T-SQL 查询、修改数据表/" title="T-SQL 查询、修改数据表">T-SQL 查询、修改数据表</a></h2>
+                <p class="excerpt">
+                
+                T-SQL修改表数据 
+INSERT语句 
+语法： 
+INSERT[TOP(expression) [PERCENT]][INTO]{  | rowset_function_limited[ WITH ( &amp;lt;Table_Hint_Limited&amp;gt; [ …n ] ) ] /指定表提示/| 
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-02T15:13:34.000Z" class="post-list__meta--date date">2016-03-02</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/03/02/T-SQL 查询、修改数据表/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

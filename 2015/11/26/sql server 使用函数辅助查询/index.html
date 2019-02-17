@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>sql server 使用函数辅助查询 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="函数是所有语言系统下都具备的内部数据处理过程，SQL SERVER也同样内置了许多函数。在SQL SERVER中，函数是由一个或多个T-SQL语句组成的子程序。利用函数可以简化数据的处理操作。 
+函数分为  内置函数  和  用户定义函数  两种。用户定义函数接受零个或多个输入参数，并返回标量值或表。 
+一、数据类型转换函数 
+1、CAST(expression, AS date_type) 
+将">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="sql server 使用函数辅助查询 | Sage Wong">
+    <meta name="twitter:description" content="函数是所有语言系统下都具备的内部数据处理过程，SQL SERVER也同样内置了许多函数。在SQL SERVER中，函数是由一个或多个T-SQL语句组成的子程序。利用函数可以简化数据的处理操作。 
+函数分为  内置函数  和  用户定义函数  两种。用户定义函数接受零个或多个输入参数，并返回标量值或表。 
+一、数据类型转换函数 
+1、CAST(expression, AS date_type) 
+将">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="sql server 使用函数辅助查询 | Sage Wong">
+    <meta property="og:description" content="函数是所有语言系统下都具备的内部数据处理过程，SQL SERVER也同样内置了许多函数。在SQL SERVER中，函数是由一个或多个T-SQL语句组成的子程序。利用函数可以简化数据的处理操作。 
+函数分为  内置函数  和  用户定义函数  两种。用户定义函数接受零个或多个输入参数，并返回标量值或表。 
+一、数据类型转换函数 
+1、CAST(expression, AS date_type) 
+将">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/11/26/sql server 使用函数辅助查询/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-11-26T04:32:16.000Z" class="post-list__meta--date date">2015-11-26</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">sql server 使用函数辅助查询</h1>
+  </header>
+
+  <section class="post">
+    <p>函数是所有语言系统下都具备的内部数据处理过程，SQL SERVER也同样内置了许多函数。在SQL SERVER中，函数是由一个或多个T-SQL语句组成的子程序。利用函数可以简化数据的处理操作。 </p>
+<p>函数分为  内置函数  和  用户定义函数  两种。用户定义函数接受零个或多个输入参数，并返回标量值或表。 </p>
+<p>一、数据类型转换函数 </p>
+<p>1、CAST(expression, AS date_type) </p>
+<p>将表达式值转换为指定的数据类型。 </p>
+<p>例如： </p>
+<p>SELECT  CAST  (  ‘  2015-10-15  ‘  AS  datetime  ) </p>
+<p>SELECT  CAST  (  GETDATE  ()  AS  char  ) </p>
+<p>SELECT  CAST  (  ‘  123  ‘  AS  int  ) </p>
+<p>2、CONVERT(date_type[(length)],  expression[,style]) </p>
+<p>与CAST函数相似， </p>
+<p>date_type(length) 规定目标数据类型。 </p>
+<p>style 规定日期/时间的输出格式。 </p>
+<p>下表为日期型与字符型转换时 style的取值。 </p>
+<p>例如： </p>
+<p>SELECT  CONVERT  (  char  ,  GETDATE  (),  <strong>101</strong> ) </p>
+<p>style取值 </p>
+<p>无世纪值 </p>
+<p>| </p>
+<p>style取值 </p>
+<p>有世纪值 </p>
+<p>| </p>
+<p>标准 </p>
+<p>| </p>
+<p>输入/输出   </p>
+<p>—|—|—|—<br>| </p>
+<p>0或100 </p>
+<p>| </p>
+<p>默认值 </p>
+<p>| </p>
+<p>mm dd yyyy hh:miAM(或)PM   </p>
+<p>1 </p>
+<p>| </p>
+<p>101 </p>
+<p>| </p>
+<p>美国 </p>
+<p>| </p>
+<p>mm/dd/yyyy   </p>
+<p>2 </p>
+<p>| </p>
+<p>102 </p>
+<p>| </p>
+<p>ANSI </p>
+<p>| </p>
+<p>mm dd yyyy hh:miAM(或)PM   </p>
+<p>| </p>
+<p>9或109 </p>
+<p>| </p>
+<p>默认值＋毫秒 </p>
+<p>| </p>
+<p>mm-dd-yy   </p>
+<p>10 </p>
+<p>| </p>
+<p>110 </p>
+<p>| </p>
+<p>美国 </p>
+<p>| </p>
+<p>yymmdd   </p>
+<p>12 </p>
+<p>| </p>
+<p>112 </p>
+<p>| </p>
+<p>ISO </p>
+<p>|   </p>
+<p>二、 日期函数 </p>
+<p>1、GETDATE() </p>
+<p>该函数返回当前系统日期时间。 </p>
+<p>例如： </p>
+<p>SELECT  GETDATE  () </p>
+<p>返回结果：2009-02-22 23:05:52.483 </p>
+<p>2 、DATEPART(datepart,date_expression) </p>
+<p>返回日期表达式值的指定部分， </p>
+<p>返回值为数值型数据。 </p>
+<p>例如： </p>
+<p>SELECT  DATEPART  (  YEAR  ,  GETDATE  ()) </p>
+<p>SELECT  DATEPART  (  MONTH  ,  GETDATE  ()) </p>
+<p>SELECT  DATEPART  (  DAY  ,  GETDATE  ()) </p>
+<p>date型数据日期部分的可能取值: </p>
+<p>datepart </p>
+<p>| </p>
+<p>缩　写 </p>
+<p>| </p>
+<p>说　　明   </p>
+<p>—|—|—  </p>
+<p>year </p>
+<p>| </p>
+<p>yy, yyyy </p>
+<p>| </p>
+<p>年   </p>
+<p>quarter </p>
+<p>| </p>
+<p>qq, q </p>
+<p>| </p>
+<p>季度   </p>
+<p>month </p>
+<p>| </p>
+<p>mm, m </p>
+<p>| </p>
+<p>月   </p>
+<p>Day of year </p>
+<p>| </p>
+<p>dy, y </p>
+<p>| </p>
+<p>一年中的第几天   </p>
+<p>day </p>
+<p>| </p>
+<p>dd, d </p>
+<p>| </p>
+<p>一月中的第几天   </p>
+<p>week </p>
+<p>| </p>
+<p>wk, ww </p>
+<p>| </p>
+<p>一年中的第几周   </p>
+<p>hour </p>
+<p>| </p>
+<p>hh </p>
+<p>| </p>
+<p>小时   </p>
+<p>minute </p>
+<p>| </p>
+<p>mi, n </p>
+<p>| </p>
+<p>分   </p>
+<p>second </p>
+<p>| </p>
+<p>ss, s </p>
+<p>| </p>
+<p>秒   </p>
+<p>millisecond </p>
+<p>| </p>
+<p>ms </p>
+<p>| </p>
+<p>千分之一秒   </p>
+<p>3、DATENAME(datepart,date_expression) </p>
+<p>该函数返回日期表达式值的指定部分的名称, </p>
+<p>返回值为字符型数据。例如： </p>
+<p>SELECT  DATENAME  (  YEAR  ,  GETDATE  ()) </p>
+<p>SELECT  DATENAME  (WEEKDAY,  GETDATE  ()) </p>
+<p>4、DATEADD(datepart,  interge_expression, date_expression ) </p>
+<p>该函数返回日期表达式值的指定部分，  加上整数表达式值后的日期时间。 </p>
+<p>SELECT  DATEADD  (  day  ,  <strong>10</strong> ,  GETDATE  ()) </p>
+<p>5、DATEDIFF(datepart,  date_expression1, date_expression2) </p>
+<p>该函数返回日期表达式1的值和日期表达式2的 </p>
+<p>值在指定部分的差值。例如： </p>
+<pre><code> 1 DECLARE @t1 datetime,@t2 datetime
+2 SET @t1=GETDATE()
+3 WAITFOR delay &apos;00:00:02&apos;
+4 SET @t2=GETDATE()
+5 SELECT DATEDIFF(SECOND,@t1, @t2)　
+</code></pre><p>6、DAY(date_expression) </p>
+<p>该函数返回日期表达式值的“日”部分。 </p>
+<p>例如： </p>
+<p>SELECT  DAY  (  GETDATE  ()) </p>
+<p>7、MONTH(date_expression) </p>
+<p>该函数返回日期表达式值的“月”部分。 </p>
+<p>例如： </p>
+<p>SELECT  MONTH  (  GETDATE  ()) </p>
+<p>8、YEAR(date_expression) </p>
+<p>该函数返回日期表达式值的“年”部分。 </p>
+<p>例如： </p>
+<p>SELECT  YEAR  (  GETDATE  ()) </p>
+<p>9、getutcdate </p>
+<p>返回当前utc时间(世界标准时间)。 </p>
+<p>例如： </p>
+<p>select  getutcdate() </p>
+<p>三、 聚合函数 </p>
+<p>1、COUNT([ALL | DISTINCT]expression | * ) </p>
+<p>2、AVG( ), MAX( ), MIN( ), SUM( ) </p>
+<p>3、VAR( ), VARP( ), STDEV( ),  STDEVP( ) </p>
+<p>四、 数学函数 </p>
+<p>1、ABS(numeric_expression) </p>
+<p>该函数返回表达式值（bit型除外）的绝对值，返回值的数据类型与原数据类型一致。 </p>
+<p>例如： </p>
+<p>SELECT  ABS  (  -  <strong>3.0</strong> ),  ABS  (  <strong>2.0</strong> ),  ABS  (  <strong>0.0</strong> ) </p>
+<p>2、AVG([ALL|DISTINCT]numeric_expression) </p>
+<p>该函数返回查询出的一组数据的平均值。 </p>
+<p>例如： </p>
+<p>SELECT  AVG  (grade)  from  score  where  cno  =  <strong>1</strong></p>
+<p>3、COUNT([ALL | DISTINCT]expression | * ) </p>
+<p>该函数返回查询出的表达式数。 </p>
+<p>例如： </p>
+<p>SELECT  count  (grade)  from  score  where  cno  =  <strong>1</strong></p>
+<p>4、CEILING(numeric_expression) </p>
+<p>返回最小的大于或等于表达式值的整数值。 </p>
+<p>例如： </p>
+<p>SELECT  CEILING  ($  <strong>99.99</strong> ),  CEILING  ($  -  <strong>99.99</strong> ) ,  CEILING  ($  <strong>0.0</strong> ) </p>
+<p>5、FLOOR(numeric_expression) </p>
+<p>返回最大的小于或等于表达式值的整数值。 </p>
+<p>例如： </p>
+<p>SELECT  FLOOR  ($  <strong>99.99</strong> ),  FLOOR  ($  -  <strong>99.99</strong> ) ,  FLOOR  ($  <strong>0.0</strong> ) </p>
+<p>6、RAND([integer_expression]) </p>
+<p>该函数返回一个位于0与1之间的随机数。表达式值作为产生随机数的起始值，返回值为浮点型数。 </p>
+<p>例如： </p>
+<pre><code>DECLARE @number smallint
+SET @number=1 
+WHILE (@number&lt;=3)
+BEGIN
+      SELECT  RAND(@number)
+      SET @number=@number+1
+END
+GO
+</code></pre><p>7、ROUND(numeric_expression,  int_expression1, [integer_expression2]) </p>
+<p>当 int_expression1 为正数时，numeric_expression 四舍五入为 int_expression1所指定的小数位数。 </p>
+<p>当 int_expression1为负数时，numeric_expression 则按 int_expression1所指定的位数在小数点的左边四舍五入. </p>
+<p>当 int_expression2 非零时，表示用int_expression1表示的精度对numeric_expression进行截短。 </p>
+<p>SELECT  ROUND  （  <strong>2456.12582</strong> ,  <strong>3</strong> ）  返回结果为2456.12600。 </p>
+<p>SELECT  ROUND  （  <strong>2456.12582</strong> ,  <strong>3</strong> ,  <strong>1</strong> ）  返回值为2456.12500。 </p>
+<p>ROUND  (  <strong>748.58</strong> ,  -  <strong>1</strong> )  返回值为750.00 </p>
+<p>ROUND  (  <strong>748.58</strong> ,  -  <strong>2</strong> )  返回值为700.00 </p>
+<p>ROUND  (  <strong>748.58</strong> ,  -  <strong>4</strong> )  返回值为0 </p>
+<p>五、 字符串函数 </p>
+<p>1、ASCII(chracter_expression) </p>
+<p>返回字符的ASCII码值，返回值为整型数据。 </p>
+<p>例如： </p>
+<p>SELECT  ASCII  (  ‘  a  ‘  ),  ASCII  (‘Z’)  返回结果为：97  90 </p>
+<p>2、CHAR（inter_expression） </p>
+<p>该函数返回ASCII码值代表的字符。 </p>
+<p>例如： </p>
+<p>SELECT  CHAR  (  <strong>97</strong> ),  CHAR  (  <strong>90</strong> )  返回结果为：a  Z </p>
+<p>3、LEN(charater_expression) </p>
+<p>该函数返回字符串的长度，即字符的个数， </p>
+<p>注意1个汉字计为一个字符。 </p>
+<p>例如： </p>
+<p>SELECT  len  (  ‘  张三  ‘  ),  len  (  ‘  abc  ‘  )  返回结果为：2   3 </p>
+<p>4、DATALENGTH(expression) </p>
+<p>返回表达式所占用的字节数， </p>
+<p>常用于查看变长数据类型的长度。 </p>
+<p>select  datalengh(‘  <strong>100</strong> ’),  datalength  (  <strong>100</strong> ) </p>
+<p>5、LEFT(chracter_expression,  integer_expression) </p>
+<p>返回字符串从左边开始指定个数的字符。 </p>
+<p>select  LEFT  (  ‘  sdf  ‘  ,  <strong>1</strong> )  +LEFT  (  ‘  qlsdf  ‘  ,  <strong>2</strong> ) </p>
+<p>6、RIGHT(chracter_expression,  integer_expression) </p>
+<p>返回字符串从右边开始指定个数的字符。 </p>
+<p>7、SUBSTRING(chracter_expression,  begin_integer_expression,  lenth_integer_expression ) </p>
+<p>返回字符串在起始位置开始的指定长度的子串。 </p>
+<p>例如： </p>
+<p>SELECT  SUBSTRING  (  ‘  traffic  ‘  ,  <strong>3</strong> ,  <strong>4</strong> ) </p>
+<p>8、UPPER(chracter_expression) </p>
+<p>该函数返回字符的大写形式。 </p>
+<p>例如： </p>
+<p>SELECT  upper  (  ‘  traffic’) </p>
+<p>9、LOWER(chracter_expression) </p>
+<p>该函数返回字符的小写形式。 </p>
+<p>10、SPACE(integer_expression) </p>
+<p>该函数返回指定长度的空格字符串。 </p>
+<p>SELECT  ‘  放假  ‘  +  SPACE  (  <strong>6</strong> )  +  ‘  美呀！  ‘ </p>
+<p>11、REPLICATE(chracter_expression,  integer_expression) </p>
+<p>该函数将字符串复制指定的遍数。 </p>
+<p>例如： </p>
+<p>SELECT  REPLICATE  (‘SQL’,  <strong>3</strong> )  返回结果为：SQLSQLSQL </p>
+<p>12、STUFF(chracter_expression1, begin_integer_expression,length,  chracter_expression2) </p>
+<p>该函数将字符串1从开始位置到结束位置中的 </p>
+<p>字符删去然后将字符串2填充进去。 </p>
+<p>SELECT  STUFF  (‘SQlver’,  <strong>3</strong> ,  <strong>1</strong> ,’L Ser’) </p>
+<p>13、REVERSE(chracter_expression) </p>
+<p>该函数返回字符串的反序字符串。 </p>
+<p>SELECT  REVERSE  (‘SQL’) </p>
+<p>14、LTRIM(chracter_expression) </p>
+<p>该函数返回删除字符串左端空格后的字符串。 </p>
+<p>SELECT  LEN  (‘ SQL‘),  LEN  (  LTRIM  (‘ SQL‘)) </p>
+<p>15、RTRIM(chracter_expression) </p>
+<p>该函数返回删除字符串右端空格后的字符串。 </p>
+<p>16、STR(float_expression[ integer_expr  ession1[,integer_expression2]]) </p>
+<p>该函数返回浮点表达式值的字符串形式。 </p>
+<p>表达式1为字符串长度，表达式2为小数位数。 </p>
+<p>若无表达式2，默认为0； </p>
+<p>若无表达式1，默认为浮点数的整数部分长度。 </p>
+<p>例如： </p>
+<pre><code>SELECT  STR( **123.456** ), STR( **123.456** , **4** , **1** ),STR( **123.456** , **6** , **4** )
+</code></pre><p>返回结果为：123  123  123.46 </p>
+<p>六、 判定函数 </p>
+<p>1、ISDATE(expression) </p>
+<p>该函数判断表达式是否为一个合法的日期型 </p>
+<p>数据，是则返回1，否则返回0。 </p>
+<pre><code>1 IF ISDATE(&apos;2009-05-12 10:19:41.177&apos;)= **1**  PRINT &apos;VALID&apos;
+2 ELSE
+3 PRINT &apos;INVALID&apos;
+</code></pre><p>2、ISNUMERIC(expression) </p>
+<p>该函数判断表达式是否为一个合法的数值型 </p>
+<p>数据（包括整数型、数值型和浮点型）， </p>
+<p>是则返回1，否则返回0。 </p>
+<p>SELECT  ISNUMERIC  (  <strong>56.6</strong> ) </p>
+<p>SELECT  ISNUMERIC  (  ‘  hello  ‘  ) </p>
+<p>3、ISNULL(expression1,expression2) </p>
+<p>该函数判断表达式1的值是否为NULL， </p>
+<p>是则返回表达式2的值， </p>
+<p>不是则返回表达式1的值。例如： </p>
+<p>SELECT  SNO,CNO,  ISNULL  (grade,  <strong>0</strong> )  FROM  SCORE </p>
+<p>4、NULLIF(expression1,expression2) </p>
+<p>该函数判断表达式1的值是否与表达式2的值相等，是则返回NULL，否则返回表达式1的值。 </p>
+<p>SELECT  NULLIF  (‘ABc’,’AB’) </p>
+<p>SELECT  NULLIF  (‘AB’,’AB’) </p>
+<p>七、 用户自定义函数 </p>
+<p>1、标量值函数的定义 </p>
+<p>CREATE FUNCTION [所有者名.]函数名 </p>
+<p>([{形式参数[AS]类型[=默认值]}[,…n]]) </p>
+<p>RETURNS 返回值类型 </p>
+<p>[AS] </p>
+<p>BEGIN </p>
+<p>函数体 </p>
+<p>RETURN 标量表达 </p>
+<p>END </p>
+<p>参数说明： </p>
+<p>1) 形式参数的数据类型为系统的基本标量类型，不能为timestamp类型、用户定义数据类型和非标量类型 </p>
+<p>（如cursor和table）。 </p>
+<p>2) 返回值类型为系统的基本标量类型，但text、ntext、image和timestamp除外。 </p>
+<p>3) 函数体由T-SQL语句序列构成。 </p>
+<p>4) 函数返回标量表达式的值。 </p>
+<p>2、表值函数的定义 </p>
+<p>CREATE FUNCTION [所有者名.] </p>
+<p>函数名([{形式参数[AS]类型[=默认值]}[,…n]]) </p>
+<p>RETURNS TABLE </p>
+<p>[AS] </p>
+<p>RETURN [(select语句)] </p>
+<p>参数说明： </p>
+<p>1)形式参数的数据类型为系统的基本标量类型，不能为timestamp类型、用户定义数据类型和非标量类型 </p>
+<p>（如cursor和table）。 </p>
+<p>2) TABLE关健字指定此函数返回一个表. </p>
+<p>3)  函数返回select语句的结果。 </p>
+<p>当调用用户自定义函数时，必须提供函数名和参数，标量函数可以在SELECT语句中调用，或用EXEC语句执行调用，调用形式分别为：所有者名.函数名（实参1, 实参2, …实参n） </p>
+<p>其中用EXEC语句调用时参数次序可与定义时不同，表型函数只能通过SELECT语句调用。 </p>
+<p>可有两种方法删除用户已定义的函数即用命令方式和界面方式， </p>
+<p>命令格式为： </p>
+<p>DROP FUNCTION {[owner_name]function_name}[,…n] </p>
+<p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/11/26/递归与分治之棋盘覆盖问题/" title="递归与分治之棋盘覆盖问题">递归与分治之棋盘覆盖问题</a></h2>
+                <p class="excerpt">
+                
+                在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。 
+显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。 
+下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。 
+
+在棋盘覆盖问题
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-11-26T05:02:21.000Z" class="post-list__meta--date date">2015-11-26</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/11/26/递归与分治之棋盘覆盖问题/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/11/18/sql server T-SQL 基础/" title="sql server T-SQL 基础">sql server T-SQL 基础</a></h2>
+                <p class="excerpt">
+                
+                SQL语言按照用途可以分为如下3类： 
+①  DDL(Data Definition Language)  数据定义语言： 
+定义修改和删除数据库、表、索引和视图等 
+②  DML(Data Manipulation Language)  数据处理语言： 
+对数据进行查询(SELECT)、插入(IN
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-11-18T05:05:29.000Z" class="post-list__meta--date date">2015-11-18</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/T-SQL/">T-SQL</a>, <a class="tag-link" href="/tags/sql-server-2008/">sql server 2008</a>
+</span><a class="btn-border-small" href="/2015/11/18/sql server T-SQL 基础/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

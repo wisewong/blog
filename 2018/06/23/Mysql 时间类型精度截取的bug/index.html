@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Mysql 时间类型精度截取的bug | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 
+首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。 
+当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断 
+db的server">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Mysql 时间类型精度截取的bug | Sage Wong">
+    <meta name="twitter:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 
+首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。 
+当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断 
+db的server">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Mysql 时间类型精度截取的bug | Sage Wong">
+    <meta property="og:description" content="mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 
+首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。 
+当mysql-connector-java版本&amp;lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&amp;gt;5.1.22后，秒以下的值将不会截断 
+db的server">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2018/06/23/Mysql 时间类型精度截取的bug/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-06-23T10:05:07.000Z" class="post-list__meta--date date">2018-06-23</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Mysql 时间类型精度截取的bug</h1>
+  </header>
+
+  <section class="post">
+    <p>mysql-connector-java版本升级出现的一次问题。涉及到了时间精度的截取和四舍五入。 </p>
+<p>首先了解一点，timestamp,datetime如果不指定精度,默认的精度是秒。 </p>
+<p>当mysql-connector-java版本&lt;=5.1.22时,db的客户端会将Datetime,Timestamp秒以下的精度丢弃。版本&gt;5.1.22后，秒以下的值将不会截断 </p>
+<p>db的server端会对超出精度位数的数据进行四舍五入!! </p>
+<p>举个例子：在db建表时没指定精度时，插入精确到毫秒级别的日期 </p>
+<p>如果使用mysql-connector-java版本&lt;=5.1.22，在客户端用’2018-04-02 23:59:59.999’插入日期，精度会在客户端被截取到秒，插入db里是’2018-04-02 23:59:59’ </p>
+<p>如果升级版本，在db的客户端用’2018-04-02 23:59:59.999’插入日期，精度在客户端不会被截断，db的server端会对超出精度位数的数据进行四舍五入，即插入db里是’2018-04-03 00:00:00 ‘ </p>
+<p>所以说mysql-connector-java版本升级就带了时间与原本不一致的问题，结合具体业务逻辑上的使用，可能会造成不同大小的影响。 </p>
+<p>要想证实这个观点，可以分两步： </p>
+<ul>
+<li>server端是否会四舍五入 </li>
+</ul>
+<ul>
+<li>客户端代码不同版本对精度是否有不同的处理方式 </li>
+</ul>
+<p>来实际测一下server会不会四舍五入： </p>
+<pre><code>CREATE TABLE `time_test` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `create_time` timestamp NOT NULL DEFAULT &apos;1971-01-01 00:00:00&apos; ,
+  `end_time` timestamp NOT NULL DEFAULT &apos;1971-01-01 00:00:00&apos; ,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+
+insert into time_test (create_time,end_time) values(&apos;2018-04-02 23:59:59&apos;,&apos;2018-04-02 23:59:59.999&apos;);
+
+
+select * from time_test;
+</code></pre><p><code></code></p>
+<p><code>看一下记录：</code></p>
+<p><code>+----+---------------------+---------------------+</code></p>
+<p><code>| id | create_time         | end_time            |</code></p>
+<p><code>+----+---------------------+---------------------+</code></p>
+<p><code>|</code> <code>2</code> <code>|</code> <code>2018</code> <code>-</code> <code>04</code> <code>-</code> <code>02</code> <code>23</code> <code>:</code> <code>59</code> <code>:</code> <code>59</code> <code>|</code> <code>2018</code> <code>-</code> <code>04</code> <code>-</code> <code>03</code> <code>00</code> <code>:</code> <code>00</code> <code>:</code> <code>00</code> <code>|</code></p>
+<p><code>+----+---------------------+---------------------+</code></p>
+<p><img src="https://img-blog.csdn.net/20180623180117338?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt="">   </p>
+<p>可以看出db的server端果然会进行四舍五入。 </p>
+<p>再看一下mysql驱动里是怎么写的，是否真的是截断精度了。 </p>
+<p>Mysql对于时间精度的处理在  com.mysql.jdbc.PreparedStatement#setTimestampInternal这个方法中 </p>
+<p>翻一下5.1.21的源码看一下： </p>
+<pre><code>private void setTimestampInternal(int parameterIndex,
+      Timestamp x, Calendar targetCalendar,
+      TimeZone tz, boolean rollForward) throws SQLException {
+   synchronized (checkClosed()) {
+      if (x == null) {
+         setNull(parameterIndex, java.sql.Types.TIMESTAMP);
+      } else {
+         checkClosed();
+
+         if (!this.useLegacyDatetimeCode) {
+            newSetTimestampInternal(parameterIndex, x, targetCalendar);
+         } else {
+            String timestampString = null;
+
+            Calendar sessionCalendar = this.connection.getUseJDBCCompliantTimezoneShift() ?
+                  this.connection.getUtcCalendar() :
+                     getCalendarInstanceForSessionOrNew();
+
+            synchronized (sessionCalendar) {
+               x = TimeUtil.changeTimezone(this.connection,
+                     sessionCalendar,
+                     targetCalendar,
+                     x, tz, this.connection
+                  .getServerTimezoneTZ(), rollForward);
+            }
+
+            if (this.connection.getUseSSPSCompatibleTimezoneShift()) {
+               doSSPSCompatibleTimezoneShift(parameterIndex, x, sessionCalendar);
+            } else {
+               synchronized (this) {
+                  if (this.tsdf == null) {
+                     //这里，截断秒以下的精度
+                     this.tsdf = new SimpleDateFormat(&quot;&apos;&apos;yyyy-MM-dd HH:mm:ss&apos;&apos;&quot;, Locale.US); //$NON-NLS-1$
+                  }
+
+                  timestampString = this.tsdf.format(x);
+
+                  //这里永远不会执行添加秒以下的精度
+                  if (false) { // not so long as Bug#50774 is around
+                     StringBuffer buf = new StringBuffer();
+                     buf.append(timestampString);
+                     int nanos = x.getNanos();
+
+                     if (nanos != 0) {
+                        buf.append(&apos;.&apos;);
+                        buf.append(formatNanos(nanos));
+                     }
+
+                     buf.append(&apos;\&apos;&apos;);
+                  }
+
+                  setInternal(parameterIndex, timestampString); // SimpleDateFormat is not
+                                                     // thread-safe
+               }
+            }
+         }
+
+         this.parameterTypes[parameterIndex - 1 + getParameterIndexOffset()] = Types.TIMESTAMP;
+      }
+   }
+}
+</code></pre><p>再看下5.1.32的实现： </p>
+<pre><code>private void setTimestampInternal(int parameterIndex,
+      Timestamp x, Calendar targetCalendar,
+      TimeZone tz, boolean rollForward) throws SQLException {
+   synchronized (checkClosed().getConnectionMutex()) {
+      if (x == null) {
+         setNull(parameterIndex, java.sql.Types.TIMESTAMP);
+      } else {
+         checkClosed();
+
+         if (!this.useLegacyDatetimeCode) {
+            newSetTimestampInternal(parameterIndex, x, targetCalendar);
+         } else {
+            Calendar sessionCalendar = this.connection.getUseJDBCCompliantTimezoneShift() ?
+                  this.connection.getUtcCalendar() :
+                     getCalendarInstanceForSessionOrNew();
+
+            synchronized (sessionCalendar) {
+               x = TimeUtil.changeTimezone(this.connection,
+                     sessionCalendar,
+                     targetCalendar,
+                     x, tz, this.connection
+                  .getServerTimezoneTZ(), rollForward);
+            }
+
+            if (this.connection.getUseSSPSCompatibleTimezoneShift()) {
+               doSSPSCompatibleTimezoneShift(parameterIndex, x, sessionCalendar);
+            } else {
+               synchronized (this) {
+                  //同样截断精度
+                  if (this.tsdf == null) {
+                     this.tsdf = new SimpleDateFormat(&quot;&apos;&apos;yyyy-MM-dd HH:mm:ss&quot;, Locale.US); //$NON-NLS-1$
+                  }
+
+                  StringBuffer buf = new StringBuffer();
+                  buf.append(this.tsdf.format(x));
+
+                  //这里，如果server支持fractional seconds的话，就加上毫秒的精度
+                  if (this.serverSupportsFracSecs) {
+                     int nanos = x.getNanos();
+
+                     if (nanos != 0) {
+                        buf.append(&apos;.&apos;);
+                        buf.append(TimeUtil.formatNanos(nanos, this.serverSupportsFracSecs, true));
+                     }
+                  }
+
+                  buf.append(&apos;\&apos;&apos;);
+
+                  setInternal(parameterIndex, buf.toString()); // SimpleDateFormat is not
+                                                     // thread-safe
+               }
+            }
+         }
+
+         this.parameterTypes[parameterIndex - 1 + getParameterIndexOffset()] = Types.TIMESTAMP;
+      }
+   }
+}
+</code></pre><p>看来果然是个bug…看一下mysql官网的描述： <a href="https://dev.mysql.com/doc/relnotes/connector-j/5.1/en/news-5-1-23.html" target="_blank" rel="noopener"> 参见bugFix第三条 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/06/23/大数据量下的集合过滤—Bloom Filter/" title="大数据量下的集合过滤—Bloom Filter">大数据量下的集合过滤—Bloom Filter</a></h2>
+                <p class="excerpt">
+                
+                算法背景如果想判断一个元素是不是在一个集合里，一般想到的是将集合中所有元素保存起来，然后通过比较确定。  链表  、  树  、  散列表  （又叫哈希表，Hash table）等等数据结构都是这种思路，存储位置要么是磁盘，要么是内存。很多时候要么是以时间换空间，要么是以空间换时间。 
+在响应时间要
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-06-23T10:27:41.000Z" class="post-list__meta--date date">2018-06-23</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2018/06/23/大数据量下的集合过滤—Bloom Filter/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/04/11/Tomcat NIO/" title="Tomcat NIO">Tomcat NIO</a></h2>
+                <p class="excerpt">
+                
+                说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-04-11T07:00:23.000Z" class="post-list__meta--date date">2018-04-11</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2018/04/11/Tomcat NIO/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

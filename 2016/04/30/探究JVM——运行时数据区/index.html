@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>探究JVM——运行时数据区 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 
+Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如图所示： 
+
+其中  程序计数器  、">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="探究JVM——运行时数据区 | Sage Wong">
+    <meta name="twitter:description" content="最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 
+Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如图所示： 
+
+其中  程序计数器  、">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="探究JVM——运行时数据区 | Sage Wong">
+    <meta property="og:description" content="最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 
+Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如图所示： 
+
+其中  程序计数器  、">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/04/30/探究JVM——运行时数据区/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-04-30T03:51:23.000Z" class="post-list__meta--date date">2016-04-30</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">探究JVM——运行时数据区</h1>
+  </header>
+
+  <section class="post">
+    <p>最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 </p>
+<p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁。Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如图所示： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201604/740591-20160430114608644-1958608011.png" alt=""></p>
+<p>其中  程序计数器  、  VM栈  、  native栈  为线程隔离的，  堆(Heap)  和  方法区(Method Aera,or Non-Heap)  为线程共享的。至于常量池，自JDK 1.7的HotSpot VM后，把原本放在方法区的字符串常量池移出。 </p>
+<p>下面来一个个介绍各个区域： </p>
+<h4 id="1-程序计数器-Program-Counter-Register"><a href="#1-程序计数器-Program-Counter-Register" class="headerlink" title="1.程序计数器(Program Counter Register)"></a>1.程序计数器(Program Counter Register)</h4><p>程序计数器  是一块较小的内存空间，它可以看作是当前线程所执行的字节码的行号指示器。 </p>
+<p>在虚拟机的概念模型里（仅是概念模型，各种虚拟机可能会通过一些更高效的方式去实现），字节码解释器工作时就是通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都需要依赖这个计数器来完成。 </p>
+<p>由于Java虚拟机的多线程是通过线程轮流切换并分配处理器执行时间的方式来实现的，在任何一个确定的时刻，一个处理器（对于多核处理器来说是一个内核）都只会执行一条线程中的指令。因此，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这类内存区域为“  线程私有  ”的内存。 </p>
+<p>如果线程正在执行的是一个Java方法，这个计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是Native方法，这个计数器值则为空（Undefined）。此内存区域是  唯一一个  在Java虚拟机规范中  没有规定任何OutOfMemoryError  情况的区域。 </p>
+<h4 id="2-Java虚拟机栈-Java-Virtual-Machine-Stacks"><a href="#2-Java虚拟机栈-Java-Virtual-Machine-Stacks" class="headerlink" title="2.Java虚拟机栈(Java Virtual Machine Stacks)"></a>2.Java虚拟机栈(Java Virtual Machine Stacks)</h4><p>与程序计数器一样，Java虚拟机栈也是  线程私有  的，它的生命周期与线程相同。 </p>
+<p>虚拟机栈描述的  是Java  方法执行  的内存模型  ：每个方法在执行的同时都会创建一个栈帧（Stack Frame）用于存储局部变量表、操作数栈、动态链接、方法出口等信息。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。 </p>
+<p>通常会认为内存区分为  堆内存  （Heap）  和  栈内存  （Stack）  ，所指的“栈”就是现在讲的虚拟机栈，或者说是虚拟机栈中局部变量表部分。 </p>
+<p>局部变量表  存放了编译期可知的各种  基本数据类型  （boolean、byte、char、short、int、float、long、double）  、  对象引用  （reference类型，它不等同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向一个代表对象的句柄或其他与此对象相关的位置）  和  returnAddress类型  （指向了一条字节码指令的地址）  。 </p>
+<p>其中64位长度的long和double类型的数据会占用2个局部变量空间  （Slot）  ，其余的数据类型只占用1个。局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。 </p>
+<p>StackOverflow  ：如果线程请求的栈深度大于虚拟机所允许的深度，将抛出  StackOverflowError  异常 </p>
+<p>OOM  ：如果虚拟机栈可以  动态扩展  （当前大部分的Java虚拟机都可动态扩展，只不过Java虚拟机规范中也允许固定长度的虚拟机栈）  ，如果扩展时无法申请到足够的内存，就会抛出  OutOfMemoryError  异常。 </p>
+<h4 id="3-本地方法栈-Native-Method-Stack"><a href="#3-本地方法栈-Native-Method-Stack" class="headerlink" title="3.本地方法栈(Native Method Stack)"></a>3.本地方法栈(Native Method Stack)</h4><p>与VM栈所作用非常相似，区别是VM栈为虚拟机执行Java方法（也就是字节码）服务，而本地方法栈则为虚拟机使用到的Native方法服务。 </p>
+<p>在虚拟机规范中对本地方法栈中方法使用的语言、使用方式与数据结构并没有强制规定，因此具体的虚拟机可以自由实现它。甚至有的虚拟机（譬如Sun HotSpot虚拟机）直接就把本地方法栈和虚拟机栈合二为一。与虚拟机栈一样，本地方法栈区域也会抛出StackOverflowError和OutOfMemoryError异常。 </p>
+<p>StackOverflow  ：同虚拟机栈 </p>
+<p>OOM  ：同虚拟机栈 </p>
+<p>以上都是线程私有的内存区域，下面是线程共享内存区域： </p>
+<h4 id="1-Java堆-Heap"><a href="#1-Java堆-Heap" class="headerlink" title="1.Java堆(Heap)"></a>1.Java堆(Heap)</h4><p>Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。 </p>
+<p>此内存区域的唯一目的就是  存放对象实例  ，几乎所有的对象实例都在这里分配内存。对于大多数应用来说，Java堆（Java Heap）是Java虚拟机所管理的内存中最大的一块。这一点在Java虚拟机规范中的描述是：所有的对象实例以及数组都要在堆上分配，但是随着JIT编译器的发展与逃逸分析技术逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化发生，所有的对象都分配在堆上也渐渐变得不是那么“绝对”了。 </p>
+<p>Java堆是  垃圾收集器管理的主要区域  ，因此很多时候也被称做“GC堆”（Garbage Collected Heap）。 </p>
+<p>从内存回收的角度来看，由于现在收集器基本都采用分代收集算法，所以Java堆中还可以细分为：  新生代  和  老年代  ；再细致一点的话新生代中分为  Eden空间  、  From Survivor空间、To Survivor空间  等。 </p>
+<p>从内存分配的角度来看，线程共享的Java堆中可能划分出多个  线程私有的分配缓冲区（  Thread Local Allocation Buffer,TLAB）。不过无论如何划分，都与存放内容无关，无论哪个区域，存储的都仍然是对象实例，进一步划分的目的是为了更好地回收内存，或者更快地分配内存。 </p>
+<p>Java堆可以处于物理上不连续的内存空间中，只要逻辑上是连续的即可，就像我们的磁盘空间一样。在实现时，既可以实现成固定大小的，也可以是  可扩展的  ，不过当前主流的虚拟机都是按照可扩展来实现的（通过-Xmx和-Xms控制）。 </p>
+<p>OOM  ：如果在堆中没有内存完成实例分配，并且堆也无法再扩展时，将会抛出OutOfMemoryError异常。 </p>
+<h4 id="2-方法区-Method-Area"><a href="#2-方法区-Method-Area" class="headerlink" title="2.方法区(Method Area)"></a>2.方法区(Method Area)</h4><p>用于存储已被虚拟机加载的  类信息、常量、静态变量  、即时编译器编译后的  代码  等数据。 </p>
+<p>虽然Java虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个别名叫做  Non-Heap（非堆）  ，目的应该是与Java堆区分开来。 </p>
+<p>永久代  ：对于习惯在HotSpot虚拟机上开发、部署程序的开发者来说，很多人都更愿意把方法区称为“永久代”（Permanent Generation），本质上两者并  不等价  ，仅仅是因为HotSpot虚拟机的设计团队选择把GC分代收集扩展至方法区，或者说使用永久代来实现方法区而已。这样HotSpot的垃圾收集器可以像管理Java堆一样管理这部分内存，能够省去专门为方法区编写内存管理代码的工作。对于其他虚拟机（如BEA JRockit、IBM J9等）来说是  不存在永久代  的概念的。 </p>
+<p>根据官方发布的路线图信息，现在也有放弃永久代并逐步改为采用Native Memory来实现方法区的规划了，在目前已经发布的JDK 1.7的HotSpot中，已经把原本放在永久代的字符串常量池移出。 </p>
+<p>方法区和Java堆一样不需要连续的内存和可以选择固定大小或者可扩展外，还可以选择不实现垃圾收集。相对而言，垃圾收集行为在这个区域是比较少出现的，但并非数据进入了方法区就如永久代的名字一样“永久”存在了。这区域的内存回收目标主要是针对常量池的回收和对类型的卸载，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛刻，但是这部分区域的回收确实是必要的。 </p>
+<p>OOM  ：根据Java虚拟机规范的规定，当方法区无法满足内存分配需求时，将抛出OutOfMemoryError异常。 </p>
+<h4 id="3-运行时常量池-Runtime-Constant-Pool"><a href="#3-运行时常量池-Runtime-Constant-Pool" class="headerlink" title="3.运行时常量池(Runtime Constant Pool)"></a>3.运行时常量池(Runtime Constant Pool)</h4><p>运行时常量池是  方法区的一部分  。  Class文件中  除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是  常量池  （Constant Pool Table），用于存放编译期生成的  各种字面量和符号引用  ，这部分内容将在类加载后进入方法区的运行时常量池中存放。 </p>
+<p>Java虚拟机对Class文件每一部分（自然也包括常量池）的格式都有严格规定，每一个字节用于存储哪种数据都必须符合规范上的要求才会被虚拟机认可、装载和执行，但对于运行时常量池，不同的提供商实现的虚拟机可以按照自己的需要来实现这个内存区域。不过，一般来说，除了保存Class文件中描述的符号引用外，还会把翻译出来的直接引用也存储在运行时常量池中。 </p>
+<p>运行时常量池相对于Class文件常量池的另外一个重要特征是  具备动态性  ，Java语言并不要求常量一定只有编译期才能产生，也就是并非预置入Class文件中常量池的内容才能进入方法区运行时常量池，运行期间也可能将新的常量放入池中，这种特性利用得比较多的是String类的intern（）方法。 </p>
+<p>OOM  ：既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出OutOfMemoryError异常。 </p>
+<p>除此之外，还有一部分内存区域： </p>
+<h4 id="直接内存-Direct-Memory"><a href="#直接内存-Direct-Memory" class="headerlink" title="直接内存(Direct Memory)"></a>直接内存(Direct Memory)</h4><p>直接内存并  不是虚拟机运行时数据区的一部分  ，也不是Java虚拟机规范中定义的内存区域，字面上的意思，是  本机的直接内存  。这部分内存也被频繁地使用。 </p>
+<p>在JDK 1.4中新加入了NIO（New Input/Output）类，引入了一种基于通道（Channel）与缓冲区（Buffer）的I/O方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。这样能在一些场景中显著提高性能，因为避免了在Java堆和Native堆中来回复制数据。 </p>
+<p>本机直接内存的分配  不会受到Java堆大小的限制  ，但还是会受到本机总内存（包括RAM以及SWAP区或者分页文件）大小以及处理器寻址空间的限制。 </p>
+<p>OOM  ：配置虚拟机参数时，根据实际内存设置-Xmx等参数信息时，经常忽略直接内存，使得各个内存区域总和大于物理内存限制（包括物理的和操作系统级的限制），从而导致动态扩展时出现OutOfMemoryError异常。 </p>
+<p>以上 </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/05/01/探究JVM——垃圾回收/" title="探究JVM——垃圾回收">探究JVM——垃圾回收</a></h2>
+                <p class="excerpt">
+                
+                垃圾回收主要考虑三件事情：  哪些内存需要回收？什么时候回收？如何回收？ 
+一、哪些内存需要回收？ 
+堆内存  ：对于JVM 来说，垃圾回收主要是针对堆内存中的对象实例。 
+方法区  ：垃圾收集行为在方法区是比较少出现的，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-05-01T12:58:21.000Z" class="post-list__meta--date date">2016-05-01</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/05/01/探究JVM——垃圾回收/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/14/OS存储器管理(三) 虚拟存储器/" title="OS存储器管理(三) 虚拟存储器">OS存储器管理(三) 虚拟存储器</a></h2>
+                <p class="excerpt">
+                
+                基本概念与实现 
+1）局部性原理 
+在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 
+2）虚拟存储器的引入 
+作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-14T15:02:59.000Z" class="post-list__meta--date date">2016-03-14</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/os/">os</a>, <a class="tag-link" href="/tags/虚拟存储器/">虚拟存储器</a>
+</span><a class="btn-border-small" href="/2016/03/14/OS存储器管理(三) 虚拟存储器/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

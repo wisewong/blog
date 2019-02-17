@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>基于深度学习的图像风格转换 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 
+主要参考的文献有  《A Neural Algorithm of Artistic Style">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="基于深度学习的图像风格转换 | Sage Wong">
+    <meta name="twitter:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 
+主要参考的文献有  《A Neural Algorithm of Artistic Style">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="基于深度学习的图像风格转换 | Sage Wong">
+    <meta property="og:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 
+主要参考的文献有  《A Neural Algorithm of Artistic Style">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/06/21/基于深度学习的图像风格转换/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-06-21T05:35:56.000Z" class="post-list__meta--date date">2017-06-21</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">基于深度学习的图像风格转换</h1>
+  </header>
+
+  <section class="post">
+    <p>距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 </p>
+<p>主要参考的文献有 <a href="https://arxiv.org/abs/1508.06576" target="_blank" rel="noopener"> 《A Neural Algorithm of Artistic Style》 </a> 和 <a href="https://arxiv.org/abs/1603.08155" target="_blank" rel="noopener"> 《Perceptual Losses for Real-Time Style Transfer and Super-Resolution》 </a> 这两篇论文，以及 <a href="https://zhuanlan.zhihu.com/p/24383274" target="_blank" rel="noopener"> 深度学习实践：使用Tensorflow实现快速风格迁移 </a> 等文章，代码参考了  <a href="https://github.com/OlavHN/fast-neural-style" target="_blank" rel="noopener"> OlavHN </a> <a href="https://github.com/OlavHN/fast-neural-style" target="_blank" rel="noopener"> /fast-neural-style </a> 和 <a href="https://github.com/hzy46/fast-neural-style-tensorflow" target="_blank" rel="noopener"> hzy46/fast-neural-style-tensorflow </a> 等大神的。 </p>
+<p>先说一下卷积神经网络。卷积神经网络（  CNN）是一种前馈神经网络，了解机器学习中人工神经网络的话应该对这个概念不陌生。神经网络中的感知器模型如下图所示。 </p>
+<p><img src="https://img-blog.csdn.net/20170621131634528?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>输入神经元与其各自权重相乘再相加得到z，利用激活函数g(z)进行变换得到神经元y。输入层神经元与其权重相乘再相加的过程可以用矩阵相乘相乘来表示，这点在下面的卷及神经网络里可以看到。神经网络里输入层和输出层中间的是隐藏层。    </p>
+<p>在卷积神经网络里，网络结构一般是由多个卷积层、非线性化层、池化层以及最后的全连接层组成。卷积层对输入进行卷积计算，得到的结果经过非线性化层的激活函数，再经过池化层进行采样，最后是全连接层。 </p>
+<p>先介绍卷积操作。假设输入图片是二维矩阵，每个像素值都是输入层的一个神经元，权值也用矩阵来表示，这个权值矩阵叫做卷积核，也可以成为滤波器，卷积核代表了你看这个图像时的感受野。不过卷积核是与输入图片的二维矩阵滑动计算的，这里涉及到了权值共享的问题。计算的过程如下图所示。 </p>
+<p><img src="https://img-blog.csdn.net/20170621131813298?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>图中黄色部分为3x3卷积核，绿色的为5x5输入矩阵。卷积核在输入矩阵上滑动计算，每次都计算相应位置的乘积再相加，得到卷积后的矩阵中的新的元素。每次滑动的一格代表步长(stride)为1，也可以为其它值。然后再对右面矩阵的每一个得到的元素的值通过激励函数进行非线性化处理，一般是用的ReLU函数。如下图所示。    </p>
+<p><img src="https://img-blog.csdn.net/20170621131859077?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>池化层进行下采样，目的是减小特征图，池化规模一般为2×2。常用的池化方法之一是最大池化（Max Pooling）,即取4个点的最大值，如下图所示，非常简单。    </p>
+<p><img src="https://img-blog.csdn.net/20170621132145142?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>卷积神经网络通过这样可以不断提取图像的不同层次的特征图，然后用于分类问题等等。关于卷积神经网络的详细解释可以参考 <a href="http://www.moonshile.com/post/juan-ji-shen-jing-wang-luo-quan-mian-jie-xi" target="_blank" rel="noopener"> 卷积神经网络全面解析 </a> 和 <a href="http://www.omegaxy.com/blog/2016-01-14/cnn/" target="_blank" rel="noopener"> 卷积神经网络的理解 </a> 这两篇文章，这里就不多作解释了。下面进入正题，图像风格转换的原理。 </p>
+<p>图像风格转换 </p>
+<p>以目前的深度学习技术，如果给定两张图像，完全有能力让计算机识别出图像具体内容。而图像的风格是一种很抽象的东西，人眼能够很有效地的辨别出不同画家不同流派绘画的风格，而在计算机的眼中，本质上就是一些像素，多层网络的实质其实就是找出更复杂、更内在的特性(features)，所以图像的风格理论上可以通过多层网络来提取图像里面可能含有的一些有意思的特征。 </p>
+<p>根据前面第一篇论文中提出的方法，  风格迁移的速度非常慢的。在风格迁移过程中，把生成图片的过程当做一个“训练”的过程。每生成一张图片，都相当于要训练一次模型，这中间可能会迭代几百几千次。从头训练一个模型相对于执行一个已经训练好的模型来说相当费时。现在根据前面第二篇论文提出的另一种模型，使得把生成图片当做一个“执行”的过程，而不是一个“训练”的过程。 </p>
+<p>快速风格迁移的网络结构包含两个部分。一个是“  生成网络  ”（Image Transform Net），一个是“  损失网络  ”（Loss Network）。生成网络输入层接收一个输入图片，最终输出层输出也是一张图片（即风格转换后的结果）。模型总体分为两个阶段，训练阶段和执行阶段。模型如图所示。 其中左侧是生成网络，右侧为损失网络。 </p>
+<p><img src="https://img-blog.csdn.net/20170621132441176?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>训练阶段：选定一张风格图片。训练过程中，将数据集中的图片输入网络，生成网络生成结果图片y，损失网络提取图像的特征图，将生成图片y分别与目标风格图片ys和目标输入图片（内容图片）yc做损失计算，根据损失值来调整生成网络的权值，通过最小化损失值来达到目标效果。 </p>
+<p>执行阶段：给定一张图片，将其输入已经训练好的生成网络，输出这张图片风格转换后的结果。 </p>
+<p>生成网络 </p>
+<p>对于生成网络，本质上是一个卷积神经网络，这里的生成网络是一个深度残差网络，不用任何的池化层，取而代之的是用步幅卷积或微步幅卷积做网络内的上采样或者下采样。这里的神经网络有五个残差块组成。除了最末的输出层以外，所有的非残差卷积层都跟着一个空间性的instance-normalization，和RELU的非线性层，  instance-normalization  正则化是用来防止过拟合的。  最末层使用一个缩放的Tanh来确保输出图像的像素在[0,255]之间。除开第一个和最后一个层用9x9的卷积核(kernel)，其他所有卷积层都用3x3的卷积核。 </p>
+<p>损失网络 </p>
+<p>损失网络φ是能定义一个内容损失(content loss)和一个风格损失(style loss)，分别衡量内容和风格上的差距。对于每一张输入的图片x我们有一个内容目标yc一个风格目标ys，对于风格转换，内容目标yc是输入图像x，输出图像y，应该把风格ys结合到内容x=yc上。系统为每一个目标风格训练一个网络。 </p>
+<p>为了明确逐像素损失函数的缺点，并确保所用到的损失函数能更好的衡量图片感知及语义上的差距，需要使用一个预先训练好用于图像分类的CNN，这个CNN已经学会感知和语义信息编码，这正是图像风格转换系统的损失函数中需要做的。所以使用了一个预训练好用于图像分类的网络φ，来定义系统的损失函数。之后使用同样是深度卷积网络的损失函数来训练我们的深度卷积转换网络。 </p>
+<p>这里的损失网络虽然也是卷积神经网络(CNN)，但是参数不做更新，只用来做内容损失和风格损失的计算，训练更新的是前面的生成网络的权值参数。所以从整个网络结构上来看输入图像通过生成网络得到转换的图像，然后计算对应的损失，整个网络通过最小化这个损失去不断更新前面的生成网络权值。 </p>
+<p>感知损失 </p>
+<p>对于求损失的过程，不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的损失网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。 </p>
+<p>（1）内容损失 </p>
+<p>上面提到的论文中设计了两个感知损失函数，用来衡量两张图片之间高级的感知及语义差别。内容的损失计算用VGG计算来高级特征（内容）表示，因为VGG模型本来是用于图像分类的，所以一个训练好的VGG模型可以有效的提取图像的高级特征（内容）。计算的公式如下： </p>
+<p><img src="https://img-blog.csdn.net/20170621132706725?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>找到一个图像  y使较低的层的特征损失最小，往往能产生在视觉上和  y不太能区分的图像，如果用高层来重建，内容和全局结构会被保留，但是颜色纹理和精确的形状不复存在。用一个特征损失来训练我们的图像转换网络能让输出非常接近目标图像  y，但并不是让他们做到完全的匹配 </p>
+<p>（2）风格损失 </p>
+<p>内容损失惩罚了输出的图像（当它偏离了目标y时），所以同样的，我们也希望对输出的图像去惩罚风格上的偏离：颜色，纹理，共同的模式，等方面。为了达成这样的效果，一些研究人员等人提出了一种风格重建的损失函数：让φj(x)代表网络φ的第j层，输入是x。特征图谱的形状就是Cj x Hj x Wj、定义矩阵Gj(x)为Cj x Cj矩阵（特征矩阵）其中的元素来自于： </p>
+<p><img src="https://img-blog.csdn.net/20170621132741225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>如果把φj(x)理解成一个Cj维度的特征，每个特征的尺寸是Hj x Wj，那么上式左边Gj(x)就是与Cj维的非中心的协方差成比例。每一个网格位置都可以当做一个独立的样本。这因此能抓住是哪个特征能带动其他的信息。梯度矩阵可以很高效的计算，通过调整φj(x)的形状为一个矩阵ψ，形状为Cj x HjWj，然后Gj(x)就是ψψT/CjHjWj。风格重建的损失是定义的很好的，甚至当输出和目标有不同的尺寸是，因为有了梯度矩阵，所以两者会被调整到相同的形状。 </p>
+<p>具体实现 </p>
+<p>GitHub地址 <a href="https://github.com/mrxlz/ImageStyleTransform" target="_blank" rel="noopener"> mrxlz/ImageStyleTransform </a> ，实现基本上参考了 <a href="https://github.com/hzy46/fast-neural-style-tensorflow" target="_blank" rel="noopener"> hzy </a> 的代码，代码从原版迁移到了python3.5，TensorFlow1.0，具体实现代码基本没变，加了一些注释，添加了一个web页面，效果如下。 </p>
+<p><img src="https://img-blog.csdn.net/20170621133002386?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p><img src="https://img-blog.csdn.net/20170621133212032?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/07/24/Git总结/" title="Git总结">Git总结</a></h2>
+                <p class="excerpt">
+                
+                git在本地分为三个区域，工作区、暂存区和本地仓库，具体情况如下： 
+
+git的一般操作就是本地代码的修改提交回滚，以及与远程仓库的拉取、合并、提交等。 
+git fetch   从远程仓库上抓取分支到本机origin的dev分支上 
+git merge  将origin上的分支合并到工作区的dev
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-07-24T14:36:13.000Z" class="post-list__meta--date date">2017-07-24</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/git/">git</a>
+</span><a class="btn-border-small" href="/2017/07/24/Git总结/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/10/25/校招碎碎念/" title="校招碎碎念">校招碎碎念</a></h2>
+                <p class="excerpt">
+                
+                前两天拿了去哪儿(Qunar)的offer，不打算接着找了，心累，结束我的校招生涯吧，写写这段时间的经历。 
+本科生一只，普通一本，非211/985学校，出了省就没人认那种，计算机专业，目前大四。找工作大概从大三下学期开始吧，那时候各大厂开始招实习，接着陆陆续续的有七八月份的内推，九、十月份的校招，
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-10-25T14:54:14.000Z" class="post-list__meta--date date">2016-10-25</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/10/25/校招碎碎念/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

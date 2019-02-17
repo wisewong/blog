@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>EL函数以及自定义标签的应用 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一、EL函数  (调用普通类的静态方法) 
+编写步骤（自定义EL函数的编写步骤即自定义标签的编写步骤）： 
+①编写一个普通的java类，提供一个静态方法，功能自定  ，例如下： 
+package cn.wzbrilliant.el;
+
+public class ElFunction {
+    public static String toUpperCase(String str){">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="EL函数以及自定义标签的应用 | Sage Wong">
+    <meta name="twitter:description" content="一、EL函数  (调用普通类的静态方法) 
+编写步骤（自定义EL函数的编写步骤即自定义标签的编写步骤）： 
+①编写一个普通的java类，提供一个静态方法，功能自定  ，例如下： 
+package cn.wzbrilliant.el;
+
+public class ElFunction {
+    public static String toUpperCase(String str){">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="EL函数以及自定义标签的应用 | Sage Wong">
+    <meta property="og:description" content="一、EL函数  (调用普通类的静态方法) 
+编写步骤（自定义EL函数的编写步骤即自定义标签的编写步骤）： 
+①编写一个普通的java类，提供一个静态方法，功能自定  ，例如下： 
+package cn.wzbrilliant.el;
+
+public class ElFunction {
+    public static String toUpperCase(String str){">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/08/28/EL函数以及自定义标签的应用/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-08-28T12:23:09.000Z" class="post-list__meta--date date">2015-08-28</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">EL函数以及自定义标签的应用</h1>
+  </header>
+
+  <section class="post">
+    <p>一、EL函数  (调用普通类的静态方法) </p>
+<p>编写步骤（自定义EL函数的编写步骤即自定义标签的编写步骤）： </p>
+<p>①编写一个普通的java类，提供一个静态方法，功能自定  ，例如下： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+public class ElFunction {
+    public static String toUpperCase(String str){
+        return str.toUpperCase();
+    }
+}
+</code></pre><p>②在JavaWeb应用的WEB-INF目录下建立一个扩展名是tld(taglib definition)的XML文件。  内容如下： </p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;taglib xmlns=&quot;http://java.sun.com/xml/ns/j2ee&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd&quot;
+    version=&quot;2.0&quot;&gt;
+    &lt;tlib-version&gt;1.0&lt;/tlib-version&gt;
+    &lt;short-name&gt;myfn&lt;/short-name&gt;
+    &lt;uri&gt;/WEB-INF/myfn.tld&lt;/uri&gt;
+
+    &lt;function&gt;&lt;!-- 定义函数 --&gt;
+        &lt;name&gt;toUpper&lt;/name&gt; &lt;!-- 调用名称 --&gt;
+        &lt;function-class&gt;cn.wzbrilliant.el.ElFunction&lt;/function-class&gt; &lt;!-- 类全名 --&gt;
+        &lt;function-signature&gt;java.lang.String toUpperCase( java.lang.String )&lt;/function-signature&gt;
+    &lt;/function&gt;
+
+&lt;/taglib&gt;
+</code></pre><p><tlib-version>值随意 </tlib-version></p>
+<p><short-name>一般与文件名、前缀名称相同，方便查找，不相同也可。 </short-name></p>
+<uri>值随意，只要与web.xml中的uri想对应即可<br><br><br>③（可选步骤）前提是把tld文件放到了WEB-INF目录下。<br>告知应用，tld文件和tld中的uri的对应。修改web.xml，增加以下内容：<br><br><br>    <jsp-config><br>            <taglib><br>                <taglib-uri>/WEB-INF/myfn.tld</taglib-uri><br>                <taglib-location>/WEB-INF/myfn.tld</taglib-location><br>            </taglib><br>    </jsp-config><br><br><taglib>　代表一个标签库，可以多个<br><br><taglib-location>　tld文件的位置<br><br><br>④　在JSP中使用<br><br>用taglib指令，引入自定义的EL函数库：  &lt;%@ taglib uri=”/WEB-INF/myfn.tld” prefix=”myfn”%&gt;<br><br>使用方式如下：<br><br><br>    &lt;%<br>            pageContext.setAttribute(“p”, “abcdef”);<br>    %&gt;<br><br>    ${myfn:toUpper(h) } <br><br>    ${myfn:toUpper(“abcdef”) }<br><br><br><br><br>代码第五行和第六行都可输出”ABCDEF”。<br><br>二、EL自定义标签开发<br><br>自定义标签属于JSP技术<br><br>1、标签的作用<br><br>移除掉JSP中的Java脚本(&lt;%%&gt;)<br><br>2、编写自定义标签的步骤  (自定义EL函数，步骤相同)<br><br>自定义标签分为两种，  传统标签  和  简单标签  ：<br><br><img src="https://img-blog.csdn.net/20150828200645460?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""><br><br>这里只介绍  简单标签  的开发：<br><br>①编写一个类，直接或间接实现javax.servlet.jsp.tagext.Tag接口<br><br>这里继承SimpleTagSupport类,例子如下：<br><br><br>    package cn.wzbrilliant.el;<br><br>    import java.io.IOException;<br><br>    import javax.servlet.jsp.JspException;<br>    import javax.servlet.jsp.tagext.SimpleTagSupport;<br><br>    public class SimpleTag extends SimpleTagSupport {<br><br>        @Override<br>        public void doTag() throws JspException, IOException {<br>    //        JspFragment jf=getJspBody();<br>    //        jf.invoke(getJspContext().getOut());<br><br>            getJspBody().invoke(null);<br><br>        }<br><br>    }<br><br><br><br><br>JspFragment对象的invoke方法将标签内容输入到给定的流中，如果为null，例如上面代码，则其作用与注释部分代码相同。<br><br>下面以一个获取远程IP地址的代码为例：<br><br><br>    package cn.wzbrilliant.el;<br><br>    import java.io.IOException;<br><br>    import javax.servlet.jsp.JspException;<br>    import javax.servlet.jsp.PageContext;<br>    import javax.servlet.jsp.tagext.SimpleTagSupport;<br><br>    public class SimpleTag extends SimpleTagSupport {<br><br>        @Override<br>        public void doTag() throws JspException, IOException {<br>            PageContext pageContext=(PageContext)getJspContext();<br>            String ip=pageContext.getRequest().getRemoteAddr();<br>            pageContext.getOut().write(ip);<br>        }<br><br>    }<br><br><br><br><br>②  在WEB-INF目录下建立一个扩展名为tld（Tag Libary Definition）的xml文件。<br><br><br>    &lt;?xml version=”1.0” encoding=”UTF-8”?&gt;<br>    <taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0"><br><br>        <tlib-version>1.0</tlib-version><br>        <short-name>mytag</short-name><br>        <uri>/WEB-INF/mytag.tld</uri>
+
+<pre><code>    &lt;tag&gt;&lt;!-- 描述标签 --&gt;
+        &lt;description&gt;Show Remote Address&lt;/description&gt;
+        &lt;name&gt;remoteIp&lt;/name&gt;&lt;!-- 标签名称 --&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.SimpleTag&lt;/tag-class&gt;
+        &lt;body-content&gt;empty&lt;/body-content&gt;&lt;!-- 指示标签的主体内容：没有就写empty --&gt;
+    &lt;/tag&gt;
+
+&lt;/taglib&gt;
+</code></pre><p>标签内容与EL函数中tld文件中相似。可以添加多个标签。具体如下： </p>
+<p>taglib：根元素 </p>
+<p>tlib-version:版本号<br>short-name:引用标签时的短名称。一般与tld文件的文件名一致，好找。<br>uri：标签绑定的名称空间。只是一个名字，没有实际的意义。 </p>
+<p>tag：定义标签元素 </p>
+<p>name  ：标签的名称。 </p>
+<p>tag-class  ：标签的实现类的全名称。 </p>
+<p>body-content  ：指示标签的主体内容的类型。 </p>
+<p>可选值：  empty  ：没有主体内容。适用于传统和简单标签。 </p>
+<p>JSP  ：说明JSP文件中能出现什么，标签主体内容中就能出现什么。适用于传统标签。 </p>
+<p>scriptless  ：说明标签的主体内容不能是java脚本。适用于简单标签。 </p>
+<p>tagdependent  ：说明标签的主体内容是原封不动的传递给标签处理类的，而不是传递的运算结果 </p>
+<p>attribute  ：定义标签的属性 </p>
+<p>name  ：属性名。对应标签处理类中的setter方法 </p>
+<p>required  ：是否是必须的属性 </p>
+<p>rtexprvalue  ：是否支持表达式（EL或java表达式）。默认是false。 </p>
+<p>③（可选的）在web.xml中对tld文件和名称空间进行映射对应。 </p>
+<pre><code>&lt;jsp-config&gt;
+        &lt;taglib&gt;
+            &lt;taglib-uri&gt;/WEB-INF/mytag.tld&lt;/taglib-uri&gt;
+            &lt;taglib-location&gt;/WEB-INF/mytag.tld&lt;/taglib-location&gt;
+        &lt;/taglib&gt;
+&lt;/jsp-config&gt;
+</code></pre><p>此处配置与EL函数相同 </p>
+<p>⑤　在JSP中使用 </p>
+<p>首先引入：  &lt;%@ taglib uri=”/WEB-INF/mytag.tld” prefix=”mytag”%&gt;   </p>
+<p>使用方法：在jsp页面中使用：  &lt;mytag:remoteIp /&gt; 即可输出访问服务器的远程的ip地址 </p>
+<p>3.简单标签的原理： </p>
+<p><img src="https://img-blog.csdn.net/20150828201014310?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>三、自定义标签实例： </p>
+<p>①实现JSTL中forEach标签的功能 </p>
+<p>类代码如下： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class ForEachTag extends SimpleTagSupport {
+    private String var;
+    private Collection items;
+
+    public void setItems(Object items) {
+        if(items instanceof List){
+            this.items=(List)items;
+        }else if(items instanceof Set){
+            this.items=(Set)items;
+        }else if(items instanceof Map){
+            this.items=((Map)items).entrySet();
+        }else if(items.getClass().isArray()){
+            this.items=new ArrayList();
+            int length=Array.getLength(items);
+            for(int i=0;i&lt;length;i++){
+                this.items.add(Array.get(items, i));
+            }
+        }else{
+            throw new RuntimeException(&quot;对不起，不支持的类型&quot;);
+        }
+    }
+    public void setVar(String var) {
+        this.var = var;
+    }
+    @Override
+    public void doTag() throws JspException, IOException {
+        PageContext pageContext=(PageContext) getJspContext();
+        for(Object obj:items){
+            pageContext.setAttribute(var, obj);
+            getJspBody().invoke(null);
+        }
+    }
+
+}
+</code></pre><p>mytag.tld文件中添加如下内容： </p>
+<pre><code>&lt;tag&gt;&lt;!-- forEach标签 --&gt;
+        &lt;description&gt;for each&lt;/description&gt;
+        &lt;name&gt;forEach&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.ForEachTag&lt;/tag-class&gt;
+        &lt;body-content&gt;scriptless&lt;/body-content&gt;
+        &lt;attribute&gt;
+            &lt;name&gt;items&lt;/name&gt;
+            &lt;required&gt;true&lt;/required&gt;
+            &lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+        &lt;/attribute&gt;
+        &lt;attribute&gt;
+            &lt;name&gt;var&lt;/name&gt;
+            &lt;required&gt;true&lt;/required&gt;
+            &lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+        &lt;/attribute&gt;
+&lt;/tag&gt;
+</code></pre><p>使用方法： </p>
+<pre><code>&lt;%
+    int[] arr = new int[] {1,2,3,4};
+
+    pageContext.setAttribute(&quot;p&quot;, arr);
+ %&gt;
+
+ &lt;mytag:forEach items=&quot;${p}&quot; var=&quot;v&quot;&gt;
+            ${v}&lt;br&gt;
+ &lt;/mytag:forEach&gt;
+</code></pre><p>②实现JSTL中when  otherwise功能  (与if-else结构相似) </p>
+<p>实现用到了父标签。父标签的作用：用于子标签之间数据的传递。 </p>
+<p>该例使用了三个标签，分别为choose(父标签)，when，otherwise，用三个类实现。 </p>
+<p>父标签choose实现类： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class ChooseTag extends SimpleTagSupport {
+    private boolean flag=false;
+
+    protected boolean isFlag(){
+        return flag;
+    }
+
+    protected void setFlag(boolean flag){
+        this.flag=flag;
+    }
+
+    @Override
+    public void doTag() throws JspException, IOException {
+
+        getJspBody().invoke(null);
+    }
+
+
+}
+</code></pre><p>子标签when实现类： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class WhenTag extends SimpleTagSupport {
+    private boolean test;
+
+    public void setTest(boolean test){
+        this.test=test;
+    }
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        if(test){
+            ChooseTag parent=(ChooseTag)getParent();
+            parent.setFlag(true);
+            getJspBody().invoke(null);
+        }
+    }
+
+
+}
+</code></pre><p>子标签otherwise实现类： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class OtherwiseTag extends SimpleTagSupport {
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        ChooseTag parent=(ChooseTag)getParent();
+        if(!parent.isFlag()){
+            getJspBody().invoke(null);
+        }
+    }
+
+}
+</code></pre><p>mytag.tld中添加如下内容： </p>
+<pre><code>&lt;tag&gt;&lt;!-- choose标签 --&gt;
+        &lt;description&gt;when otherwise&lt;/description&gt;
+        &lt;name&gt;choose&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.ChooseTag&lt;/tag-class&gt;
+        &lt;body-content&gt;scriptless&lt;/body-content&gt;
+&lt;/tag&gt;
+
+&lt;tag&gt;&lt;!-- when标签 --&gt;
+        &lt;description&gt;when otherwise&lt;/description&gt;
+        &lt;name&gt;when&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.WhenTag&lt;/tag-class&gt;
+        &lt;body-content&gt;scriptless&lt;/body-content&gt;
+                &lt;attribute&gt;
+            &lt;name&gt;test&lt;/name&gt;
+            &lt;required&gt;true&lt;/required&gt;
+            &lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+        &lt;/attribute&gt;
+&lt;/tag&gt;
+
+&lt;tag&gt;&lt;!-- otherwise标签 --&gt;
+        &lt;description&gt;when otherwise&lt;/description&gt;
+        &lt;name&gt;otherwise&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.OtherwiseTag&lt;/tag-class&gt;
+        &lt;body-content&gt;scriptless&lt;/body-content&gt;
+&lt;/tag&gt;
+</code></pre><p>使用方法，在jsp中： </p>
+<pre><code>&lt;%
+    pageContext.setAttribute(&quot;p&quot;, arr);
+%&gt;
+
+
+&lt;mytag:choose&gt;
+    &lt;mytag:when test=&quot;${empty p }&quot;&gt;
+            there is empty
+    &lt;/mytag:when&gt;
+    &lt;mytag:otherwise&gt;
+            &lt;mytag:forEach items=&quot;${p }&quot; var=&quot;v&quot;&gt;
+                    &lt;br&gt;${v}
+            &lt;/mytag:forEach&gt;
+    &lt;/mytag:otherwise&gt;
+&lt;/mytag:choose&gt;
+</code></pre><p>③  html显示文本中html代码的过滤 </p>
+<p>例如留言板中，有时候需要将html代码原样输出，而不解析。 </p>
+<p>实现类代码如下： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+import java.io.StringWriter;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class HtmlTextFilterTag extends SimpleTagSupport {
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        StringWriter sw=new StringWriter();
+        getJspBody().invoke(sw);
+        String content=sw.toString();
+        content = filter(content);
+        getJspContext().getOut().write(content);
+    }
+
+    private String filter(String message) {
+        if (message == null)
+            return (null);
+
+        char content[] = new char[message.length()];
+        message.getChars(0, message.length(), content, 0);
+        StringBuffer result = new StringBuffer(content.length + 50);
+        for (int i = 0; i &lt; content.length; i++) {
+            switch (content[i]) {
+            case &apos;&lt;&apos;:
+                result.append(&quot;&lt;&quot;);
+                break;
+            case &apos;&gt;&apos;:
+                result.append(&quot;&gt;&quot;);
+                break;
+            case &apos;&amp;&apos;:
+                result.append(&quot;&amp;&quot;);
+                break;
+            case &apos;&quot;&apos;:
+                result.append(&quot;&quot;&quot;);
+                break;
+            default:
+                result.append(content[i]);
+            }
+        }
+        return (result.toString());
+    }
+}
+</code></pre><p>mytag.tld中添加如下内容： </p>
+<pre><code>&lt;tag&gt;&lt;!-- 文本中Html代码过滤标签 --&gt;
+        &lt;description&gt;htmlfilter&lt;/description&gt;
+        &lt;name&gt;htmlfilter&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.HtmlTextFilterTag&lt;/tag-class&gt;
+        &lt;body-content&gt;scriptless&lt;/body-content&gt;
+&lt;/tag&gt;
+</code></pre><p>使用方式：在jsp页面中输出文本数据时添加此标签便可将文本中html代码原样输出，而不解析。 </p>
+<p>④防盗链标签 </p>
+<p>防止别的网站、应用盗链，可以利用EL自定义标签，将请求转向其他URI(自定义的广告等等) </p>
+<p>实现代码如下： </p>
+<pre><code>package cn.wzbrilliant.el;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class RefererTag extends SimpleTagSupport {
+    private String site;
+    private String redirectPath;
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public void setRedirectPath(String redirectPath) {
+        this.redirectPath = redirectPath;
+    }
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        PageContext pageContext = (PageContext) getJspContext();
+        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+        HttpServletResponse response = (HttpServletResponse) pageContext.getResponse();
+        String referer = request.getHeader(&quot;referer&quot;);
+        if (referer != null &amp;&amp; !referer.startsWith(site)) {
+            String path;
+            if (redirectPath.startsWith(&quot;/&quot;)) {
+                path = request.getContextPath() + redirectPath;
+            } else {
+                String uri=request.getRequestURI();
+                path=uri.substring(0, uri.lastIndexOf(&quot;/&quot;)+1)+redirectPath;
+            }
+            response.sendRedirect(path);
+        }
+    }
+
+}
+</code></pre><p>mytag.tld中添加如下内容： </p>
+<pre><code>&lt;tag&gt;&lt;!-- 防盗链 --&gt;
+        &lt;description&gt;referer&lt;/description&gt;
+        &lt;name&gt;referer&lt;/name&gt;
+        &lt;tag-class&gt;cn.wzbrilliant.el.RefererTag&lt;/tag-class&gt;
+        &lt;body-content&gt;empty&lt;/body-content&gt;
+        &lt;attribute&gt;
+            &lt;name&gt;site&lt;/name&gt;
+            &lt;required&gt;true&lt;/required&gt;
+            &lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+        &lt;/attribute&gt;
+        &lt;attribute&gt;
+            &lt;name&gt;redirectPath&lt;/name&gt;
+            &lt;required&gt;true&lt;/required&gt;
+            &lt;rtexprvalue&gt;true&lt;/rtexprvalue&gt;
+        &lt;/attribute&gt;
+&lt;/tag&gt;
+</code></pre><p>使用方法：在防盗链的页面头部添加：  &lt;mytag:referer site=”<a href="http://localhost:8080/JavaWeb&quot;" target="_blank" rel="noopener">http://localhost:8080/JavaWeb&quot;</a> redirectPath=”error.jsp”/&gt; ，其中site值为本应用的URI，redirectPath是将外部应用的请求转发的目标地址，可以是相对路径，也可以是绝对路径。    </p>
+<p>四、JSTL中的核心标签库  (替换掉JSP中的Java脚本) </p>
+<p>①  c:if </p>
+<p>作用：判断是否为true，如果为true，那么标签的主体内容就会显示。<br>属性：  test：必须的。要求必须是boolean的。支持表达式（EL或Java表达式）<br>var：保存test运算结果的变量<br>scope: 保存的域范围。默认是page    </p>
+<p>②  c:forEach </p>
+<p>遍历：数组、List、Set、Map<br>属性：  items：要遍历的目标对象。支持表达式<br>var：变量名。指向当前遍历的集合中的一个元素<br>begin：开始的索引（含）<br>end：结束的索引（含）<br>step：步长。默认是1<br>varStatus：取一个名字，引用了一个对象。  该对象有以下方法：<br>int getIndex():当前记录的索引号。从0开始<br>int getCount():当前记录的顺序。从1开始<br>boolean isFirst():是否是第一条记录<br>boolean isLast():是否是最后一条记录 </p>
+<p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+</taglib></taglib-location></taglib></uri>
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/08/29/数据的分页处理/" title="数据的分页处理">数据的分页处理</a></h2>
+                <p class="excerpt">
+                
+                当页面中要显示的内容过多需要分多页显示、或是数据量过大内存吃不消时，需要分页处理。 
+原理：每次从数据库中取出一定量的数据，通过jsp页面显示 
+实现： 
+①写一个类封装分页的页面 
+②从数据库中取出一个页面的数据，将信息封装到分页页面对象中 
+③根据情况，将分页的页面对象设置到request对象、
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-08-29T04:19:25.000Z" class="post-list__meta--date date">2015-08-29</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/08/29/数据的分页处理/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/08/28/Jsp内置对象及EL表达式的使用/" title="Jsp内置对象及EL表达式的使用">Jsp内置对象及EL表达式的使用</a></h2>
+                <p class="excerpt">
+                
+                一、JSP的内置对象  （9个JSP内置对象） 
+JSP的内置对象引用名称 　　对应的类型    
+request  HttpServletRequestresponse  HttpServletResponsesession  HttpSession(有开关的：page指令的session属性的取
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-08-27T16:11:34.000Z" class="post-list__meta--date date">2015-08-28</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/08/28/Jsp内置对象及EL表达式的使用/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

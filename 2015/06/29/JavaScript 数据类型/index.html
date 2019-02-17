@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>JavaScript 数据类型 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="在javascript中,数据类型分为两类：  基本数据类型  和  引用数据类型  。javascript中声明变量使用关键字  var  。 
+一、基本数据类型 
+javascrip含有五种基本数据类型：  undefined  ，  null  ，  boolean  ，  number  和  string  。 
+
+boolean  ：  布尔，值为  true 或  false
+num">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="JavaScript 数据类型 | Sage Wong">
+    <meta name="twitter:description" content="在javascript中,数据类型分为两类：  基本数据类型  和  引用数据类型  。javascript中声明变量使用关键字  var  。 
+一、基本数据类型 
+javascrip含有五种基本数据类型：  undefined  ，  null  ，  boolean  ，  number  和  string  。 
+
+boolean  ：  布尔，值为  true 或  false
+num">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="JavaScript 数据类型 | Sage Wong">
+    <meta property="og:description" content="在javascript中,数据类型分为两类：  基本数据类型  和  引用数据类型  。javascript中声明变量使用关键字  var  。 
+一、基本数据类型 
+javascrip含有五种基本数据类型：  undefined  ，  null  ，  boolean  ，  number  和  string  。 
+
+boolean  ：  布尔，值为  true 或  false
+num">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/06/29/JavaScript 数据类型/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-06-29T12:53:02.000Z" class="post-list__meta--date date">2015-06-29</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">JavaScript 数据类型</h1>
+  </header>
+
+  <section class="post">
+    <p>在javascript中,数据类型分为两类：  基本数据类型  和  引用数据类型  。javascript中声明变量使用关键字  var  。 </p>
+<p>一、基本数据类型 </p>
+<p>javascrip含有五种基本数据类型：  undefined  ，  null  ，  boolean  ，  number  和  string  。 </p>
+<ul>
+<li>boolean  ：  布尔，值为  <code>true</code> 或  <code>false</code></li>
+<li>number  ：数字，值为任何整型会浮点数值 </li>
+<li>string  ：字符串，值为由单引号或双引号括出的单个字符或连续字符（JavaScript不区分字符类型） </li>
+<li>null  ：空类型，其仅有一个值：  null </li>
+<li>undefined  ：未定义，其仅有一个值：  undefined </li>
+</ul>
+<p>typeof  关键字  ：由于Javascript中的变量是松散类型的，所以它提供了一种检测当前变量的数据类型的方法，也就是  typeof  关键字，在上面提到的ECMAScript中的5种简单数据类型中（这5种只是  数据类型  ，代表一种数据类型，就想C#中的int，string类型一样），通过  typeof  关键字，对这5种数据类型会返回下面的值（以字符串形式显示） </p>
+<ul>
+<li>“  boolean  “    ——如果变量值为  布尔  类型； </li>
+<li>“  number  “     ——值为  数字  类型； </li>
+<li>“  string  “        ——值为  字符串  类型； </li>
+<li>“  object  “       ——  对象  或者  值为  null  ； </li>
+<li>“  undefined  “ ——  未申明  ，或者变量的  值为undefined  或者  未初始化  ； </li>
+</ul>
+<p>原始类型的值是直接保存在变量中，并可以用  typeof  进行检测。但是  typeof 对 null 的检测是返回  object  ,而不是返回  null  。所以检测 null 时，最好用全等于(  ===  ),其还能避免强制类型转换。 </p>
+<p>对于字符串、数字或者布尔值，其都有对应的方法，这些方法来自于对应的原始封装类型：  String  、  <code>Number</code> 和  <code>Boolean</code> 。原始封装类型将被自动创建。例如： </p>
+<pre><code>var name = &quot;Tom&quot;;
+var char = name.charAt(0);
+console.log(char);  // &quot;T&quot;
+</code></pre><p>在JavaScript引擎中发生的事情： </p>
+<pre><code>var person = &quot;Tom&quot;;
+var temp = new String(person);
+var char = temp.charAt(0);
+temp = null;
+console.log(char);  // &quot;T&quot;
+</code></pre><p>字符串对象的引用在用完之后立即被销毁，所以不能给字符串添加属性，并且  instanceof  检测对应类型时均返回  false  ： </p>
+<pre><code>var person = &quot;Tom&quot;;
+person.age = 21;
+console.log(person.age);   //undefined
+console.log(person instanceof String);  //false
+</code></pre><p>二、引用数据类型 </p>
+<p>引用类型  ：保存为对象，实质是指向内存位置的引用，所以不在变量中保存对象。除了自定义的对象，JavaScript提供了多种内建类型。 </p>
+<p>Object  类型：  Object  类型是Javascript引用类型的鼻祖了，就跟在C#和Java中是一样的道理，在创建Object类型的实例后可以为其添加属性和方法。 </p>
+<p>以  Object  为基础，JavaScript提供的内建类型如图所示： </p>
+<p><img src="https://img-blog.csdn.net/20150629205358353?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<ul>
+<li>Array  ：数组类型，以数字为索引的一组值的有序列表 </li>
+<li>Date  ：日期和时间类型 </li>
+<li>Error  ：运行期错误类型 </li>
+<li>Function  ：函数类型 </li>
+<li>RegExp  ：正则表达式类型 </li>
+</ul>
+<p>可以用new  来实例化每一个对象，或者用字面量形式来创建对象： </p>
+<pre><code>var obj = new Object();
+var person = {
+            name:&quot;Tom&quot;,
+            sex:&quot;man&quot;,
+            &quot;my age&quot;:22
+ };
+console.log(person.sex);    //访问属性
+console.log(person[&quot;my age&quot;]); 
+obj = null;  //解除引用
+</code></pre><p>obj并不包含对象实例，而是一个指向内存中实际对象所在位置的指针（或者说引用）。因为  typeof  对所有非函数的引用类型均返回  object  ，所以需要用  instanceof  来检测引用类型。 </p>
+<p>Object对象 </p>
+<p>对象是一种引用类型，创建对象常见的两种方式：Object构造函数和对象字面量形式： </p>
+<pre><code>var p1 = {
+    name:&quot;Tom&quot;,
+    age:22
+};
+var p2 = new Object();
+p2.name = &quot;Jack&quot;;
+</code></pre><p>在JavaScript中，可以随时为对象添加属性： </p>
+<pre><code>p1.age = 0;
+p1.sayName = function(){
+    alert(this.name);  
+}
+p1.sayName(); //&quot;Tom&quot;
+</code></pre><p>检测属性是否存在时，有两种方式：  in  和  hasOwnProperty()  ，前者会检测原型属性和自有(实例)属性，后者只检测自有(实例)属性： </p>
+<pre><code>console.log(&quot;age&quot; in p1);  //true
+console.log(p1.hasOwnProperty(&quot;age&quot;));  //true
+console.log(&quot;toString&quot; in p1);  //true
+console.log(p1.hasOwnProperty(&quot;toString&quot;));  //false
+</code></pre><p>对象 p1 并没有定义 toString，该属性继承于Object，所以 in 和hasOwnProperty()检测该属性时出现差异. </p>
+<p>若要删除一个属性，用  delete  操作符，用于删除自有属性，不能删除原型属性： </p>
+<pre><code>p1.toString = function(){
+    console.log(&quot;p1对象&quot;);
+};
+console.log(p1.hasOwnProperty(&quot;toString&quot;));   //true
+p1.toString();   //&quot;per1对象&quot;
+delete p1.toString;
+console.log(p1.hasOwnProperty(&quot;toString&quot;));   //false
+console.log(p1.toString());  //[object Object]
+</code></pre>
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/08/03/HTTP请求与响应/" title="HTTP请求与响应">HTTP请求与响应</a></h2>
+                <p class="excerpt">
+                
+                Http协议对浏览器发出的Request格式以及对Web服务器发出的Response格式有具体的规定。 
+请求部分由三部分组成： 
+
+Requset line  ：请求行,位于第一行 
+Request headers  ：请求消息头,从第二行开始至第一个空行结束 
+Request  body  ：请
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-08-03T09:02:03.000Z" class="post-list__meta--date date">2015-08-03</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/http/">http</a>, <a class="tag-link" href="/tags/request/">request</a>, <a class="tag-link" href="/tags/response/">response</a>
+</span><a class="btn-border-small" href="/2015/08/03/HTTP请求与响应/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/06/28/jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用/" title="jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用">jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用</a></h2>
+                <p class="excerpt">
+                
+                一、连接池的概念和使用 
+在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-06-28T11:36:21.000Z" class="post-list__meta--date date">2015-06-28</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/c3p0/">c3p0</a>, <a class="tag-link" href="/tags/dbcp/">dbcp</a>, <a class="tag-link" href="/tags/jdbc/">jdbc</a>
+</span><a class="btn-border-small" href="/2015/06/28/jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

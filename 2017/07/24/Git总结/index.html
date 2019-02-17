@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>Git总结 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="git在本地分为三个区域，工作区、暂存区和本地仓库，具体情况如下： 
+
+git的一般操作就是本地代码的修改提交回滚，以及与远程仓库的拉取、合并、提交等。 
+git fetch   从远程仓库上抓取分支到本机origin的dev分支上 
+git merge  将origin上的分支合并到工作区的dev分支上 
+git pull  相当于前两个命令合在一起 
+#切换到master分之后，将dev分支合">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Git总结 | Sage Wong">
+    <meta name="twitter:description" content="git在本地分为三个区域，工作区、暂存区和本地仓库，具体情况如下： 
+
+git的一般操作就是本地代码的修改提交回滚，以及与远程仓库的拉取、合并、提交等。 
+git fetch   从远程仓库上抓取分支到本机origin的dev分支上 
+git merge  将origin上的分支合并到工作区的dev分支上 
+git pull  相当于前两个命令合在一起 
+#切换到master分之后，将dev分支合">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Git总结 | Sage Wong">
+    <meta property="og:description" content="git在本地分为三个区域，工作区、暂存区和本地仓库，具体情况如下： 
+
+git的一般操作就是本地代码的修改提交回滚，以及与远程仓库的拉取、合并、提交等。 
+git fetch   从远程仓库上抓取分支到本机origin的dev分支上 
+git merge  将origin上的分支合并到工作区的dev分支上 
+git pull  相当于前两个命令合在一起 
+#切换到master分之后，将dev分支合">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/07/24/Git总结/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-07-24T14:36:13.000Z" class="post-list__meta--date date">2017-07-24</time> &#8226; <span class="post-meta__tags tags">于 
+  <a class="tag-link" href="/tags/git/">git</a>
+ </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">Git总结</h1>
+  </header>
+
+  <section class="post">
+    <p>git在本地分为三个区域，工作区、暂存区和本地仓库，具体情况如下： </p>
+<p><img src="https://img-blog.csdn.net/20170724223416658?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>git的一般操作就是本地代码的修改提交回滚，以及与远程仓库的拉取、合并、提交等。 </p>
+<p>git fetch   从远程仓库上抓取分支到本机origin的dev分支上 </p>
+<p>git merge  将origin上的分支合并到工作区的dev分支上 </p>
+<p>git pull  相当于前两个命令合在一起 </p>
+<p>#切换到master分之后，将dev分支合并到master分支 </p>
+<p>git checkout master </p>
+<p>git merge dev </p>
+<p>当本地仓库向远程仓库push失败的时候，先从远程仓库上fetch下最新的代码merge到本地的分支上，然后才能push </p>
+<p>当fetch下来的代码与本地仓库的分支代码merge时发生冲突的话，需要解决掉冲突文件中的冲突再push。冲突文件这时已经被git程序更改，标记了冲突的位置。此时可以查看git status根据提示来操作，具体的做法： </p>
+<p>1，若想回到没有更改前，即merge前，执行git merge –abort。再进行想要的操作。 </p>
+<p>2，可以直接更改冲突文件，然后git add file 然后git commit，再push </p>
+<p>对于工作区、暂存区、本地仓库代码的差异比较 </p>
+<p>diff  用于对比差异 </p>
+<p>git diff 默认用于比较工作区和暂存区之间的差异 </p>
+<p>git diff –cached 和git diff –staged比较暂存区和本地仓库的差异 </p>
+<p>git diff HEAD  是工作区与本地仓库的差异 </p>
+<p>查看帮助  git merge –help 或者git help merge </p>
+<p>对于分支相关的操作 </p>
+<p>git branch 查看所有分支 </p>
+<p>git branch -v 查看所有分支详细信息 </p>
+<p>git branch  branchname 新建分支 </p>
+<p>git branch -d branchname 删除分支 </p>
+<p>git checkout branchname  切换分支 </p>
+<p>git checkout -b branchname 创建新分支并切换到新分支 </p>
+<p>git checkout – filename 把工作区的修改撤销，还原到修改前的暂存区的文件的内容（如果修改前已经add到暂存区），或者还原到本地仓库的文件的内容（修改前没有add到暂存区）。即把暂存区或者本地仓库的最近一次的提交检出到工作区使文件的更改撤销，让文件回到最后一次add或commit的状态。 </p>
+<p>git checkout  versionid filename  可以将工作区某个文件还原到指定版本的那个文件的内容 </p>
+<p>具体场景： </p>
+<p>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout – file。 </p>
+<p>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，可以分两步，第一步用命令git reset HEAD file，就回到了场景1，第二步按场景1操作。 </p>
+<p>在Git中，用HEAD表示当前版本，也就是最新的commit的那个版本。上一个版本就是HEAD^，上上一个版本就是HEAD^^。也可以用数字HEAD～，HEAD～2 </p>
+<p><img src="https://img-blog.csdn.net/20170724223459138?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>关于reset的几个参数 </p>
+<p>git reset –mixed HEAD～   将HEAD指针指向上一个版本，同时将本地仓库改变后的HEAD的指向的内容覆盖到暂存区 </p>
+<p>git reset HEAD～  同上，默认是–mixed </p>
+<p>git reset –hard HEAD～ 将HEAD指针指向上一个版本，同时将本地仓库HEAD的指向的内容同时覆盖到暂存区和工作区 </p>
+<p>git reset –soft HEAD～  只将本地仓库的HEAD指针指向上一个版本，其他不做改变。 </p>
+<p>对于回滚来说： </p>
+<p>reset是针对的commit级别的操作，移动HEAD指针，同时可能会影响到暂存区和工作区 </p>
+<p>checkout改变的是工作区的内容，reset改变的可能是工作区、暂存区和HEAD指针的内容 </p>
+<p>git revert versionid  来使本地仓库的内容回到指定的版本内容。与reset的不同是，如果reset要回到以前的某个版本，则HEAD指针移到指定的版本的位置，此后的commit则不显示在git log里面了。而revert则是把它当做一次commit，即把工作区的内容修改成指定版本的内容然后add和commit了。 </p>
+<p>git cherry-pick versionid  经常用于将某个分支上的某次commit合并到master上，而分支的其他commit暂时不合并。（比如修复bug的commit） </p>
+<p>git merge和git rebase </p>
+<p>两者最终结果相似，都是将分支合并，不过合并过程和方式不同。 </p>
+<p><img src="https://img-blog.csdn.net/20170724223533939?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>上图：执行git merge master，把master分支合并到dev分支上    </p>
+<p><img src="https://img-blog.csdn.net/20170724223547515?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="">   </p>
+<p>若是执行git rebase，就会将原来dev的两次提交d和e添加到master分支后面，变成d‘和e’。若有冲突的话，修改后使用git add 和git rebase –continue即可。过程中任何时候可以使用git rebase –abort来终止rebase操作回到原来的状态 </p>
+<p>其余还有一些命令，比如git log、git config等等，不写了。 </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2018/02/26/SpringMVC静态文件过滤/" title="SpringMVC静态文件过滤">SpringMVC静态文件过滤</a></h2>
+                <p class="excerpt">
+                
+                如果在web.xml加了如下配置，那么静态资源文件也会被拦截： 
+&amp;lt;servlet-mapping&amp;gt;
+    &amp;lt;servlet-name&amp;gt;springmvc&amp;lt;/servlet-name&amp;gt;
+    &amp;lt;url-pattern&amp;gt;/&amp;lt;/url-patte
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2018-02-26T06:38:23.000Z" class="post-list__meta--date date">2018-02-26</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2018/02/26/SpringMVC静态文件过滤/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/06/21/基于深度学习的图像风格转换/" title="基于深度学习的图像风格转换">基于深度学习的图像风格转换</a></h2>
+                <p class="excerpt">
+                
+                距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-06-21T05:35:56.000Z" class="post-list__meta--date date">2017-06-21</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2017/06/21/基于深度学习的图像风格转换/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

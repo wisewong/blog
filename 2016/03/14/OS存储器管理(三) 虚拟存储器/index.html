@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>OS存储器管理(三) 虚拟存储器 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="基本概念与实现 
+1）局部性原理 
+在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 
+2）虚拟存储器的引入 
+作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。 
+虚拟内存 
+①虚拟内存将内存抽象成一">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="OS存储器管理(三) 虚拟存储器 | Sage Wong">
+    <meta name="twitter:description" content="基本概念与实现 
+1）局部性原理 
+在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 
+2）虚拟存储器的引入 
+作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。 
+虚拟内存 
+①虚拟内存将内存抽象成一">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="OS存储器管理(三) 虚拟存储器 | Sage Wong">
+    <meta property="og:description" content="基本概念与实现 
+1）局部性原理 
+在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 
+2）虚拟存储器的引入 
+作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。 
+虚拟内存 
+①虚拟内存将内存抽象成一">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/03/14/OS存储器管理(三) 虚拟存储器/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-03-14T15:02:59.000Z" class="post-list__meta--date date">2016-03-14</time> &#8226; <span class="post-meta__tags tags">于 
+  <a class="tag-link" href="/tags/os/">os</a>, <a class="tag-link" href="/tags/虚拟存储器/">虚拟存储器</a>
+ </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">OS存储器管理(三) 虚拟存储器</h1>
+  </header>
+
+  <section class="post">
+    <p>基本概念与实现 </p>
+<p>1）局部性原理 </p>
+<p>在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 </p>
+<p>2）虚拟存储器的引入 </p>
+<p>作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。 </p>
+<p>虚拟内存 </p>
+<p>①虚拟内存将内存抽象成一个巨大的、统一的存储数组，进而将用户看到的逻辑内存与物理内存分开 </p>
+<p>②只要部分程序需要放在内存中就能使程序执行 </p>
+<p>③逻辑地址空间可以比物理地址空间大 </p>
+<p>④允许地址空间被多个进程共享 </p>
+<p>⑥允许更多进程被创建 </p>
+<p>虚拟地址空间 </p>
+<p>当处理器读或写入内存位置时，它会使用虚拟地址。作为读或写操作的一部分，处理器将虚拟地址转换为物理地址。通过虚拟地址访问内存有以下优势 </p>
+<p>①程序可以使用一系列相邻的虚拟地址来访问物理内存中不相邻的大内存缓冲区。 </p>
+<p>②程序可以使用一系列虚拟地址来访问大于可用物理内存的内存缓冲区。当物理内存的供应量变小时，内存管理器会将物理内存页（通常大小为 4 KB）保存到磁盘文件。数据或代码页会根据需要在物理内存与磁盘之间移动。 </p>
+<p>③不同进程使用的虚拟地址彼此隔离。一个进程中的代码无法更改正在由另一进程或操作系统使用的物理内存。 </p>
+<p>进程可用的虚拟地址范围称为该进程的  虚拟地址空间  。每个用户模式进程都有其各自的专用虚拟地址空间。 对于 32 位进程，虚拟地址空间通常为 2 GB，范围从 0x00000000 至 0x7FFFFFFF。对于 64 位进程，虚拟地址空间为 8 TB，范围从 0x000’00000000 至 0x7FF’FFFFFFFF。一系列虚拟地址有时称为一系列“虚拟内存” </p>
+<p>虚拟内存可以用以下方式来实现 </p>
+<p>①覆盖与交换技术 </p>
+<p>②请求页式调度 </p>
+<p>③请求段式调度 </p>
+<p>①覆盖与交换技术 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314220739178-736349078.png" alt=""></p>
+<p>②请求页式调度 </p>
+<p>算法思想  ： </p>
+<p>作业分页(page)，内存分块(帧,frame)，页与块的大小相等。先装入部分页到物理内存，待运行需要时再调入新的页，淘汰旧的页（交换） </p>
+<p>只在页面需要时，才把它们载入物理内存：需要更少的输入输出，更小的内存，更快的响应，更多的用户 </p>
+<p>有效-无效位  ： </p>
+<p>页表中的每一项与一有效无效位与之关联。（1表示该页在物理内存中，0表示不在物理内存） </p>
+<p>有效无效位初始为0 </p>
+<p>当进程试图访问那些尚未调入到物理内存的页时，对标记为无效的页面的访问会产生页错误陷阱（page-fault trap，缺页） </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314221831365-2108132502.png" alt=""></p>
+<p>当有些页不在内存中时的页表： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222006006-266052871.png" alt=""></p>
+<p>缺页(中断) </p>
+<p>1.检查进程的页表，以确定该引用是合法还是非法的地址访问。 </p>
+<p>2.如果引用非法，那么终止进程。如果引用有效但是尚未调入页面，引起缺页中断。 </p>
+<p>3.找到一个空闲块（从空闲块链表中取一个） </p>
+<p>4.调度一个磁盘操作，以便将所需要的页调入刚分配的块 </p>
+<p>5.当磁盘读操作完成后，修改进程的内部表和页表，以表示该页已在内存中。 </p>
+<p>6.重新开始因非法地址陷阱而中断的指令。进程现在能访问所需的页，就好像它似乎总在内存中。 </p>
+<p>处理缺页的步骤： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222509709-713216604.png" alt=""></p>
+<p>处理缺页的流程： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222606928-126621474.png" alt=""></p>
+<p>那么。。没有空闲块时该如何处理？ </p>
+<p>页替换： 在内存中找到一些不再使用的页，将它换出。 </p>
+<p>页面置换 </p>
+<p>给原有的缺页中断服务程序增加页置换，可以防止内存的过度分配（over-allocating）。 </p>
+<p>使用修改位（脏位）来降低页传输的开销 － 只有被修改过的页才写回至磁盘。 </p>
+<p>页置换分开了逻辑内存与物理内存 － 采用这种机制，小的物理内存能为程序员提供巨大的虚拟内存。 </p>
+<p>页置换的基本方法 </p>
+<p>1.查找所需页在磁盘上的位置； </p>
+<p>2.查找一空闲块； </p>
+<p>如果有空闲块，那么就使用它； </p>
+<p>如果没有空闲块，那么就使用页置换算法以选择一个“牺牲”块（victim frame）； </p>
+<p>将“牺牲”块的内容写到磁盘上；修改页表； </p>
+<p>3.将所需页读入（新）空闲块；修改页表； </p>
+<p>4.重启用户进程； </p>
+<p>页面置换算法 </p>
+<p>主要追求最低的缺页 </p>
+<p>常用的页面置换算法模拟：见文章 <a href="http://blog.csdn.net/u013805360/article/details/50571859" target="_blank" rel="noopener"> 页面调度算法模拟 </a></p>
+<p>块分配 </p>
+<p>每个进程需要最低数量的页 </p>
+<p>例如：IBM 370至少需要6页用来处理SS MOVE指令 </p>
+<p>指令是多字节指令，可能跨越2页 </p>
+<p>要移动的字符的块和要移动到目的的区域也可能都要跨页。 </p>
+<p>两种主要的分配方案：  固定分配，优先级分配 </p>
+<p>固定分配 </p>
+<p>平均分配：如100块，5个进程，则给每个进程20块 </p>
+<p>比例分配：根据进程的大小按比例分配 </p>
+<p>特点：每个进程所分配的数量会随着多道程序的级别而有所变化；优先级进程与低优先级进程在这种分配方式下没有任何区别。 </p>
+<p>优先级分配 </p>
+<p>按优先级比例而非进程的大小来分配 </p>
+<p>如果进程 Pi 产生了一个缺页，那么： </p>
+<p>从自身的块中选择用于替换 </p>
+<p>从比自身优先级低的进程中选取块用于替换 </p>
+<p>全局置换  ：允许一个进程从所有块集合中选择一个置换块，而不管该块是否已分配给其他进程；一个进程可以从另一个进程中取块。 </p>
+<p>局部置换  ：要求每个进程仅从其自己的分配块中进行选择 </p>
+<p>系统颠簸(抖动) </p>
+<p>抖动：进程一直忙于将页面换进换出。 </p>
+<p>如果一个进程没有足够的页，那么缺页率就会非常高。这会导致CPU使用率低，这时OS认为必须提高多道程序的程度，因此，新的进程会加入到系统中来。 </p>
+<p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/04/30/探究JVM——运行时数据区/" title="探究JVM——运行时数据区">探究JVM——运行时数据区</a></h2>
+                <p class="excerpt">
+                
+                最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 
+Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-04-30T03:51:23.000Z" class="post-list__meta--date date">2016-04-30</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/04/30/探究JVM——运行时数据区/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/03/13/OS存储器管理(二)/" title="OS存储器管理(二)">OS存储器管理(二)</a></h2>
+                <p class="excerpt">
+                
+                离散分配 
+分页(Paging)，  分段，段页式 
+一、分页 
+一个进程的物理地址可以是非连续的； 
+将物理内存分成固定大小的块，称为块（frame）； 
+将逻辑内存分为同样大小的块，称为页（page）； 
+将连续的页分配并存放到不连续的若干内存块中； 
+建立页表，记录每一页对应的存储块的块号，将
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-03-13T14:46:17.000Z" class="post-list__meta--date date">2016-03-13</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/03/13/OS存储器管理(二)/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

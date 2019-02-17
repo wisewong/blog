@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>动态规划之 0-1背包问题及改进 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="有N件物品和一个容量为V的背包。第i件物品的重量是w[i]，价值是v[i]。求解将哪些物品装入背包可使这些物品的重量总和不超过背包容量，且价值总和最大。在选择装入背包的物品时，对于每种物品i，只能选择装包或不装包，不能装入多次，也不能部分装入，因此成为0-1背包问题。 
+形式化描述为：给定n个物品，背包容量C &amp;gt;0,重量 第i件物品的重量w[i]&amp;gt;0, 价值v[i] &amp;gt;0 , 1">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="动态规划之 0-1背包问题及改进 | Sage Wong">
+    <meta name="twitter:description" content="有N件物品和一个容量为V的背包。第i件物品的重量是w[i]，价值是v[i]。求解将哪些物品装入背包可使这些物品的重量总和不超过背包容量，且价值总和最大。在选择装入背包的物品时，对于每种物品i，只能选择装包或不装包，不能装入多次，也不能部分装入，因此成为0-1背包问题。 
+形式化描述为：给定n个物品，背包容量C &amp;gt;0,重量 第i件物品的重量w[i]&amp;gt;0, 价值v[i] &amp;gt;0 , 1">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="动态规划之 0-1背包问题及改进 | Sage Wong">
+    <meta property="og:description" content="有N件物品和一个容量为V的背包。第i件物品的重量是w[i]，价值是v[i]。求解将哪些物品装入背包可使这些物品的重量总和不超过背包容量，且价值总和最大。在选择装入背包的物品时，对于每种物品i，只能选择装包或不装包，不能装入多次，也不能部分装入，因此成为0-1背包问题。 
+形式化描述为：给定n个物品，背包容量C &amp;gt;0,重量 第i件物品的重量w[i]&amp;gt;0, 价值v[i] &amp;gt;0 , 1">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/10/31/动态规划之 0-1背包问题及改进/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-10-31T14:48:17.000Z" class="post-list__meta--date date">2015-10-31</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">动态规划之 0-1背包问题及改进</h1>
+  </header>
+
+  <section class="post">
+    <p>有N件物品和一个容量为V的背包。第i件物品的重量是w[i]，价值是v[i]。求解将哪些物品装入背包可使这些物品的重量总和不超过背包容量，且价值总和最大。在选择装入背包的物品时，对于每种物品i，只能选择装包或不装包，不能装入多次，也不能部分装入，因此成为0-1背包问题。 </p>
+<p>形式化描述为：给定n个物品，背包容量C &gt;0,重量 第i件物品的重量w[i]&gt;0, 价值v[i] &gt;0 , 1≤i≤n.要求找一n元向量(X  1  ,X  2  ,…,X  n  ,), X  i  ∈{0,1}, 使得 ∑（w[i] <em> Xi） ≤C,且∑ v[i] </em> Xi达最大.即一个特殊的整数规划问题。 </p>
+<p>数学描述为： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201510/740591-20151031115100232-1697238547.jpg" alt=""></p>
+<p>求解最优值： </p>
+<p>设最优值m(i,j)为背包容量为j、可选择物品为i，i+1，……，n时的最优值(装入包的最大价值)。所以原问题的解为  m(1，C) </p>
+<p>将原问题分解为其子结构来求解。要求原问题的解m(1，C)，可从m(n，C)，m(n-1，C)，m(n-2，C)…..来依次求解，即可装包物品分别为（物品n）、（物品n-1，n）、（物品n-2，n-1，n）、……、（物品1，物品2，……物品n-1，物品n）。最后求出的值即为最优值m(1，C)。 </p>
+<p>若求m(i,j)，此时已经求出m(i+1,j)，即第i+1个物品放入和不放入时这二者的最大值。 </p>
+<p>对于此时背包剩余容量  j=0,1,2,3……C  ，分两种情况： </p>
+<p>(1)当  w[i] &gt; j  ，即第i个物品重量大于背包容量j时，  m(i,j)=m(i+1,j) </p>
+<p>(2)当  w[i] &lt;= j  ，即第i个物品重量不大于背包容量j时，这时要判断物品i放入和不放入对m的影响。 </p>
+<p>若  不放入物品i  ，则此时m(i,j)=m(i+1,j) </p>
+<p>若  放入物品i  ，此时背包剩余容量为 j-w[i]，在子结构中已求出当容量k=0,1,2……C 时的最优值m(i+1,k)。所以此时m(i,j)=m(i+1,j-w[i])+v[i]。 </p>
+<p>取上述二者的最大值，即  m(i,j) = max{ m(i+1,j)，m(i+1,j-w[i])+v[i] } </p>
+<p>总结得出状态转移方程为： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201510/740591-20151031203936779-272788613.jpg" alt=""></p>
+<p>该算法的python代码实现： </p>
+<pre><code># 0-1背包问题
+__author__ = &apos;ice&apos;
+
+
+# 背包容量0~capacity,不是0~capacity-1
+def knapsack(weight, value, capacity):
+    if len(weight) != len(value):
+        print(&quot;parameter err!&quot;)
+        return
+    obj_num = len(weight)
+    result = [[] for x in range(obj_num)]
+    divide = min(weight[-1], capacity)
+    result[-1] = [0 for x in range(divide)]
+    result[-1].extend(value[-1] for x in range(divide, capacity + 1))
+    for i in reversed(list(range(1, obj_num - 1))):
+        divide = min(weight[i], capacity)
+        for j in range(divide):
+            result[i].append(result[i + 1][j])
+        for j in range(divide, capacity + 1):
+            result[i].append(max(result[i + 1][j], result[i + 1][j - weight[i]] + value[i]))
+
+    result[0] = {capacity: result[1][capacity]}
+    if weight[0] &lt;= capacity:
+        result[0][capacity] = max(result[1][capacity], result[1][capacity - weight[0]] + value[0])
+
+    vector = [0 for x in range(obj_num)]
+    capacity_temp = capacity
+    for i in range(obj_num - 1):
+        if result[i][capacity_temp] != result[i + 1][capacity_temp]:
+            vector[i] = 1
+            capacity_temp -= weight[i]
+
+    if capacity_temp == 0:
+        vector[-1] = 0
+    else:
+        vector[-1] = 1
+
+    return {&apos;total_value&apos;: result[0][capacity], &apos;select&apos;: vector}
+</code></pre><p>但是  ，但是！！该算法有两个明显的缺点：1，基于上述代码，因为数组索引的需要，要求所给物品重量为整数。2，当背包容量C很大时，算法所需计算时间较多。当C&gt;2^n时，需要Ω(n*2^n)计算时间。 </p>
+<p>所以  ，所以！！改进算法如下： </p>
+<p>对于函数m(i,j)的值，当i确定，j为自变量时，是单调不减的跳跃式增长，如图所示。而这些跳跃点取决于在（物品i，物品i+1，……物品n）中选择放入哪些物品使得在放入重量小于容量 j (0&lt;=j&lt;=C)的情况下m取得最大值。对于每一个确定的i值，都有一个对应的跳跃点集  P  i  ={  (  j  ,  m(i,j)  )  ，……}。j始终小于等于C </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201510/740591-20151031214234810-787969128.jpg" alt=""></p>
+<p>(1)开始求解时，先求  P  i  ，初始时P  n+1  ={(0，0)}，i=n+1，由此按下列步骤计算P  i-1  ，P  i-2  ……P  1  ，即P  n  ，P  n-1  ，……P  1    </p>
+<p>(2)求  Q  i  ，利用P  i  求出m（i，j-w[i-1]）+v[i-1]，即P  i  当放入物品i-1后的变化后的跳跃点集Q  i  ={  (  j+w[i-1], m(i,j)+v[i-1]  )  ，……}，在函数图像上表现为所有跳跃点横轴坐标右移w[i-1]，纵轴坐标上移v[i-1]。 </p>
+<p>(3)求  P  i-1  ，即求P  i  ∪Q  i  然后再去掉  受控跳跃点  后的点集。此处有个  受控跳跃点  的概念：若点(a,b)，(c,d)∈Pi∪Qi，且a&lt;=c，b&gt;d，则(c,d)受控于(a,b)，所以(c,d)∉P  i-1  。去掉受控跳跃点，是为了求得在物品i-1放入后m较大的点，即 使m取最优值的跳跃点。 </p>
+<p>由此计算得出P  n  ，P  n-1  ，……，P  1  。求得P  1  的最后那个跳跃点即为所求的最优值m(1,C)。 </p>
+<p>举个栗子  ： </p>
+<p>n=5，c=10，w={2，2，6，5，4}，v={6，3，5，4，6}。跳跃点的计算过程如下： </p>
+<p>初始时  p[6]={(0,0)} </p>
+<p>因此，  q[6]=p[6]⊕(w[5],v[5])={(4,6)} </p>
+<p>p[5]={(0,0),(4,6)} </p>
+<p>q[5]=p[5]⊕(w[4],v[4])={(5,4),(9,10)} </p>
+<p>p[4]={(0,0),(4,6),(9,10)}  p[5]与q[5]的并集p[5]∪q[5]={(0,0),(4,6),(5,4),(9,10)}中跳跃点(5,4)受控于跳跃点(4,6)。将受控跳跃点(5,4)清除后，得到p[4] </p>
+<p>q[4]=p[4]⊕(6，5)={(6，5)，(10，11)} </p>
+<p>p[3]={(0，0)，(4，6)，(9，10)，(10，11)} </p>
+<p>q[3]=p[3]⊕(2，3)={(2，3)，(6，9)} </p>
+<p>p[2]={(0，0)，(2，3)，(4，6)，(6，9)，(9，10)，(10，11)} </p>
+<p>q[2]=p[2]⊕(2，6)={(2，6)，(4，9)，(6，12)，(8，15)} </p>
+<p>p[1]={(0，0)，(2，6)，(4，9)，(6，12)，(8，15)} </p>
+<p>p[1]的最后的那个跳跃点(8,15)即为所求的最优值，m(1,C)=15 </p>
+<p>最后，python代码的实现： </p>
+<pre><code>class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
+# 0-1背包问题 改进
+def knapsack_improve(weight, value, capacity):
+    if len(weight) != len(value):
+        print(&quot;parameter err!&quot;)
+        return
+    obj_num = len(weight)
+    jump_points_p = [[] for x in range(obj_num)]
+    jump_points_q = [[] for x in range(obj_num)]
+    jump_points_p.append([Point(0, 0)])
+    jump_points_q.append([Point(weight[obj_num - 1], value[obj_num - 1])])
+    for i in reversed(list(range(1, obj_num))):
+        jump_points_p[i] = merge_points(jump_points_p[i + 1], jump_points_q[i + 1])
+        jump_points_q[i] = [Point(point.x + weight[i - 1], point.y + value[i - 1]) for point in jump_points_p[i] if
+                            point.x + weight[i - 1] &lt;= capacity]
+    result = merge_points(jump_points_p[1], jump_points_q[1])
+    return result
+
+
+def merge_points(points_x, points_y):
+    x_len = len(points_x)
+    y_len = len(points_y)
+    merged_points = []
+    i = j = 0
+    while True:
+        if i == x_len or j == y_len:
+            break
+        if points_x[i].x &lt; points_y[j].x:
+            merged_points.append(points_x[i])
+            if points_x[i].y &gt;= points_y[j].y:
+                j += 1
+            i += 1
+        else:
+            merged_points.append(points_y[j])
+            if points_y[j].y &gt;= points_x[i].y:
+                i += 1
+            j += 1
+    while i &lt; x_len:
+        if points_x[i].x &gt; merged_points[-1].x and points_x[i].y &gt; merged_points[-1].y:
+            merged_points.append(points_x[i])
+        i += 1
+    while j &lt; y_len:
+        if points_y[j].x &gt; merged_points[-1].x and points_y[j].y &gt; merged_points[-1].y:
+            merged_points.append(points_y[j])
+        j += 1
+    return merged_points
+
+
+result = knapsack_improve([2, 2, 6, 5, 4], [6, 3, 5, 4, 6], 10)
+print()
+for point in result:
+    print(&apos;(&apos; + str(point.x) + &apos;,&apos; + str(point.y) + &apos;)&apos;, end=&apos; &apos;)
+
+#(0,0) (2,6) (4,9) (6,12) (8,15)
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/11/13/sql server 2008 基础知识/" title="sql server 2008 基础知识">sql server 2008 基础知识</a></h2>
+                <p class="excerpt">
+                
+                一、配置管理器 
+1.管理服务 
+使用配置管理器可以启动、停止、重新启动、继续或暂停服务。 
+服务器和客户端网络协议 
+2.SQLSMS 
+简介：  SQLSMS是一个集成环境，用于访问、配置、管理和开发SQL Server的所有组件。 
+注册服务器：  为客户机确定一台SQL Server数据库所
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-11-13T05:20:47.000Z" class="post-list__meta--date date">2015-11-13</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/11/13/sql server 2008 基础知识/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/10/31/动态规划之矩阵连乘/" title="动态规划之矩阵连乘">动态规划之矩阵连乘</a></h2>
+                <p class="excerpt">
+                
+                给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。 
+例如： 
+A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-10-31T02:06:32.000Z" class="post-list__meta--date date">2015-10-31</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/10/31/动态规划之矩阵连乘/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

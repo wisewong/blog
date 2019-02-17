@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>探究JVM——垃圾回收 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="垃圾回收主要考虑三件事情：  哪些内存需要回收？什么时候回收？如何回收？ 
+一、哪些内存需要回收？ 
+堆内存  ：对于JVM 来说，垃圾回收主要是针对堆内存中的对象实例。 
+方法区  ：垃圾收集行为在方法区是比较少出现的，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛刻，但是这部分区域的回收确实是必要的。 
+二、什么时候回收？ 
+在堆里面存放着Java世界中几乎所有">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="探究JVM——垃圾回收 | Sage Wong">
+    <meta name="twitter:description" content="垃圾回收主要考虑三件事情：  哪些内存需要回收？什么时候回收？如何回收？ 
+一、哪些内存需要回收？ 
+堆内存  ：对于JVM 来说，垃圾回收主要是针对堆内存中的对象实例。 
+方法区  ：垃圾收集行为在方法区是比较少出现的，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛刻，但是这部分区域的回收确实是必要的。 
+二、什么时候回收？ 
+在堆里面存放着Java世界中几乎所有">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="探究JVM——垃圾回收 | Sage Wong">
+    <meta property="og:description" content="垃圾回收主要考虑三件事情：  哪些内存需要回收？什么时候回收？如何回收？ 
+一、哪些内存需要回收？ 
+堆内存  ：对于JVM 来说，垃圾回收主要是针对堆内存中的对象实例。 
+方法区  ：垃圾收集行为在方法区是比较少出现的，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛刻，但是这部分区域的回收确实是必要的。 
+二、什么时候回收？ 
+在堆里面存放着Java世界中几乎所有">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/05/01/探究JVM——垃圾回收/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-05-01T12:58:21.000Z" class="post-list__meta--date date">2016-05-01</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">探究JVM——垃圾回收</h1>
+  </header>
+
+  <section class="post">
+    <p>垃圾回收主要考虑三件事情：  哪些内存需要回收？什么时候回收？如何回收？ </p>
+<p>一、哪些内存需要回收？ </p>
+<p>堆内存  ：对于JVM 来说，垃圾回收主要是针对堆内存中的对象实例。 </p>
+<p>方法区  ：垃圾收集行为在方法区是比较少出现的，一般来说，这个区域的回收“成绩”比较难以令人满意，尤其是类型的卸载，条件相当苛刻，但是这部分区域的回收确实是必要的。 </p>
+<p>二、什么时候回收？ </p>
+<p>在堆里面存放着Java世界中几乎所有的对象实例，垃圾收集器在对堆进行回收前，第一件事情就是要确定这些对象之中哪些还“存活”着，哪些已经“死去”（即不可能再被任何途径使用的对象）。那么，怎么判断呢？ </p>
+<h4 id="引用计数算法-Reference-Counting"><a href="#引用计数算法-Reference-Counting" class="headerlink" title="引用计数算法(Reference Counting)"></a>引用计数算法(Reference Counting)</h4><p>很多教科书上给出的算法是这样的：给对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加1；当引用失效时，计数器值就减1；任何时刻计数器为0的对象就是不可能再被使用的。 </p>
+<p>引用计数算法的实现简单，判定效率也很高，在大部分情况下它都是一个不错的算法，但是，至少主流的Java虚拟机里面没有选用引用计数算法来管理内存，其中最主要的原因是它很难解决对象之间相互循环引用的问题。 </p>
+<p>举个栗子：看下面代码(示例代码来自《深入理解Java虚拟机》) </p>
+<pre><code>/**
+*testGC（）方法执行后，objA和objB会不会被GC呢？
+*/
+public class ReferenceCountingGC{
+    public Object instance=null；
+    private static final int_1MB=1024*1024；
+    /**
+    *这个成员属性的唯一意义就是占点内存，以便能在GC日志中看清楚是否被回收过
+    */
+    private byte[]bigSize=new byte[2*_1MB]；
+    public static void testGC（）{
+        ReferenceCountingGC objA=new ReferenceCountingGC（）；
+        ReferenceCountingGC objB=new ReferenceCountingGC（）；
+        objA.instance=objB；
+        objB.instance=objA；
+        objA=null；
+        objB=null；
+        //假设在这行发生GC,objA和objB是否能被回收？
+        System.gc（）；
+    }
+}
+</code></pre><p>上述代码中的testGC（）方法：对象objA和objB都有字段instance，赋值令objA.instance=objB及objB.instance=objA，除此之外，这两个对象再无任何引用，实际上这两个对象已经不可能再被访问，但是它们因为互相引用着对方，导致它们的引用计数都不为0，于是引用计数算法无法通知GC收集器回收它们。 </p>
+<p>下面介绍一种算法:  可达性分析算法 </p>
+<p>#### </p>
+<h4 id="可达性分析算法-Reachability-Analysis"><a href="#可达性分析算法-Reachability-Analysis" class="headerlink" title="可达性分析算法(Reachability Analysis)"></a>可达性分析算法(Reachability Analysis)</h4><p>在主流的商用程序语言（Java、C#等）的主流实现中，都是称通过可达性分析来判定对象是否存活的。 </p>
+<p>这个算法的基本思路就是通过一系列的称为“  GC Roots  ”的对象作为起始点，从这些节点开始向下搜索，搜索所走过的路径称为  引用链  （Reference Chain），当一个对象到GC Roots没有任何引用链相连（用图论的话来说，就是从GC Roots到这个  对象不可达  ）时，则证明此对象是不可用的。 </p>
+<p>继续举栗子,如下图所示，对象object 5、object 6、object 7虽然互相有关联，但是它们到GC Roots是不可达的，所以它们将会被判定为是可回收的对象。 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201604/740591-20160430165852753-1959600269.jpg" alt=""></p>
+<p>在Java语言中，可作为GC Roots的对象包括下面几种： </p>
+<p>虚拟机栈（栈帧中的本地变量表）中引用的对象。 </p>
+<p>方法区中类静态属性引用的对象。 </p>
+<p>方法区中常量引用的对象。 </p>
+<p>本地方法栈中JNI（即一般说的Native方法）引用的对象。 </p>
+<p>那么问题就来了，即使在可达性分析算法中不可达的对象，也并非是“非死不可”的。 </p>
+<p>要真正宣告一个对象死亡，至少要经历两次标记过程： </p>
+<p>①如果对象在进行可达性分析后发现  没有与GC Roots相连接的引用链  ，那它将会被  第一次标记  并且进行一次  筛选  ，筛选的条件是此对象  是否有必要执行finalize（）  方法： </p>
+<p>当对象没有覆盖finalize()方法，或者finalize()方法已经被虚拟机调用过，虚拟机将这两种情况都视为“没有必要执行”。 </p>
+<p>如果这个对象被判定为有必要执行finalize（）方法，那么这个对象将会放置在一个叫做F-Queue的队列之中，并在稍后由一个由虚拟机自动建立的、低优先级的Finalizer线程去执行它。  这里所谓的“执行”是指虚拟机会触发这个方法，但并不承诺会等待它运行结束，这样做的原因是，如果一个对象在finalize（）方法中执行缓慢，或者发生了死循环（更极端的情况），将很可能会导致F-Queue队列中其他对象永久处于等待，甚至导致整个内存回收系统崩溃。 </p>
+<p>②finalize()方法是对象逃脱死亡命运的最后一次机会，稍后GC将对F-Queue中的对象进行第二次小规模的标记，如果对象要在finalize（）中成功拯救自己——只要重新与引用链上的任何一个对象建立关联即可，譬如把自己（this关键字）赋值给某个类变量或者对象的成员变量，那在第二次标记时它将被移除出“即将回收”的集合；如果对象这时候还没有逃脱，那基本上它就真的被回收了。 </p>
+<p>finalize()方法应尽量避免使用，它的运行代价高昂，不确定性大，无法保证各个对象的调用顺序。 </p>
+<p>关于方法区的回收 </p>
+<p>Java虚拟机规范中不要求虚拟机在方法区实现垃圾收集，而且在方法区中进行垃圾收集的“性价比”一般比较低：在堆中，尤其是在新生代中，常规应用进行一次垃圾收集一般可以回收70%～95%的空间，而永久代的垃圾收集效率远低于此。 </p>
+<p>永久代的垃圾收集主要回收两部分内容：  废弃常量  和  无用的类  。 </p>
+<p>回收废弃常量与回收Java堆中的对象非常类似： </p>
+<p>以常量池中字面量的回收为例，假如一个字符串“abc”已经进入了常量池中，但是当前系统没有任何一个String对象是叫做“abc”的，换句话说，就是没有任何String对象引用常量池中的“abc”常量，也没有其他地方引用了这个字面量，如果这时发生内存回收，而且必要的话，这个“abc”常量就会被系统清理出常量池。常量池中的其他类（接口）、方法、字段的符号引用也与此类似。 </p>
+<p>判定一个常量是否是“废弃常量”比较简单，而要判定一个类是否是“无用的类”的条件则相对苛刻许多。  类需要同时满足下面3个条件才能算是“无用的类”： </p>
+<p>①该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例。 </p>
+<p>②加载该类的ClassLoader已经被回收。 </p>
+<p>③该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。 </p>
+<p>虚拟机可以对满足上述3个条件的无用类进行回收，这里说的仅仅是“可以”，而并不是和对象一样，不使用了就必然会回收。是否对类进行回收，HotSpot虚拟机提供了-Xnoclassgc参数进行控制，还可以使用-verbose：class以及-XX：+TraceClassLoading、-XX：+TraceClassUnLoading查看类加载和卸载信息，其中-verbose：class和-XX：+TraceClassLoading可以在Product版的虚拟机中使用，-XX：+TraceClassUnLoading参数需要FastDebug版的虚拟机支持。 </p>
+<p>在大量使用反射、动态代理、CGLib等ByteCode框架、动态生成JSP以及OSGi这类频繁自定义ClassLoader的场景都需要虚拟机具备类卸载的功能，以保证永久代不会溢出。 </p>
+<p>三、如何回收？ </p>
+<p>下面是几种常见的垃圾收集算法： </p>
+<h4 id="标记-清除算法-Mark-Sweep"><a href="#标记-清除算法-Mark-Sweep" class="headerlink" title="标记-清除算法(Mark-Sweep)"></a>标记-清除算法(Mark-Sweep)</h4><p>最基础的收集算法，算法分为“  标记  ”和“  清除  ”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，(标记过程在上面对象标记判定时已经提过了)。 </p>
+<p>之所以说它是最基础的收集算法，是因为后续的收集算法都是基于这种思路并对其不足进行改进而得到的。  它的主要不足有两个： </p>
+<p>①效率问题  ，标记和清除两个过程的效率都不高； </p>
+<p>②空间问题  ，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而不得不提前触发另一次垃圾收集动作。 </p>
+<p>标记—清除算法的执行过程如图所示 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201604/740591-20160430234643050-585374217.jpg" alt=""></p>
+<p>#### </p>
+<h4 id="复制算法（Copying）"><a href="#复制算法（Copying）" class="headerlink" title="复制算法（Copying）"></a>复制算法（Copying）</h4><p>为了解决效率问题，一种称为“复制”的收集算法出现了，它将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这一块的内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。 </p>
+<p>这样使得每次都是对整个半区进行内存回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针，按顺序分配内存即可，实现简单，运行高效。只是这种算法的代价是将内存缩小为了原来的一半，未免太高了一点。 </p>
+<p>复制算法的执行过程如图所示 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201604/740591-20160430235042582-931203633.jpg" alt=""></p>
+<p>研究表明，新生代中的对象98%是“朝生夕死”的，所以并不需要按照1:1的比例来划分内存空间，而是  将内存分为一块较大的Eden空间和两块较小的Survivor空间，每次使用Eden和其中一块Survivor  。  当回收时，将Eden和Survivor中还存活着的对象一次性地复制到另外一块Survivor空间上，最后清理掉Eden和刚才用过的Survivor空间。 </p>
+<p>HotSpot虚拟机默认Eden和Survivor的大小比例是  8:1  ，也就是每次新生代中可用内存空间为整个新生代容量的90%（80%+10%），只有10%的内存会被“浪费”。当然，98%的对象可回收只是一般场景下的数据，我们没有办法保证每次回收都只有不多于10%的对象存活，当Survivor空间不够用时，需要依赖其他内存（这里指老年代）进行分配担保（Handle Promotion）。 </p>
+<h4 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h4><p>复制收集算法在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选用这种算法。 </p>
+<p>根据老年代的特点，有人提出了另外一种“标记-整理”（Mark-Compact）算法，标记过程仍然与“标记-清除”算法一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存，“标记-整理”算法的示意图如图所示。 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201604/740591-20160430235500863-1228152188.jpg" alt=""></p>
+<p>#### </p>
+<h4 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h4><p>当前商业虚拟机的垃圾收集都采用“  分代收集  ”（Generational Collection）算法，这种算法并没有什么新的思想，只是根据对象存活周期的不同将内存划分为几块。 </p>
+<p>一般是把Java堆分为  新生代  和  老年代  ，这样就可以根据各个年代的特点采用最适当的收集算法。 </p>
+<p>新生代中  ，每次垃圾收集时都发现有大批对象死去，只有少量存活，那就选用  复制算法  ，只需要付出少量存活对象的复制成本就可以完成收集。 </p>
+<p>老年代中  ，因为对象存活率高、没有额外空间对它进行分配担保，就必须使用“  标记—清理  ”或者“  标记—整理  ”算法来进行回收。 </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/05/11/浅谈Struts2/" title="浅谈Struts2">浅谈Struts2</a></h2>
+                <p class="excerpt">
+                
+                学过SSH框架很长一段时间了，一直没有很系统的总结一下，这里先简单谈谈Struts2。 
+为什么要用Struts2？ 
+这里列举一些  Servlet的缺点  ： 
+1、每写一个servlet在web.xml中都要做相应的配置。如果有多很servlet，会导致web.xml内容过于繁多。 
+2、这样
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-05-11T12:09:30.000Z" class="post-list__meta--date date">2016-05-11</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/05/11/浅谈Struts2/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/04/30/探究JVM——运行时数据区/" title="探究JVM——运行时数据区">探究JVM——运行时数据区</a></h2>
+                <p class="excerpt">
+                
+                最近在读《  深入理解Java虚拟机  》，收获颇丰，记录一下，部分内容摘自原书。 
+Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则依赖用户线程的启动和结束而建立和销毁
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-04-30T03:51:23.000Z" class="post-list__meta--date date">2016-04-30</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/04/30/探究JVM——运行时数据区/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

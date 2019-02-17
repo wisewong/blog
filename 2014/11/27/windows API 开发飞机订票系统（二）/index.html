@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>windows API 开发飞机订票系统（二） | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="呐，上回书说到写代码过程中遇到不少问题，在这里就一点一点慢慢道来吧。 
+首先，定义的结构体、全局变量和函数如下： 
+// Flight.c : 定义应用程序的入口点。
+//
+#include &amp;quot;stdafx.h&amp;quot;
+
+//订单
+typedef struct OrderForm{
+    TCHAR IdNum[32];">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="windows API 开发飞机订票系统（二） | Sage Wong">
+    <meta name="twitter:description" content="呐，上回书说到写代码过程中遇到不少问题，在这里就一点一点慢慢道来吧。 
+首先，定义的结构体、全局变量和函数如下： 
+// Flight.c : 定义应用程序的入口点。
+//
+#include &amp;quot;stdafx.h&amp;quot;
+
+//订单
+typedef struct OrderForm{
+    TCHAR IdNum[32];">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="windows API 开发飞机订票系统（二） | Sage Wong">
+    <meta property="og:description" content="呐，上回书说到写代码过程中遇到不少问题，在这里就一点一点慢慢道来吧。 
+首先，定义的结构体、全局变量和函数如下： 
+// Flight.c : 定义应用程序的入口点。
+//
+#include &amp;quot;stdafx.h&amp;quot;
+
+//订单
+typedef struct OrderForm{
+    TCHAR IdNum[32];">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2014/11/27/windows API 开发飞机订票系统（二）/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2014-11-27T06:54:54.000Z" class="post-list__meta--date date">2014-11-27</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">windows API 开发飞机订票系统（二）</h1>
+  </header>
+
+  <section class="post">
+    <p>呐，上回书说到写代码过程中遇到不少问题，在这里就一点一点慢慢道来吧。 </p>
+<p>首先，定义的结构体、全局变量和函数如下： </p>
+<pre><code>// Flight.c : 定义应用程序的入口点。
+//
+#include &quot;stdafx.h&quot;
+
+//订单
+typedef struct OrderForm{
+    TCHAR IdNum[32];                                    //订单用户身份证号
+    int Order_Number;                                    //订单号
+    int Tickets_Num;                                    //订票数量
+    TCHAR Flight_Number[16];                            //航班号
+    TCHAR Departure[16];                                //出发地
+    TCHAR Destination[16];                                //目的地
+    TCHAR Date[16];                                        //出发日期
+    TCHAR TakeOff_Time[16];                                //起飞时间
+    TCHAR Landing_Time[16];                                //降落时间
+    struct OrderForm *Next;                                //所有订单链表next
+    struct OrderForm *psgNext;                            //用户订单链表next
+}OrderForm;
+
+//乘客订单链表
+typedef struct PsgOrderLink{
+    int OrderNum;                                        //订单数目
+    OrderForm *head;                                    //头结点
+    OrderForm *tail;                                    //尾结点
+}PsgOrderLink;
+
+//所有订单列表
+typedef struct AllOrderLink{
+    int AllOrderNum;                                    //所有订单数目
+    OrderForm *head;                                    //头结点
+    OrderForm *tail;                                    //尾结点
+}AllOrderLink;
+
+//乘客
+typedef struct Passenger{
+    TCHAR Name[16];                                        //姓名
+    TCHAR IdNum[32];                                    //身份证号码
+    TCHAR PassWord[32];                                    //密码
+    int TicketNum;                                        //订单数目
+    PsgOrderLink OrderLink;                                //用户所有订单
+    struct Passenger *Next;
+}Passenger;
+
+//乘客链表
+typedef struct PsgLinkList{
+    int PsgNum;                                            //账户数量
+    Passenger *head;                                    //头结点
+    Passenger *tail;                                    //尾结点
+}PsgLinkList;
+
+//航班
+typedef struct Flight{
+    double Fare;                                        //票价
+    int Seat_Number;                                    //座位数
+    int Vacant_Seat;                                    //空余座位数
+    TCHAR Discount[16];                                    //折扣
+    TCHAR Flight_Number[16];                            //航班号
+    TCHAR Departure[16];                                //出发地
+    TCHAR Destination[16];                                //目的地
+    TCHAR Date[16];                                        //出发日期
+    TCHAR TakeOff_Time[16];                                //起飞时间
+    TCHAR Landing_Time[16];                                //降落时间
+    struct Flight *Next;
+}Flight;
+
+//航班链表
+typedef struct FlightLinkList{
+    Flight *head;                                        //头结点
+    Flight *tail;                                        //尾结点
+    int Flight_Number;                                    //航班数目
+}FilghtLinkList;
+
+
+// 全局变量: 
+HICON hIcon;
+HINSTANCE hInst;                                        //当前实例
+static TCHAR szBuffer[256];                                //缓冲区
+static PsgLinkList psglink;                                //所有账户_链表
+static Passenger *passenger;                            //登陆账户信息
+static AllOrderLink allorder;                            //所有订单_链表
+static FilghtLinkList flightlink;                        //所有航班_链表
+
+
+
+//函数声明
+BOOL AccountLogIn(HWND);                                        //账户登陆
+BOOL AccountRegister(HWND);                                        //注册账户
+BOOL ReadFlightData(HWND);                                        //读入航班信息
+BOOL ReadAccountData(HWND);                                        //读入账户资料
+BOOL ReadAccountOrder(HWND,Passenger*);                            //读入所有订单、账户订单
+BOOL SearchFlight(HWND);                                        //查询航班
+BOOL BookTickets(HWND);                                            //订票
+BOOL _Book_Tickets(HWND,Flight*,int);                            //订票
+BOOL Recommend(HWND,Flight*,int);                                //航班建议
+BOOL ReturnTickets(HWND);                                        //退票
+BOOL EntryFlight(HWND);                                            //录入航班
+BOOL ModifyFlight(HWND);                                        //修改航班信息
+BOOL PrintFlight(HWND, Flight*);                                //输出航班信息
+BOOL WriteFlightData(HWND);                                        //保存航班信息
+BOOL WriteAccountData(HWND);                                    //保存账户资料
+BOOL WriteOrderData(HWND);                                        //保存订单信息
+BOOL CALLBACK LogInDlgProc(HWND, UINT, WPARAM, LPARAM);            //登陆窗口窗口过程
+BOOL CALLBACK MainDlgProc(HWND, UINT, WPARAM, LPARAM);            //主界面窗口过程
+BOOL CALLBACK NameDlgProc(HWND, UINT, WPARAM, LPARAM);            //获取新注册用户姓名窗口过程
+BOOL CALLBACK FlightNumDlgProc(HWND, UINT, WPARAM, LPARAM);        //获取用户输入机票数量窗口过程
+BOOL CALLBACK EntryFlightProc(HWND, UINT, WPARAM, LPARAM);        //录入航班窗口过程
+BOOL CALLBACK ModifyFlightProc(HWND, UINT, WPARAM, LPARAM);        //修改航班信息窗口过程
+</code></pre><p>主函数如下： </p>
+<pre><code>//主函数
+int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR szCmdLine,int iCmdShow)
+{            
+
+    hInst = hInstance;
+    InitCommonControls();
+    hIcon=LoadIcon(hInst, MAKEINTRESOURCE(IDI_ICON1));
+    return DialogBox(hInst, MAKEINTRESOURCE(IDD_LOGINDLG), NULL, (DLGPROC)LogInDlgProc);
+}//WinMain
+</code></pre><p>登陆界面窗口过程： </p>
+<pre><code>//登陆窗口_窗口过程
+BOOL CALLBACK LogInDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)  
+{
+    switch (uMsg)
+    {
+        //WM_INITDIALOG是当其对话框和子控件全部创建完毕，将要显示内容的时候发送的消息
+        //因此可以在WM_INITDIALOG消息响应函数中添加对编辑框控件的初始化和修改
+        case WM_INITDIALOG:  
+        {
+            if (hIcon)
+                SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+            ReadAccountData(hwndDlg);                    //登陆对话框初始化时读入账户资料
+            ReadFlightData(hwndDlg);                    //登陆对话框初始化时读入航班信息
+        }//WM_INITDIALOG
+        return TRUE;
+
+        case WM_CLOSE:
+        {
+            EndDialog(hwndDlg, 0);
+        }//WM_CLOSE
+        return TRUE;
+
+        case WM_COMMAND:
+        {
+            switch (LOWORD(wParam))
+            {
+            case IDC_LOGIN:
+                AccountLogIn(hwndDlg);                    //登陆
+                break;
+            case IDC_REGISTER:
+                AccountRegister(hwndDlg);                //注册
+                break; 
+            }//switch
+        }//WM_COMMAND
+        return TRUE;
+
+    }//switch
+    return FALSE;
+}//LogInDlgProc（）
+</code></pre><p>我在对话框初始化时调用了下述函数来  加载程序标题栏的图标： </p>
+<pre><code>if (hIcon)
+    SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+</code></pre><p>接下来就该读取文件了。 </p>
+<p>那么问题就来了，挖掘机…额，不对，应该怎么读入账户资料和航班信息？ </p>
+<p>我把  账户资料和航班信息储存在了.txt文件里，每一行是结构体的一个成员，一个一个读入。 </p>
+<p>两个读入函数代码如下： </p>
+<pre><code>//读入账户信息
+BOOL ReadAccountData(HWND hwndDlg){                        
+
+    FILE *fp;
+
+    passenger = (Passenger *)malloc(sizeof(Passenger));                                        //为登录账户分配内存
+    if (!passenger){
+        MessageBox(hwndDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        EndDialog(hwndDlg, 0);
+        return FALSE;
+    }//if
+
+    psglink.head = NULL;
+    psglink.tail = NULL;
+    psglink.PsgNum = 0;
+
+    if ((fp = fopen(&quot;.\\AccountData.txt&quot;, &quot;r+&quot;)) == NULL){        //打开文件
+        MessageBox(hwndDlg, TEXT(&quot;账户文件读入错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        EndDialog(hwndDlg, 0);
+    }//if        
+
+    while (!feof(fp)){
+        Passenger *p = (Passenger *)malloc(sizeof(Passenger));
+        if (!p){
+            MessageBox(hwndDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+            EndDialog(hwndDlg, 0);
+            return FALSE;
+        }//if
+
+        //读入账户姓名、身份证号、密码
+        if (fscanf(fp, &quot;%s%s%s&quot;, p-&gt;Name, p-&gt;IdNum, p-&gt;PassWord) == EOF){
+            free(p); break;
+        }
+
+        p-&gt;Next = NULL;
+        if (psglink.head == NULL)                        //读入第一个账户信息时，头、尾结点均指向p
+            psglink.head = p;
+        else
+            psglink.tail-&gt;Next = p;                        //否则，尾结点Next指向p
+        psglink.tail = p;                                //尾结点指向p
+        psglink.PsgNum++;                                //已注册账户个数
+
+    }//while
+    fclose(fp);                                            //关闭文件
+    return TRUE;
+}//ReadAccountData(HWND)
+
+
+//读入航班信息
+BOOL ReadFlightData(HWND hwndDlg){                        
+
+    int flag = 0;
+    FILE *fp;
+
+    flightlink.Flight_Number = 0;
+    flightlink.head = NULL;
+    flightlink.tail = NULL;
+
+    if ((fp = fopen(&quot;.\\FlightData.txt&quot;, &quot;r&quot;)) == NULL){        //打开文件
+        MessageBox(hwndDlg, TEXT(&quot;账户文件读入错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        EndDialog(hwndDlg, 0);
+    }//if
+
+    while (!feof(fp)){
+        Flight *p = (Flight *)malloc(sizeof(Flight));
+        if (!p){
+            MessageBox(hwndDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+            EndDialog(hwndDlg, 0);
+            return FALSE;
+        }//if
+        //读入航班信息
+        if (fscanf(fp, &quot;%s%lf%s%d%d%s%s%s%s%s&quot;,
+            p-&gt;Flight_Number,
+            &amp;p-&gt;Fare,
+            p-&gt;Discount,
+            &amp;p-&gt;Seat_Number,
+            &amp;p-&gt;Vacant_Seat,
+            p-&gt;Departure,
+            p-&gt;Destination,
+            p-&gt;Date,
+            p-&gt;TakeOff_Time,
+            p-&gt;Landing_Time) == EOF)
+        {
+            free(p);
+            break;
+        }
+        p-&gt;Next = NULL;
+        if (flightlink.head == NULL)                    //添加至链表
+            flightlink.head = p; 
+        else
+            flightlink.tail-&gt;Next = p;
+        flightlink.tail = p;
+        flightlink.Flight_Number++;
+
+    }//while
+    fclose(fp);                                            //关闭文件
+    return TRUE;
+}//ReadFlightData()
+</code></pre><p>编译运行的时候会报错，报错信息是大体是说fopen()函数不安全，根据提示信息，解决办法是在文件头部做如下定义： </p>
+<pre><code>#define _CRT_SECURE_NO_WARNINGS
+</code></pre><p>或者是在项目-&gt;属性-&gt;c/c++-&gt;预处理器-&gt;预处理器定义，后面加上_CRT_SECURE_NO_WARNINGS就行了。 </p>
+<p>结下来又遇到问题了：程序退出把数据写入txt文件时每行末尾都会有一个\n，读入数据的时候用的是feof()函数，而feof()返回的其实是”最后一次读操作的内容”，与数据库中的eof()不同，eof()读取的是当前指针位置。因此在读到文件末尾的时候，程序会多执行一次循环，为了防止这种情况，我采取的是检查fscanf()返回值的方法，在此以读入账户资料时为例： </p>
+<pre><code>//读入账户姓名、身份证号、密码
+if (fscanf(fp, &quot;%s%s%s&quot;, p-&gt;Name, p-&gt;IdNum, p-&gt;PassWord) == EOF){
+&lt;span style=&quot;white-space:pre&quot;&gt;    &lt;/span&gt;free(p); break;
+}
+</code></pre><p>下面继续贴函数代码： </p>
+<pre><code>//登陆用户验证
+BOOL AccountLogIn(HWND hwndDlg){                        
+
+    int flag = 0;                                                                //flag！=0则该用户已注册，flag==0则该用户尚未注册
+    Passenger *p;
+
+    GetDlgItemText(hwndDlg, IDC_IDEDIT, passenger-&gt;IdNum, 256);                    //获取用户输入ID
+    GetDlgItemText(hwndDlg, IDC_PSWEDIT, passenger-&gt;PassWord, 256);                //获取用户输入密码
+
+    p = psglink.head;
+    while (p){                                                                    //在用户链表查找登陆用户ID
+        if (!lstrcmp(passenger-&gt;IdNum, p-&gt;IdNum)){        
+            flag++;                                                                //该用户已注册
+            if (!lstrcmp(passenger-&gt;PassWord, p-&gt;PassWord)){                    //密码匹配，登陆成功
+                lstrcpy(passenger-&gt;Name, p-&gt;Name);
+                MessageBox(hwndDlg, TEXT(&quot;登陆成功，单击确定进入程序主界面&quot;), TEXT(&quot;登陆成功&quot;), MB_OK | MB_ICONINFORMATION);
+                break;
+            }//if
+            else{                                                                //密码错误，退出循环
+                MessageBox(hwndDlg, TEXT(&quot;密码错误，请重新输入&quot;), TEXT(&quot;密码错误&quot;), MB_OK | MB_ICONERROR);
+                return FALSE;
+            }//else
+        }//if
+        p = p-&gt;Next;
+    }//while
+    if (!flag){                                                                    //用户尚未注册
+        if (lstrlen(passenger-&gt;PassWord)==0)
+            MessageBox(hwndDlg, TEXT(&quot;请输入密码！&quot;), TEXT(&quot;信息&quot;), MB_OK | MB_ICONINFORMATION);
+        else
+            MessageBox(hwndDlg, TEXT(&quot;该账户尚未注册，请先注册&quot;), TEXT(&quot;信息&quot;), MB_OK | MB_ICONINFORMATION);
+    }//if
+    else{                                                                        //关闭登陆界面，弹出主界面
+        EndDialog(hwndDlg, TRUE);
+        if (ReadAccountOrder(hwndDlg, passenger))                                //读取用户订单
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_MAINDLG), NULL, (DLGPROC)MainDlgProc);
+    }//else
+
+    return TRUE;
+}//AccountLogIn(HWND)
+
+
+
+//用户注册
+BOOL AccountRegister(HWND hwndDlg){
+
+    GetDlgItemText(hwndDlg, IDC_IDEDIT, passenger-&gt;IdNum, 256);            //获取用户输入ID
+    GetDlgItemText(hwndDlg, IDC_PSWEDIT, passenger-&gt;PassWord, 256);        //获取用户输入密码
+
+    if (lstrlen(passenger-&gt;PassWord) == 0){
+        MessageBox(hwndDlg, TEXT(&quot;请输入注册用户密码！&quot;), TEXT(&quot;信息&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    DialogBox(hInst, MAKEINTRESOURCE(IDD_NAMEDLG), NULL, (DLGPROC)NameDlgProc);    //获取新注册用户姓名
+
+    if (lstrlen(passenger-&gt;Name) == 0)
+        return FALSE;
+
+    passenger-&gt;Next = NULL;
+
+    if (psglink.head == NULL)                                        //该注册账户为第一个账户时，头、尾结点均指向passenger
+        psglink.head = passenger;
+    else
+        psglink.tail-&gt;Next = passenger;                                //将新注册账户资料添加至账户链表
+    psglink.tail = passenger;                                        //链表尾指针指向链表尾
+    psglink.PsgNum++;                                                //注册用户数目加1
+    passenger-&gt;TicketNum = 0;                            
+    passenger-&gt;OrderLink.head = NULL;                                //乘客订单链表初始化
+    passenger-&gt;OrderLink.tail = NULL;
+    passenger-&gt;OrderLink.OrderNum = 0;
+
+    MessageBox(hwndDlg, TEXT(&quot;注册成功！请单击确定进入主界面&quot;), TEXT(&quot;注册成功&quot;), MB_OK | MB_ICONINFORMATION);
+
+    EndDialog(hwndDlg, TRUE);                                                    //关闭登陆界面
+
+    DialogBox(hInst, MAKEINTRESOURCE(IDD_MAINDLG), NULL, (DLGPROC)MainDlgProc); //弹出主界面
+
+    return TRUE;
+}//AccountRegister(HWND)
+
+
+//获取新注册用户姓名_窗口过程
+BOOL CALLBACK NameDlgProc(HWND hNameDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+
+    switch (uMsg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (hIcon)
+            SendMessage(hNameDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }
+    return TRUE;
+
+    case WM_CLOSE:
+    {
+        wsprintf(passenger-&gt;IdNum, TEXT(&quot;\0&quot;));
+        EndDialog(hNameDlg, 0);
+    }//WM_CLOSE
+    return TRUE;
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_GETNAMEOK:
+        {
+            GetDlgItemText(hNameDlg, IDC_GETNAME, passenger-&gt;Name, 16);
+            EndDialog(hNameDlg, TRUE);
+            break;
+        }//GETNAME
+        case IDC_GETNAMECANCEL:
+        {
+            wsprintf(passenger-&gt;IdNum, TEXT(&quot;\0&quot;));
+            EndDialog(hNameDlg, TRUE);
+            break;
+        }//GETNAMECANCEL
+
+        }//stitch
+
+    }//WM_COMMAND
+    return TRUE;
+
+    }//stitch
+
+    return FALSE;
+
+}//NameDlgProc()
+
+
+//读取订单信息
+BOOL ReadAccountOrder(HWND hwndDlg, Passenger *passenger){    
+
+    FILE *fp;
+    allorder.AllOrderNum = 0;                            //订单链表初始化
+    allorder.head = NULL;                                
+    allorder.tail = NULL;
+    passenger-&gt;TicketNum = 0;                            //乘客订单链表初始化
+    passenger-&gt;OrderLink.head = NULL;
+    passenger-&gt;OrderLink.tail = NULL;
+    passenger-&gt;OrderLink.OrderNum = 0;
+
+    if ((fp = fopen(&quot;.\\OrderForm.txt&quot;, &quot;r&quot;)) == NULL){    //打开存储订单信息文件
+        MessageBox(hwndDlg, TEXT(&quot;订单文件读入错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+
+    while (!feof(fp)){
+        OrderForm *p = (OrderForm *)malloc(sizeof(OrderForm));
+        if (!p){
+            MessageBox(hwndDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+            EndDialog(hwndDlg, 0);
+            return FALSE;
+        }//if
+        if (fscanf(fp, &quot;%s%d%d%s%s%s%s%s%s&quot;,
+            p-&gt;IdNum,                                    //读取订单信息
+            &amp;p-&gt;Order_Number,
+            &amp;p-&gt;Tickets_Num,
+            p-&gt;Flight_Number,
+            p-&gt;Departure,
+            p-&gt;Destination,
+            p-&gt;Date,
+            p-&gt;TakeOff_Time,
+            p-&gt;Landing_Time) == EOF)
+        {
+            free(p);
+            break;
+        }
+        p-&gt;Next = NULL;
+        p-&gt;psgNext = NULL;
+
+        if (allorder.head == NULL){                        //将结点添至订单链表末尾
+            allorder.head = p; 
+        }
+        else
+            allorder.tail-&gt;Next = p;
+        allorder.tail = p;
+        allorder.AllOrderNum++;                            //订单数目增加
+
+        if (!lstrcmp(p-&gt;IdNum, passenger-&gt;IdNum)){        //若该订单为当前登录账户订单，则添至用户订单链表末尾
+            if (passenger-&gt;OrderLink.head == NULL){        //将结点添至用户订单链表末尾
+                passenger-&gt;OrderLink.head = p;
+            }
+            else
+                passenger-&gt;OrderLink.tail-&gt;psgNext = p;
+            passenger-&gt;OrderLink.tail = p;
+            passenger-&gt;TicketNum += p-&gt;Tickets_Num;        
+            passenger-&gt;OrderLink.OrderNum++;            //订单数目增加
+        }//if
+    }//while
+    fclose(fp);
+    return TRUE;
+}//ReadAccountOrder()
+</code></pre><p>至此，登录对话框部分已经完成。下篇博客来完成主界面的部分功能….. </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2014/11/30/windows API 开发飞机订票系统（三）/" title="windows API 开发飞机订票系统（三）">windows API 开发飞机订票系统（三）</a></h2>
+                <p class="excerpt">
+                
+                嘿嘿，今天继续来完成哥哥我的飞机订票系统。 
+废话不多说，先把主界面对话框窗口过程贴出来： 
+//主界面_窗口过程
+BOOL CALLBACK MainDlgProc(HWND hMainDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+    switc
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2014-11-30T13:49:50.000Z" class="post-list__meta--date date">2014-11-30</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2014/11/30/windows API 开发飞机订票系统（三）/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2014/11/26/windows API 开发飞机订票系统（一）/" title="windows API 开发飞机订票系统（一）">windows API 开发飞机订票系统（一）</a></h2>
+                <p class="excerpt">
+                
+                课程设计做一个飞机订票系统，c语言实现，功能如下： 
+录入： 
+可以录入航班情况（数据可以存储在一个数据文件中，数据结构、具体数据自定） 
+查询： 
+可以查询某个航线的情况（如，输入航班号，查询起降时间，起飞抵达城市，航班票价，票价折扣，确定航班是否满仓）； 
+可以输入起飞抵达城市，查询飞机航班情况
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2014-11-26T15:33:02.000Z" class="post-list__meta--date date">2014-11-26</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2014/11/26/windows API 开发飞机订票系统（一）/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>c++实现简单计算器 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="帮一个同学写的，非计算机类专业，应付交差，也没什么功能，两个数的加减乘除运算，以及三角函数的运算。要求用到模板、运算符重载和异常处理。 
+一直以来都是用的java，没怎么用过c++，就当是复习了一下c++语法。 
+代码如下： 
+#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;string&amp;gt;
+#include&amp;lt;cmath&amp;gt;
+#include&amp;lt;cstd">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="c++实现简单计算器 | Sage Wong">
+    <meta name="twitter:description" content="帮一个同学写的，非计算机类专业，应付交差，也没什么功能，两个数的加减乘除运算，以及三角函数的运算。要求用到模板、运算符重载和异常处理。 
+一直以来都是用的java，没怎么用过c++，就当是复习了一下c++语法。 
+代码如下： 
+#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;string&amp;gt;
+#include&amp;lt;cmath&amp;gt;
+#include&amp;lt;cstd">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="c++实现简单计算器 | Sage Wong">
+    <meta property="og:description" content="帮一个同学写的，非计算机类专业，应付交差，也没什么功能，两个数的加减乘除运算，以及三角函数的运算。要求用到模板、运算符重载和异常处理。 
+一直以来都是用的java，没怎么用过c++，就当是复习了一下c++语法。 
+代码如下： 
+#include&amp;lt;iostream&amp;gt;
+#include&amp;lt;string&amp;gt;
+#include&amp;lt;cmath&amp;gt;
+#include&amp;lt;cstd">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/06/06/c++实现简单计算器/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-06-06T10:32:56.000Z" class="post-list__meta--date date">2015-06-06</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">c++实现简单计算器</h1>
+  </header>
+
+  <section class="post">
+    <p>帮一个同学写的，非计算机类专业，应付交差，也没什么功能，两个数的加减乘除运算，以及三角函数的运算。要求用到模板、运算符重载和异常处理。 </p>
+<p>一直以来都是用的java，没怎么用过c++，就当是复习了一下c++语法。 </p>
+<p>代码如下： </p>
+<pre><code>#include&lt;iostream&gt;
+#include&lt;string&gt;
+#include&lt;cmath&gt;
+#include&lt;cstdlib&gt;
+
+using namespace std;
+
+//四则运算
+template &lt;class T&gt; class ElementaryArithmetic{
+private:
+    T result;
+    T operand1, operand2;
+    char operators;
+public:
+    //四则运算
+    void Calculate(); 
+    //加法运算
+    void add(T, T); 
+    //减法运算
+    void subtraction(T, T); 
+    //乘法运算
+    void multiplication(T, T);
+    //除法运算
+    void divide(T, T); 
+    //输出运算符重载
+    template &lt;class E&gt; friend ostream &amp;operator&lt;&lt;(ostream&amp;, ElementaryArithmetic&lt;E&gt; &amp;);
+};
+
+//四则运算
+template &lt;class T&gt; void ElementaryArithmetic&lt;T&gt;::Calculate(){
+    int type;
+
+loop1:
+    system(&quot;cls&quot;);
+    cout &lt;&lt; endl &lt;&lt; &quot;*******************&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;*   1.加法运算    *&quot; &lt;&lt; endl; 
+    cout &lt;&lt; &quot;*   2.减法运算    *&quot; &lt;&lt; endl;  
+    cout &lt;&lt; &quot;*   3.乘法运算    *&quot; &lt;&lt; endl;  
+    cout &lt;&lt; &quot;*   4.除法运算    *&quot; &lt;&lt; endl; 
+    cout &lt;&lt; &quot;*******************&quot; &lt;&lt; endl &lt;&lt; endl;
+    cout &lt;&lt; &quot;请输入菜单项(1-4)：&quot;;
+    try{
+        cin &gt;&gt; type;
+        if (type != 1 &amp;&amp; type != 2 &amp;&amp; type != 3 &amp;&amp; type != 4)
+            throw 1;
+    }
+    catch (int e){
+        cout &lt;&lt; endl &lt;&lt; &quot;输入错误，请重新输入选项...&quot;;
+        system(&quot;pause&quot;);
+        goto loop1;
+    }
+
+    cout &lt;&lt; endl &lt;&lt; &quot;请输入两个数字：&quot;;
+    cin &gt;&gt; operand1 &gt;&gt; operand2;
+    if (type == 1){
+        add(operand1, operand2);
+        operators = &apos;+&apos;;
+    }
+    else if (type == 2){
+        subtraction(operand1, operand2);
+        operators = &apos;-&apos;;
+    }
+    else if (type == 3){
+        multiplication(operand1, operand2);
+        operators = &apos;*&apos;;
+    }
+    else if (type == 4){
+        divide(operand1, operand2);
+        operators = &apos;/&apos;;
+    }
+
+}
+
+//加法运算
+template &lt;class T&gt; void ElementaryArithmetic&lt;T&gt;::add(T operand1,T operand2){
+    result = operand1 + operand2;
+}
+
+//减法运算
+template &lt;class T&gt; void ElementaryArithmetic&lt;T&gt;::subtraction(T operand1, T operand2){
+    result = operand1 - operand2;
+}
+
+//乘法运算
+template &lt;class T&gt; void ElementaryArithmetic&lt;T&gt;::multiplication(T operand1, T operand2){
+    result = operand1 * operand2;
+}
+
+//除法运算
+template &lt;class T&gt; void ElementaryArithmetic&lt;T&gt;::divide(T operand1, T operand2){
+    try{
+        //除数为0，出现异常
+        if ((operand2 - 0) &lt; 1e-8 &amp;&amp; (operand2 - 0) &gt; -1e-8)
+            throw 0;
+    }
+    catch (int){
+        throw ;
+    }
+    result = operand1 / operand2;
+}
+
+//输出运算符重载
+template &lt;class E&gt; ostream&amp; operator&lt;&lt;(ostream &amp;os, ElementaryArithmetic&lt;E&gt; &amp;result){
+    os &lt;&lt; endl &lt;&lt; &quot;计算结果 ： &quot; &lt;&lt; result.operand1 &lt;&lt; result.operators &lt;&lt; result.operand2 &lt;&lt; &apos;=&apos; &lt;&lt; result.result &lt;&lt; endl;
+    return os;
+}
+
+//三角函数
+class Trigonometric{
+private:
+    double radian;
+    string type;
+    double result;
+public:
+    //三角函数计算
+    void Calculate();
+    //输出运算符重载
+    friend ostream &amp;operator&lt;&lt;(ostream&amp;, Trigonometric &amp;);
+};
+
+//三角函数计算
+void Trigonometric::Calculate(){
+    int option;
+
+loop2:
+    system(&quot;cls&quot;);
+    cout &lt;&lt; &quot;*******************&quot; &lt;&lt; endl;
+    cout &lt;&lt; &quot;*    1.求正弦      *&quot;&lt;&lt; endl; 
+    cout &lt;&lt; &quot;*    2.求余弦      *&quot;&lt;&lt; endl;
+    cout &lt;&lt; &quot;*    3.求正切      *&quot;&lt;&lt; endl;
+    cout &lt;&lt; &quot;*******************&quot; &lt;&lt; endl &lt;&lt; endl;
+    cout &lt;&lt; &quot;请输入菜单项(1-3)：&quot;;
+    try{
+        cin &gt;&gt; option;
+        if (option != 1 &amp;&amp; option != 2 &amp;&amp; option != 3 &amp;&amp; option != 4)
+            throw 2;
+    }
+    catch (int e){
+        cout &lt;&lt; endl &lt;&lt; &quot;输入错误，请重新输入选项...&quot; ;
+        system(&quot;pause&quot;);
+        goto loop2;
+    }
+
+
+    cout &lt;&lt; endl &lt;&lt; &quot;请输入弧度：&quot;;
+    cin &gt;&gt; radian;
+
+    if (option == 1){
+        result = sin(radian);
+        type = &quot;sin&quot;;
+    }
+    else if (option == 2){
+        result = cos(radian);
+        type = &quot;cos&quot;;
+    }
+    else if (option == 3){
+        result = tan(radian);
+        type = &quot;tan&quot;;
+    }
+}
+
+//输出运算符重载
+ostream &amp;operator&lt;&lt;(ostream &amp;os, Trigonometric &amp;result){
+    os &lt;&lt; endl &lt;&lt; &quot;计算结果 ： &quot; &lt;&lt; result.type &lt;&lt; &quot;(&quot; &lt;&lt; result.radian &lt;&lt; &quot;) = &quot; &lt;&lt; result.result &lt;&lt; endl;
+    return os;
+}
+
+int main(){
+    int type;
+
+loop:
+    while (true){
+        system(&quot;cls&quot;);
+        cout &lt;&lt; &quot;*******主菜单**********&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;*                     *&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;*   1. 四则运算       *&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;*   2. 三角函数       *&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;*   3. 退出程序       *&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;*                     *&quot; &lt;&lt; endl;
+        cout &lt;&lt; &quot;***********************&quot; &lt;&lt; endl &lt;&lt; endl;
+        cout &lt;&lt; &quot;请输入菜单项(1-3)：&quot;;
+
+        try{
+            cin &gt;&gt; type;
+            if (type != 1 &amp;&amp; type != 2 &amp;&amp; type != 3)
+                throw - 1;
+
+            if (type == 1){
+                ElementaryArithmetic&lt;double&gt; calc;
+                calc.Calculate();
+                cout &lt;&lt; calc;
+            }
+            else if (type == 2){
+                Trigonometric calc;
+                calc.Calculate();
+                cout &lt;&lt; calc;
+            }
+            else if (type == 3)
+                break;
+        }
+        catch (int e){
+            if (e == -1){
+                cout &lt;&lt; endl &lt;&lt; &quot;输入错误，请重新输入选项...&quot;;
+                system(&quot;pause&quot;);
+                goto loop;
+            }
+            else if (e == 0)
+                cout &lt;&lt; &quot;除数不能为 0 &quot; &lt;&lt; endl;
+
+        }
+        cout &lt;&lt; endl;
+        system(&quot;pause&quot;);
+    }
+    return 0;
+}
+</code></pre><p>好吧，其实我也不知道为什么要求用模板和运算符重载，感觉没什么必要，典型的作业代码，不过也可能是我思想的局限性。总之，就这样吧。    </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/06/06/dom4j 使用总结/" title="dom4j 使用总结">dom4j 使用总结</a></h2>
+                <p class="excerpt">
+                
+                dom4j  是一个Java的XML API，类似于jdom，用来读写XML文件 
+dom4j的使用方法简单总结来说如下： 
+①可以创建一个新的xml文件 
+②利用SAXReader和File对象创建一个已存在的xml文件的一个Document对象 
+③利用Document对象的getRootEle
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-06-06T12:01:42.000Z" class="post-list__meta--date date">2015-06-06</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/06/06/dom4j 使用总结/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/06/05/mysql使用基础 sql语句与数据完整性(二)/" title="mysql使用基础 sql语句与数据完整性(二)">mysql使用基础 sql语句与数据完整性(二)</a></h2>
+                <p class="excerpt">
+                
+                二、  DML:Data Manipulation Language 数据操作语言 
+作用：操作表中的数据的。关键：INSERT UPDATE DELETE 
+注意：日期或字符串、字符要使用单引号引起来。 
+假设已经存在表user ： 
+mysql&amp;gt;CREATE TABLE uesr(
+   
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-06-05T09:52:54.000Z" class="post-list__meta--date date">2015-06-05</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/06/05/mysql使用基础 sql语句与数据完整性(二)/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

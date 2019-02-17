@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>sql server 2008 数据库的完整性约束 | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="一、数据库完整性概述 
+1.数据库的完整性： 
+①数据库的完整性是指数据的正确性和相容性 
+②数据库完整性是防止不合语义或不正确的数据进入数据库 
+③完整性体现了是否真实地反映现实世界 
+例: 
+学生的年龄必须是整数，取值范围为14-29； 
+学生的性别只能是男或女； 
+学生的学号一定是唯一的； 
+学生所在的系必须是学校开设的系； 
+2.DBMS维护数据库完整性的机制： 
+①提供定义完整性约束条件">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="sql server 2008 数据库的完整性约束 | Sage Wong">
+    <meta name="twitter:description" content="一、数据库完整性概述 
+1.数据库的完整性： 
+①数据库的完整性是指数据的正确性和相容性 
+②数据库完整性是防止不合语义或不正确的数据进入数据库 
+③完整性体现了是否真实地反映现实世界 
+例: 
+学生的年龄必须是整数，取值范围为14-29； 
+学生的性别只能是男或女； 
+学生的学号一定是唯一的； 
+学生所在的系必须是学校开设的系； 
+2.DBMS维护数据库完整性的机制： 
+①提供定义完整性约束条件">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="sql server 2008 数据库的完整性约束 | Sage Wong">
+    <meta property="og:description" content="一、数据库完整性概述 
+1.数据库的完整性： 
+①数据库的完整性是指数据的正确性和相容性 
+②数据库完整性是防止不合语义或不正确的数据进入数据库 
+③完整性体现了是否真实地反映现实世界 
+例: 
+学生的年龄必须是整数，取值范围为14-29； 
+学生的性别只能是男或女； 
+学生的学号一定是唯一的； 
+学生所在的系必须是学校开设的系； 
+2.DBMS维护数据库完整性的机制： 
+①提供定义完整性约束条件">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2015/11/14/sql server 2008 数据库的完整性约束/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2015-11-14T06:02:34.000Z" class="post-list__meta--date date">2015-11-14</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">sql server 2008 数据库的完整性约束</h1>
+  </header>
+
+  <section class="post">
+    <p>一、数据库完整性概述 </p>
+<p>1.数据库的完整性： </p>
+<p>①数据库的完整性是指数据的正确性和相容性 </p>
+<p>②数据库完整性是防止不合语义或不正确的数据进入数据库 </p>
+<p>③完整性体现了是否真实地反映现实世界 </p>
+<p>例: </p>
+<p>学生的年龄必须是整数，取值范围为14-29； </p>
+<p>学生的性别只能是男或女； </p>
+<p>学生的学号一定是唯一的； </p>
+<p>学生所在的系必须是学校开设的系； </p>
+<p>2.DBMS维护数据库完整性的机制： </p>
+<p>①提供定义完整性约束条件的机制 </p>
+<p>DBMS应提供定义数据库完整性约束条件，并把它们存入数据库中。 </p>
+<p>②提供完整性检查的方法 </p>
+<p>检查数据是否满足完整性约束条件的机制称为完整性检查。一般在INSERT、UPDATE、DELETE语句执行后开始检查。 </p>
+<p>3.违约处理 </p>
+<p>DBMS若发现用户的操作违背了完整性约束条件，就采取一定的动作以保证数据的完整性，如拒绝执行该操作，或级联执行其他操作。 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201511/740591-20151114130610572-1601576084.png" alt=""></p>
+<p>二、缺省(默认值)和规则 </p>
+<p>缺省  和  规则  来源于由Sybase开发的S默认值QL Server，在老版本的SQL Server或者升级版本中都有缺省和规则的使用。 </p>
+<p>缺省  是为列提供数据的一种方式，如果用户进行INSERT操作时不为列输入数据，则使用缺省值。 </p>
+<p>规则  是当用户进行INSERT或uPDATE操作时，对输入列中的数据设定的取值范围，是实现域完整性的方式之一。 </p>
+<p>缺省与规则有以下特点： </p>
+<p>(1)缺省与规则是数据库对象，它们是独立于表和列而建立的。 </p>
+<p>(2)缺省与规则建立后与列或数据类型产生关联，列和数据类型就具有了缺省与规则的属性。 </p>
+<p>(3)缺省与规则定义后，可以重复使用，可以绑定到多个列或数据类型上。 </p>
+<p>(4)缺省与规则不随表同时调入内存，当用到时才被调入内存，这可能会使程序执行出现延时。 </p>
+<p>缺省和规则对象通常  只在它所创建的数据库中有效，  不是ANSI标准，  一般不提倡使用。 </p>
+<p>应尽可能使用约束，任何可以使用缺省与规则的地方都有可以使用约束。 </p>
+<p>1. 缺省 </p>
+<p>在SQL Server中，有两种使用默认值的方法： </p>
+<p>①在创建表时，指定默认值。 </p>
+<p>用SQL Server Management Studio创建表时在设计表时指定默认值，可以在输入字段名称后，设定该字段的默认值。 </p>
+<p>或使用CREATE TABLE语句中的DEFAULT子句指定默认值。 </p>
+<p>②使用CREATE DEFAULT语句创建默认对象后，使用存储过程sp_bindefault将该默认对象绑定到列上。 </p>
+<p>默认值对象是单独存储的，删除表的时候，DEFAULT约束会自动删除，但是默认值对象不会被删除。 </p>
+<p>创建默认值对象后，需要将其绑定到某列或者用户自定义的数据类型上。 </p>
+<p>主要操作： </p>
+<p>①创建默认值对象 </p>
+<p>②绑定默认值对象 </p>
+<p>③解除默认值对象的绑定 </p>
+<p>④查看默认值对象 </p>
+<p>⑤删除默认值对象 </p>
+<p>①创建默认对象 </p>
+<p>可以使用CREATE DEFAULT语句创建默认对象。其语法格式如下： </p>
+<p>CREATE DEFAULT default  AS constant_expression </p>
+<p>例如：  create  default  d_grade  as  <strong>1</strong></p>
+<p>②绑定默认对象 </p>
+<p>默认对象创建后不能使用，必须首先将其绑定到某列或者用户自定义的数据类型上。其使用语法格式如下： </p>
+<p>sp_bindefault [@defname = ] ‘default’,  [@objname = ] ‘object_name’  [, [@futureonly = ] ‘futureonly_flag’] </p>
+<p>其中：  [, [@futureonly = ] ‘futureonly_flag’]仅在此之后将默认值绑定到用户定义的数据类型时才使用。 </p>
+<p>例如：  exec  sp_bindefault  ‘  d_grade  ‘  , ‘sc.grade  ‘ </p>
+<p>③解除默认对象的绑定 </p>
+<p>解除绑定可以使用sp_unbindefault存储过程。其语法格式如下： </p>
+<p>sp_unbindefault [@objname = ] ‘object_name’ </p>
+<p>例如：  exec  sp_unbindefault ‘sc.grade  ‘ </p>
+<p>④查看默认对象 </p>
+<p>exec  sp_help d_grade </p>
+<p>exec  sp_helptext d_grade </p>
+<p>⑤删除默认对象 </p>
+<p>在删除默认对象之前，首先要确认默认对象已经解除绑定。删除默认对象使用DROP DEFAULT语句。其语法格式如下： </p>
+<p>DROP DEFAULT {default} [,…n] </p>
+<p>例如：  drop  default  d_grade </p>
+<p>2.规则 </p>
+<p>规则用以限制存储在表中或用户自定义数据类型的值，是独立的数据库对象。 </p>
+<p>将规则绑定到列或用户自定义数据类型时，规则才起作用。 </p>
+<p>表中的每列或每个用户定义数据类型只能和一个规则绑定。但每列可应用多个CHECK约束。 </p>
+<p>如果要删除规则，应确定规则已经解除绑定。 </p>
+<p>①创建规则 </p>
+<p>CREATE RULE语句，其语法格式如下： </p>
+<p>CREATE RULE rulename AS condition_expression </p>
+<p>其中各参数含义如下： </p>
+<p>rulename  是新规则的名称。 </p>
+<p>condition_expression  是定义规则的条件。 </p>
+<p>例如：  create  rule  r_grade  as  @grade  &lt;=  <strong>100</strong> and  @grade  &gt;=0 </p>
+<p>②绑定规则 </p>
+<p>使用sp_bindrule存储过程，语法格式为： </p>
+<p>sp_bindrule [@rulename = ] ‘rulename’,  [@objname = ]  ‘object_name’ </p>
+<p>例如：  exec  sp_bindrule  ‘  r_grade  ‘  ,  ‘  sc.grade‘ </p>
+<p>注意： </p>
+<p>规则不能绑定到text、image或timestamp列。 </p>
+<p>如果规则与绑定的列不兼容，SQL Server将在插入值时返回错误信息。 </p>
+<p>未解除绑定的规则，如果再次将一个新的规则绑定到列，旧的规则将自动被解除，只有最近一次绑定的规则有效 </p>
+<p>如果列中包含CHECK约束，则CHECK约束优先。 </p>
+<p>③解除规则的绑定 </p>
+<p>使用sp_unbindrule存储过程。语法格式如下： </p>
+<p>sp_unbindrule [@objname = ] ‘object name’  [,[@futureonly = ] ‘futureonly_ lag’] </p>
+<p>例如： </p>
+<p>exec  sp_unbindrule  ‘  sc.grade  ‘ </p>
+<p>④  删除规则 </p>
+<p>首先要  解除规则的绑定，然后才能删除绑定 </p>
+<p>例如：  drop  rule  r_grade </p>
+<p>三、约束 </p>
+<p>SQL Server 2008提供的强制数据完整性的机制： </p>
+<p>①PRIMARY KEY 约束 </p>
+<p>②FOREIGN KEY 约束 </p>
+<p>③UNIQUE 约束 </p>
+<p>④CHECK 约束 </p>
+<p>⑤NOT NULL（非空性） </p>
+<p>⑥IDENTITY 约束 </p>
+<p>使用约束优先于使用触发器、规则和默认值 </p>
+<p>查询优化器使用约束定义生成高性能的查询执行计划 </p>
+<p>①PRIMARY KEY 约束： </p>
+<p>可以在下面情况下使用： </p>
+<p>(1)作为表定义的一部分在创建表时创建。 </p>
+<p>(2)添加到尚没有PRIMARY KEY约束的表中（一个表只能有一个PRIMARY KEY约束）。 </p>
+<p>(3)如果已有PRIMARY KEY约束，则可对其进行修改或删除。 </p>
+<p>特点： </p>
+<p>(1)每个表都应有一个主键，主键值唯一。 </p>
+<p>(2)主键内的任何列不能为空（null）。 </p>
+<p>(3)要使用TRansact-SQL修改PRIMARY KEY，必须先删除现有的PRIMARY KEY约束，然后再重新创建。 </p>
+<p>(4)创建表时指定主键，sql server会自动创建一个名为“PK_”且后跟表名的主键索引。如果不指定索引类型，则默认为聚集索引。该索引只能在删除与它保持联系的表或主键约束时才能删除。 </p>
+<p>②FOREIGN KEY约束 </p>
+<p>标识表之间的关系，用于强制参照完整性，为表中一列或多列提供参照完整性。 FOREIGN KEY约束也可以参照自身表中的其他列（例如：学生表中的“班长学号”列参照“学号”列），这种参照称为自参照。 </p>
+<p>FOREIGN KEY约束可以在下面情况下使用： </p>
+<p>(1)作为表定义的一部分在创建表时创建。 </p>
+<p>(2)如果现有表的某列与另一个表已有的PRIMARY KEY约束或UNIQUE约束相关联，则可向现有表添加FOREIGN KEY约束。 </p>
+<p>(3)对已有的FOREIGN KEY约束进行修改或删除。 </p>
+<p>使用FOREIGN KEY约束，应注意的几个问题： </p>
+<p>(1)每个表最多可以有253个FOREIGN KEY约束。 </p>
+<p>(2)FOREIGN KEY约束只能参照同一个数据库中的表，而不能参照其他数据库中的表。 </p>
+<p>(3)FOREIGN KEY子句中的列数目和每个列指定的数据类型必须和REFERENCES子句中的列相同。 </p>
+<p>(4)FOREIGN KEY约束不能自动创建索引。 </p>
+<p>(5)在临时表中，不能使用FOREIGN KEY约束。 </p>
+<p>(6)如果一个外键没有对应的主键值，则不能插入带该值的行。 </p>
+<p>③UNIQUE约束 </p>
+<p>(1)UNIQUE约束在列集内强制执行值的唯一性。 </p>
+<p>(2)对于UNIQUE约束中的列，表中不允许有两行包含相同的非空值。 </p>
+<p>(3)SQL Server创建了UNIQUE约束后会自动创建UNIQUE索引来强制UNIQUE约束的唯一性要求。 </p>
+<p>(4)如果插入重复行，SQL Server将返回错误信息。 </p>
+<p>(5)向表中的现有列添加UNIQUE约束时，默认情况下SQL Server 2008检查列中的现有数据确保除NULL外的所有值均唯一。 </p>
+<p>(6)UNIQUE约束与主键约束的区别：  主键也强制执行唯一性，但主键不允许空值，而且每个表中主键只能有一个，但UNIQUE列可以有多个，可以取空值。 </p>
+<p>(7)UNIQUE约束优先于唯一索引。 </p>
+<p>④CHECK约束 </p>
+<p>(1)CHECK约束通过限制用户输入的值来加强域完整性。 </p>
+<p>(2)它指定应用于列中输入的所有值的布尔（取值为TRUE或FALSE）搜索条件，拒绝所有不取值为TRUE的值。 </p>
+<p>(3)可以为每列指定多个CHECK约束。 </p>
+<p>⑤IDENTITY约束 </p>
+<p>自动编号约束又称作标识列，采用数字编号的方式依次增加一个增量。是为那些数字顺序递增的列准备的约束，可以自动完成数值添加。 </p>
+<p>(1)标识种子 </p>
+<p>(2)标识增量 </p>
+<p>(3)标识列的数据类型 </p>
+<p>四、完整性约束命名子句 </p>
+<p>完整性约束命名子句的格式： </p>
+<p>CONSTRAINT &lt;完整性约束条件名&gt;[PRIMARY KEY短语|FOREIGN KEY 短语|CHECK短语] </p>
+<p>例：建立学生登记表Student2，要求学号在10000至99999之间，姓名不能取空值，年龄小于30，性别‘男’或‘女’： </p>
+<pre><code>CREATE TABLE Student2(
+       sno   int CONSTRAINT C1 CHECK (sno BETWEEN 10000 AND 99999),
+       sname  CHAR(8)  CONSTRAINT C2 NOT NULL,
+       sage  int  CONSTRAINT C3  CHECK (sage&lt;30),
+       ssex   VARCHAR(2)  CONSTRAINT C4 CHECK (ssex IN (&apos;男&apos;, &apos;女&apos;)),
+       CONSTRAINT SK PRIMARY KEY(Sno)
+);
+</code></pre><p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/11/18/sql server T-SQL 基础/" title="sql server T-SQL 基础">sql server T-SQL 基础</a></h2>
+                <p class="excerpt">
+                
+                SQL语言按照用途可以分为如下3类： 
+①  DDL(Data Definition Language)  数据定义语言： 
+定义修改和删除数据库、表、索引和视图等 
+②  DML(Data Manipulation Language)  数据处理语言： 
+对数据进行查询(SELECT)、插入(IN
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-11-18T05:05:29.000Z" class="post-list__meta--date date">2015-11-18</time> &#8226; <span class="post-list__meta--tags tags">于 
+  <a class="tag-link" href="/tags/T-SQL/">T-SQL</a>, <a class="tag-link" href="/tags/sql-server-2008/">sql server 2008</a>
+</span><a class="btn-border-small" href="/2015/11/18/sql server T-SQL 基础/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2015/11/13/sql server 2008 操作数据表/" title="sql server 2008 操作数据表">sql server 2008 操作数据表</a></h2>
+                <p class="excerpt">
+                
+                SQL Server表 
+表的类型： 
+①临时表 
+临时表可用来处理中间数据或者用临时表 
+与其它连接共享进行中的工作。临时表只 
+能放在tempdb中。 
+私有临时表（#） 
+全局临时表（##） 
+②系统表 
+用来存储所有数据库对象、数据类型、约束、 
+配置选项等相关信息的表。 
+属性的数据类型 
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2015-11-13T15:33:27.000Z" class="post-list__meta--date date">2015-11-13</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2015/11/13/sql server 2008 操作数据表/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>OS存储器管理(一) | Sage Wong</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="存储器的层次： 
+分为  寄存器  、  主存（内存）  和  辅存（外存）  三个层次。 
+主存  ：  高速缓冲存储器、主存储器、磁盘缓冲存储器， 
+主存又称为可执行存储器； 
+辅存  ：  固定磁盘存储器、可移动的外部存储器； 
+其可长期保存数据，但不能被处理器直接访问。 
+此处针对的是在OS层面上对主存（内存）的管理。 
+内(主)存储器管理的主要功能：  ① 逻辑地址到物理地址的转换">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="OS存储器管理(一) | Sage Wong">
+    <meta name="twitter:description" content="存储器的层次： 
+分为  寄存器  、  主存（内存）  和  辅存（外存）  三个层次。 
+主存  ：  高速缓冲存储器、主存储器、磁盘缓冲存储器， 
+主存又称为可执行存储器； 
+辅存  ：  固定磁盘存储器、可移动的外部存储器； 
+其可长期保存数据，但不能被处理器直接访问。 
+此处针对的是在OS层面上对主存（内存）的管理。 
+内(主)存储器管理的主要功能：  ① 逻辑地址到物理地址的转换">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="OS存储器管理(一) | Sage Wong">
+    <meta property="og:description" content="存储器的层次： 
+分为  寄存器  、  主存（内存）  和  辅存（外存）  三个层次。 
+主存  ：  高速缓冲存储器、主存储器、磁盘缓冲存储器， 
+主存又称为可执行存储器； 
+辅存  ：  固定磁盘存储器、可移动的外部存储器； 
+其可长期保存数据，但不能被处理器直接访问。 
+此处针对的是在OS层面上对主存（内存）的管理。 
+内(主)存储器管理的主要功能：  ① 逻辑地址到物理地址的转换">
+
+    
+    <meta name="author" content="sage wong">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="Sage Wong" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://yoursite.com/2016/01/24/OS存储器管理(一)/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/bkc.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 Sage Wong 的主页"><img src="/images/touxiang.jpg" width="80" alt="Sage Wong logo" class="panel-cover__logo logo"></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for Sage Wong">Sage Wong</a></h1>
+        
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description"></p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="Visit the blog" class="blog-button">Blog</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="https://weibo.com/z941030" title="Weibo" target="_blank">
+      <i class="social fa fa-weibo"></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/wisewong" title="GitHub" target="_blank">
+      <i class="social fa fa-github"></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  <li class="navigation__item">
+    <a href="https://twitter.com/mr_xlz" title="Twitter" target="_blank">
+      <i class="social fa fa-twitter"></i>
+      <span class="label">Twitter</span>
+    </a>
+  </li>
+
+  
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class="social fa fa-rss"></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2016-01-23T18:30:46.000Z" class="post-list__meta--date date">2016-01-24</time> &#8226; <span class="post-meta__tags tags">于  </span>
+      <span class="page-pv">
+       Read <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">OS存储器管理(一)</h1>
+  </header>
+
+  <section class="post">
+    <p>存储器的层次： </p>
+<p>分为  寄存器  、  主存（内存）  和  辅存（外存）  三个层次。 </p>
+<p>主存  ：  高速缓冲存储器、主存储器、磁盘缓冲存储器， </p>
+<p>主存又称为可执行存储器； </p>
+<p>辅存  ：  固定磁盘存储器、可移动的外部存储器； </p>
+<p>其可长期保存数据，但不能被处理器直接访问。 </p>
+<p>此处针对的是在OS层面上对主存（内存）的管理。 </p>
+<p>内(主)存储器管理的主要功能：  ① 逻辑地址到物理地址的转换     ② 内存（主存）空间的分配与回收     ③ 内存信息（数据）的共享与保护     ④ 内存的逻辑扩充（虚拟存储器的实现） </p>
+<p>一个用户程序在运行之前需要经历若干步骤，为了执行，程序应被调入内存并放在进程内： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160123233953203-2016965521.png" alt=""></p>
+<p>在这些步骤中，地址可能有不同的表示形式： </p>
+<p>符号（源程序中），可重定位的地址（目标模块），绝对地址（内存映像） </p>
+<p>逻辑地址  ：目标代码的相对编址。由CPU生成，也称为虚拟地址 </p>
+<p>物理地址  ：内存存储单元的编址，内存单元的实际地址 </p>
+<p>逻辑地址空间  ：目标代码用逻辑地址编址对应的区域 </p>
+<p>内存存储空间  ：内存若干存储单元用物理地址编址对应的区域 </p>
+<p>重定位  ：逻辑地址转换为物理地址的操作（过程） </p>
+<p>接下来，将指令与数据捆绑到内存地址，可以在以下步骤的任何一步中执行： </p>
+<p>编译时  ：MS-DOS的COM格式程序 </p>
+<p>加载时  ：编译器生成可重定位代码 </p>
+<p>执行时  ：进程在执行时可以从一个内存段移到另一内存段，那么捆绑必须延迟到执行时才进行。 </p>
+<p>运行时从虚拟地址映射到物理地址的硬件设备称为  内存管理单元(MMU) </p>
+<p>用户进程所生成的地址在送交内存之前，都将加上重定位寄存器的值。 </p>
+<p>用户程序处理的是逻辑地址，它不会看到真实的物理地址  。 </p>
+<p>原理图如下： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160123235637328-270703599.png" alt=""></p>
+<p>例如： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124000119281-1451165421.png" alt=""></p>
+<p>重定位的方式： </p>
+<p>静态重定位  ：目标代码装入内存时，一次性进行逻辑地址到物理地址的地址转换。 </p>
+<p>动态重定位  ：目标代码装入内存时，先不进行地址转换（即原代码装入），在执行时,再实施地址转换。 </p>
+<p><strong> 内存分配的方式  </strong> ：  连续分配  和  非连续分配 </p>
+<p>内存通常分为两个区域： </p>
+<p>一个用于驻留  操作系统  ，常与中断向量一起放在  低内存 </p>
+<p>另一个用于  用户进程  ，常放在  高内存  。 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124002000672-2073055217.png" alt=""></p>
+<p>一、连续分配 </p>
+<p>四种方式： </p>
+<p>①单一连续区分配 </p>
+<p>②固定分区分配 </p>
+<p>③可变（动态）分区分配 </p>
+<p>④可重定位分区分配 </p>
+<p>①单分区分配方法（Single-partition allocation  ） </p>
+<p>重定位寄存器方案  用来保护用户进程之间，用户进程与操作系统之  间不会相互修改代码与数据 </p>
+<p>重定位寄存器  包含了最小的物理地址；  界限寄存器  包含了逻辑地址的范围，每个逻辑地址必须小于界限寄存器 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124004246625-1621462958.png" alt=""></p>
+<p>②固定分区分配 </p>
+<ul>
+<li>算法思想 </li>
+</ul>
+<p>内存可用区划分成若干个大小固定的存区，每个存区分别装入一道作业的代码（数据）。 </p>
+<ul>
+<li>算法实现 </li>
+</ul>
+<p>建立分区说明表，记录各分区大小、地址及分配情况 </p>
+<p>例如： </p>
+<p>分区号 </p>
+<p>| </p>
+<p>分区大小 </p>
+<p>| </p>
+<p>起始地址 </p>
+<p>| </p>
+<p>状态   </p>
+<p>—|—|—|—  </p>
+<p>1 </p>
+<p>| </p>
+<p>12k </p>
+<p>| </p>
+<p>20k </p>
+<p>| </p>
+<p>已分配   </p>
+<p>2 </p>
+<p>| </p>
+<p>32k </p>
+<p>| </p>
+<p>32k </p>
+<p>| </p>
+<p>已分配   </p>
+<p>3 </p>
+<p>| </p>
+<p>64k </p>
+<p>| </p>
+<p>64k </p>
+<p>| </p>
+<p>已分配   </p>
+<p>4 </p>
+<p>| </p>
+<p>128k </p>
+<p>| </p>
+<p>128k </p>
+<p>| </p>
+<p>空闲   </p>
+<p>5 </p>
+<p>|  |  |   </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124004851015-67845716.png" alt=""></p>
+<p>分配：查分区说明表，找到一个足够大的空闲分区分配之； </p>
+<p>回收：将回收分区对应的分区说明表状态改为“空闲”。 </p>
+<p>优点：内存可同时装入多道作业代码，算法实现简单； </p>
+<p>缺点：存在浪费（分区一次性全部分配出去）；会产生内部碎片。 </p>
+<p>③动态存储分配问题 </p>
+<p>算法思想：事先不划分分区，待作业需要分配内存时，再按需分配划分分区（分区的大小及个数不固定）。 </p>
+<p>数据结构:空闲分区表或空闲分区链表  —- &gt;   记录空闲分区的大小、地址等 </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124005608609-1309235666.png" alt=""></p>
+<p>空闲分区链表状况：  <img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124005648265-1403550251.png" alt=""></p>
+<p>分配  ：查空闲分区链表，找到第一个足够大的分区，将其一分为二分配之； </p>
+<p>分配策略（算法）  ：首次适应算法，循环首次适应算法，最佳适应算法，最差适应算法 </p>
+<p>回收  ：先将回收分区与相邻空闲分区合并再修改空闲分区链表。 </p>
+<p>回收算法  ：前邻接合并，后邻接合并，前、后邻接合并，不邻接处理 </p>
+<ul>
+<li>优、缺点 </li>
+</ul>
+<p>按需分配，可解决浪费问题；<br>分配算法复杂，会产生外部碎片； </p>
+<p>邻接合并系统开销大。 </p>
+<ul>
+<li>碎片问题 </li>
+</ul>
+<p>碎片:可变分区分配过程中形成的若干个非常小的无法再利用的小分区，形成外部碎片 </p>
+<p>碎片  分为  外部碎片  和  内部碎片  。 </p>
+<p>处理碎片的方法： </p>
+<p>1.紧缩（compaction，拼接）：用来降低外部碎片移动内存内容，以便所有空闲空间合并成一整块。 </p>
+<p>如果重定位是动态的，是在运行时进行的，那么就能采用紧缩 </p>
+<p>2.另一种可能解决外部碎片问题的方法是允许物理地址空间为非连续，这样只要有物理内存就可为进程分配：分页或分段 </p>
+<p>④可重定位分区分配 </p>
+<ul>
+<li>算法思想 </li>
+</ul>
+<p>在可变分区分配算法的基础上，采用动态重定位方式装入程序（数据）。当无足够大的分区供分配时，若总的空闲存储容量够用，则将各分区中的内容向内存一端移动（紧凑），使另一端形成一个大的空闲分区，然后再分配。 </p>
+<p>例：前例若要为作业10分配120k的存储空间，因无足够大分区（总空闲容量290k），则先进行合并处理： </p>
+<p><img src="http://images2015.cnblogs.com/blog/740591/201601/740591-20160124013915640-915824524.png" alt=""></p>
+<p>内存的非连续分配方式见下篇。 </p>
+<p><a href="http://www.cnblogs.com/z941030/" target="_blank" rel="noopener"> 博客园博客:欠扁的小篮子 </a>   </p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Newer Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/02/18/sql server 事务处理/" title="sql server 事务处理">sql server 事务处理</a></h2>
+                <p class="excerpt">
+                
+                事物处理 
+事务是SQL Server中的单个逻辑单元，一个事务内的所有SQL语句作为一个整体执行，要么全部执行，要么都不执行。 
+事务有4个属性，称为ACID（原子性、一致性、隔离性和持久性） 
+原子性  事务必须是原子工作单元。对于其数据修改，要么全都执行，要么全都不执行。 
+一致性  事务在完
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-02-18T13:26:15.000Z" class="post-list__meta--date date">2016-02-18</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/02/18/sql server 事务处理/">继续阅读</a></div>
+                           
+            </div>
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">Older Post</span>
+                <h2 class="post-list__post-title post-title"><a href="/2016/01/23/页面调度算法模拟/" title="页面调度算法模拟">页面调度算法模拟</a></h2>
+                <p class="excerpt">
+                
+                模拟实现的算法：FIFO，Optimal（最佳置换），LRU，Clock，改进的Clock算法 
+一、先入先出（FIFO）: 
+最简单的页面置换算法是先入先出（FIFO）法。这种算法的实质是，总是选择在主存中停留时间最长（即最老）的一页置换，即先进入内存的页，先退出内存。理由是：最早调入内存的页，其
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2016-01-23T15:18:50.000Z" class="post-list__meta--date date">2016-01-23</time> &#8226; <span class="post-list__meta--tags tags">于 </span><a class="btn-border-small" href="/2016/01/23/页面调度算法模拟/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        &copy; 2019 sage wong - 本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+       
+    </span>
+    <span class="footer__copyright">
+             - 基于 <a href="http://hexo.io">Hexo</a> 搭建，使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题，由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+         </span>
+       
+    
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-78918255-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9cdad07c755fa23f6aced510c6760e87";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>

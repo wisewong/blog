@@ -96,23 +96,23 @@
 
 
 
-  <meta name="description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象成一">
-<meta name="keywords" content="os,虚拟存储器">
+  <meta name="description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象">
+<meta name="keywords" content="OS,存储管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OS存储器管理(三) 虚拟存储器">
 <meta property="og:url" content="http://yoursite.com/2016/03/14/OS存储器管理(三) 虚拟存储器/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象成一">
+<meta property="og:description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314220739178-736349078.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314221831365-2108132502.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222006006-266052871.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222509709-713216604.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314222606928-126621474.png">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.646Z">
+<meta property="og:updated_time" content="2019-02-17T13:16:11.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OS存储器管理(三) 虚拟存储器">
-<meta name="twitter:description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象成一">
+<meta name="twitter:description" content="基本概念与实现  1）局部性原理  在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行  2）虚拟存储器的引入  作业（进程）运行时，仅装入其代码的一部分到物理内存，待需要时再装入其余部分，同时还可将不再运行的部分调出物理内存。变相地扩充了内存容量,即实现了虚拟存储器。  虚拟内存  ①虚拟内存将内存抽象">
 <meta name="twitter:image" content="http://images2015.cnblogs.com/blog/740591/201603/740591-20160314220739178-736349078.png">
 
 
@@ -406,7 +406,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:16:11" itemprop="dateModified" datetime="2019-02-17T21:16:11+08:00">2019-02-17</time>
               
             
           </span>
@@ -423,14 +423,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/os/" itemprop="url" rel="index"><span itemprop="name">os</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/os/虚拟存储器/" itemprop="url" rel="index"><span itemprop="name">虚拟存储器</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a></span>
 
                 
                 
@@ -465,7 +458,9 @@
       
 
       
-        <p>基本概念与实现 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>基本概念与实现 </p>
 <p>1）局部性原理 </p>
 <p>在一段时间内，运行的作业程序仅访问（涉及到）一部分作业代码，即不会涉及整个地址空间。即在一段时间间隔内，仅装入一部分代码,作业照样能正常运行 </p>
 <p>2）虚拟存储器的引入 </p>
@@ -571,9 +566,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/os/" rel="tag"># os</a>
+            <a href="/tags/OS/" rel="tag"># OS</a>
           
-            <a href="/tags/虚拟存储器/" rel="tag"># 虚拟存储器</a>
+            <a href="/tags/存储管理/" rel="tag"># 存储管理</a>
           
         </div>
       
@@ -740,15 +735,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -821,7 +808,31 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -96,18 +96,19 @@
 
 
 
-  <meta name="description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootstra">
+  <meta name="description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
+<meta name="keywords" content="Tomcat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat启动过程源码解读">
 <meta property="og:url" content="http://yoursite.com/2018/03/07/Tomcat启动过程源码解读/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootstra">
+<meta property="og:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20180307193533551">
-<meta property="og:updated_time" content="2019-02-17T07:04:31.110Z">
+<meta property="og:updated_time" content="2019-02-17T13:31:33.601Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat启动过程源码解读">
-<meta name="twitter:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootstra">
+<meta name="twitter:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180307193533551">
 
 
@@ -401,11 +402,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:31" itemprop="dateModified" datetime="2019-02-17T15:04:31+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:31:33" itemprop="dateModified" datetime="2019-02-17T21:31:33+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Tomcat/" itemprop="url" rel="index"><span itemprop="name">Tomcat</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -435,7 +454,9 @@
       
 
       
-        <p>根据Tomcat源码来看一下Tomcat启动过程都做了什么 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>根据Tomcat源码来看一下Tomcat启动过程都做了什么 </p>
 <p>部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程 </p>
 <p>先来一张启动过程时序图，了解一下启动顺序    </p>
 <p><img src="https://img-blog.csdn.net/20180307193533551" alt="">   </p>
@@ -761,6 +782,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Tomcat/" rel="tag"># Tomcat</a>
+          
+        </div>
+      
 
       
       
@@ -924,15 +951,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1005,7 +1024,31 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

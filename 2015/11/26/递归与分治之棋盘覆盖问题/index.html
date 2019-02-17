@@ -96,21 +96,22 @@
 
 
 
-  <meta name="description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且任何">
+  <meta name="description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且">
+<meta name="keywords" content="算法设计与分析,递归,分治">
 <meta property="og:type" content="article">
 <meta property="og:title" content="递归与分治之棋盘覆盖问题">
 <meta property="og:url" content="http://yoursite.com/2015/11/26/递归与分治之棋盘覆盖问题/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且任何">
+<meta property="og:description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/lsxqw2004/WindowsLiveWriter/6e8df6c1d310_13ADF/1_thumb.gif">
 <meta property="og:image" content="http://pic002.cnblogs.com/images/2011/320662/2011080809550625.png">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201511/740591-20151126125236015-1164760949.png">
 <meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/lsxqw2004/WindowsLiveWriter/6e8df6c1d310_13ADF/4_thumb.gif">
-<meta property="og:updated_time" content="2019-02-17T07:00:37.568Z">
+<meta property="og:updated_time" content="2019-02-17T13:16:12.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="递归与分治之棋盘覆盖问题">
-<meta name="twitter:description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且任何">
+<meta name="twitter:description" content="在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。  显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。  下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。   在棋盘覆盖问题中，要用下图中 4 中不同形态的 L 型骨牌覆盖一个给定的特殊棋牌上除特殊方格以外的所有方格，且">
 <meta name="twitter:image" content="http://images.cnblogs.com/cnblogs_com/lsxqw2004/WindowsLiveWriter/6e8df6c1d310_13ADF/1_thumb.gif">
 
 
@@ -404,11 +405,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:00:37" itemprop="dateModified" datetime="2019-02-17T15:00:37+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:16:12" itemprop="dateModified" datetime="2019-02-17T21:16:12+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法设计与分析/" itemprop="url" rel="index"><span itemprop="name">算法设计与分析</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -438,7 +457,9 @@
       
 
       
-        <p>在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>在一个2^k * 2^k个方格组成的棋盘中,若有一个方格与其他方格不同,则称该方格为一特殊方格,且称该棋盘为一个特殊棋盘。 </p>
 <p>显然特殊方格在棋盘上出现的位置有4^k种情形.因而对任何k≥0,有4^k种不同的特殊棋盘。 </p>
 <p>下图所示的特殊棋盘为 k=2 时 16 个特殊棋盘中的一个。 </p>
 <p><img src="http://images.cnblogs.com/cnblogs_com/lsxqw2004/WindowsLiveWriter/6e8df6c1d310_13ADF/1_thumb.gif" alt=""></p>
@@ -515,6 +536,16 @@ for lst in board:
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法设计与分析/" rel="tag"># 算法设计与分析</a>
+          
+            <a href="/tags/递归/" rel="tag"># 递归</a>
+          
+            <a href="/tags/分治/" rel="tag"># 分治</a>
+          
+        </div>
       
 
       
@@ -679,15 +710,7 @@ for lst in board:
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -760,7 +783,31 @@ for lst in board:
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -96,22 +96,23 @@
 
 
 
-  <meta name="description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始化C">
+  <meta name="description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始">
+<meta name="keywords" content="NIO,Tomcat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat NIO">
 <meta property="og:url" content="http://yoursite.com/2018/04/11/Tomcat NIO/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始化C">
+<meta property="og:description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20180411143300606">
 <meta property="og:image" content="https://img-blog.csdn.net/2018041114334393">
 <meta property="og:image" content="https://img-blog.csdn.net/20180411143428262">
 <meta property="og:image" content="https://img-blog.csdn.net/20180411145515269">
 <meta property="og:image" content="https://img-blog.csdn.net/20180411145838613">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.934Z">
+<meta property="og:updated_time" content="2019-02-17T13:31:33.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat NIO">
-<meta name="twitter:description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始化C">
+<meta name="twitter:description" content="说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。  在tomcat启动过程中，会初始">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180411143300606">
 
 
@@ -405,11 +406,36 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:31:33" itemprop="dateModified" datetime="2019-02-17T21:31:33+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Tomcat/" itemprop="url" rel="index"><span itemprop="name">Tomcat</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Tomcat/NIO/" itemprop="url" rel="index"><span itemprop="name">NIO</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -439,7 +465,9 @@
       
 
       
-        <p>说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>说起Tomcat的NIO，不得不提的就是Connector这个Tomcat组件。Connector是Tomcat的连接器，其主要任务是负责处理收到的请求，并创建一个Request和Response的对象，然后用一个线程用于处理请求，Connector会把Request和Response对象传递给该线程，该线程的具体的处理过程就是Container容器的事了。 </p>
 <p>在tomcat启动过程中，会初始化Connector，并调用Connector的startInternal()方法开启Connector,开始监听、处理请求。 </p>
 <p>想了解Tomcat NIO的工作方式，就得先了解一下Connector的实现原理。下面从三个方面来了解一下Connector组件：Connector的数据结构、Connector初始化以及Connector开启。 </p>
 <h1 id="Connector"><a href="#Connector" class="headerlink" title="Connector"></a>Connector</h1><h2 id="Connector的数据结构"><a href="#Connector的数据结构" class="headerlink" title="Connector的数据结构"></a>Connector的数据结构</h2><p>先了解一下Connector的数据结构。Connector的一个主要的属性：ProtocolHandler protocolHandler（协议） </p>
@@ -1036,6 +1064,14 @@ public boolean events() {
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/NIO/" rel="tag"># NIO</a>
+          
+            <a href="/tags/Tomcat/" rel="tag"># Tomcat</a>
+          
+        </div>
+      
 
       
       
@@ -1208,15 +1244,7 @@ public boolean events() {
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1289,7 +1317,31 @@ public boolean events() {
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

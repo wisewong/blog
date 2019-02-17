@@ -96,12 +96,13 @@
 
 
 
-  <meta name="description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Style">
+  <meta name="description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Sty">
+<meta name="keywords" content="深度学习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于深度学习的图像风格转换">
 <meta property="og:url" content="http://yoursite.com/2017/06/21/基于深度学习的图像风格转换/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Style">
+<meta property="og:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Sty">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20170621131634528?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170621131813298?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
@@ -112,10 +113,10 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20170621132741225?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170621133002386?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170621133212032?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.402Z">
+<meta property="og:updated_time" content="2019-02-17T13:33:28.242Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于深度学习的图像风格转换">
-<meta name="twitter:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Style">
+<meta name="twitter:description" content="距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。  主要参考的文献有  《A Neural Algorithm of Artistic Sty">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20170621131634528?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 
 
@@ -409,11 +410,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:33:28" itemprop="dateModified" datetime="2019-02-17T21:33:28+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -443,7 +462,9 @@
       
 
       
-        <p>距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>距离上次写博客已经好久好久好久了，真是懈怠的生活节奏，整天混吃等死玩游戏，前些日子做毕业设计时总算又学了点新东西。学了一点深度学习和卷积神经网络的知识，附带着详细学习了一下前段时间我觉得比较有意思的图像风格转换。毕竟是初学，顺便把神经网络方面的知识也写在前面了，便于理解。若有不对的地方的话，希望指正。 </p>
 <p>主要参考的文献有 <a href="https://arxiv.org/abs/1508.06576" target="_blank" rel="noopener"> 《A Neural Algorithm of Artistic Style》 </a> 和 <a href="https://arxiv.org/abs/1603.08155" target="_blank" rel="noopener"> 《Perceptual Losses for Real-Time Style Transfer and Super-Resolution》 </a> 这两篇论文，以及 <a href="https://zhuanlan.zhihu.com/p/24383274" target="_blank" rel="noopener"> 深度学习实践：使用Tensorflow实现快速风格迁移 </a> 等文章，代码参考了  <a href="https://github.com/OlavHN/fast-neural-style" target="_blank" rel="noopener"> OlavHN </a> <a href="https://github.com/OlavHN/fast-neural-style" target="_blank" rel="noopener"> /fast-neural-style </a> 和 <a href="https://github.com/hzy46/fast-neural-style-tensorflow" target="_blank" rel="noopener"> hzy46/fast-neural-style-tensorflow </a> 等大神的。 </p>
 <p>先说一下卷积神经网络。卷积神经网络（  CNN）是一种前馈神经网络，了解机器学习中人工神经网络的话应该对这个概念不陌生。神经网络中的感知器模型如下图所示。 </p>
 <p><img src="https://img-blog.csdn.net/20170621131634528?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMzgwNTM2MA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
@@ -504,6 +525,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+        </div>
       
 
       
@@ -668,15 +695,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -749,7 +768,31 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题最常">
-<meta name="keywords" content="jdbc,c3p0,dbcp">
+  <meta name="description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题">
+<meta name="keywords" content="Java,jdbc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用">
 <meta property="og:url" content="http://yoursite.com/2015/06/28/jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题最常">
+<meta property="og:description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-17T07:00:37.520Z">
+<meta property="og:updated_time" content="2019-02-17T13:31:33.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jdbc基础 (五) 连接池与数据源:DBCP以及C3P0的使用">
-<meta name="twitter:description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题最常">
+<meta name="twitter:description" content="一、连接池的概念和使用  在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用  J  DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题">
 
 
 
@@ -400,7 +400,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:00:37" itemprop="dateModified" datetime="2019-02-17T15:00:37+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:31:33" itemprop="dateModified" datetime="2019-02-17T21:31:33+08:00">2019-02-17</time>
               
             
           </span>
@@ -417,21 +417,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/c3p0/" itemprop="url" rel="index"><span itemprop="name">c3p0</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/c3p0/jdbc/" itemprop="url" rel="index"><span itemprop="name">jdbc</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/c3p0/jdbc/dbcp/" itemprop="url" rel="index"><span itemprop="name">dbcp</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
 
                 
                 
@@ -466,7 +452,9 @@
       
 
       
-        <p>一、连接池的概念和使用 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>一、连接池的概念和使用 </p>
 <p>在实际应用开发中，特别是在WEB应用系统中，如果JSP、Servlet或EJB使用 <a href="http://baike.baidu.com/view/25611.htm" target="_blank" rel="noopener"> J </a> DBC直接访问数据库中的数据，每一次数据访问请求都必须经历建立数据库连接、打开数据库、存取数据和关闭数据库连接等步骤，而连接并打开数据库是一件既消耗资源又费时的工作，如果频繁发生这种数据库操作，系统的性能必然会急剧下降，甚至会导致系统崩溃。  数据库连接池  技术是解决这个问题最常用的方法。 </p>
 <p>数据库连接池的主要操作如下： </p>
 <p>（1）建立数据库连接池对象。 </p>
@@ -760,11 +748,9 @@ public class C3P0Utils {
       
         <div class="post-tags">
           
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
             <a href="/tags/jdbc/" rel="tag"># jdbc</a>
-          
-            <a href="/tags/c3p0/" rel="tag"># c3p0</a>
-          
-            <a href="/tags/dbcp/" rel="tag"># dbcp</a>
           
         </div>
       
@@ -931,15 +917,7 @@ public class C3P0Utils {
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1012,7 +990,31 @@ public class C3P0Utils {
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

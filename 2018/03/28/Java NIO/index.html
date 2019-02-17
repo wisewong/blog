@@ -96,23 +96,23 @@
 
 
 
-  <meta name="description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出来一">
+  <meta name="description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出">
 <meta name="keywords" content="Java,NIO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java NIO">
 <meta property="og:url" content="http://yoursite.com/2018/03/28/Java NIO/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出来一">
+<meta property="og:description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img-blog.csdn.net/20180328141631333">
 <meta property="og:image" content="https://img-blog.csdn.net/20180328141640321">
 <meta property="og:image" content="https://img-blog.csdn.net/20180328141733428">
 <meta property="og:image" content="https://img-blog.csdn.net/20180328141837110">
 <meta property="og:image" content="https://img-blog.csdn.net/20180328141909170">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.302Z">
+<meta property="og:updated_time" content="2019-02-17T13:31:33.501Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java NIO">
-<meta name="twitter:description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出来一">
+<meta name="twitter:description" content="了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念，  同步/异步，阻塞/非阻塞  NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。  BIO常见使用方式传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是：   来一个请求创建一个线程，阻塞的等待网络IO的数据。    使用一个线程池，来一个请求就从线程池里取出">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20180328141631333">
 
 
@@ -406,7 +406,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:31:33" itemprop="dateModified" datetime="2019-02-17T21:31:33+08:00">2019-02-17</time>
               
             
           </span>
@@ -465,7 +465,9 @@
       
 
       
-        <p>了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念， <a href="https://blog.csdn.net/u013805360/article/details/79393252" target="_blank" rel="noopener"> 同步/异步，阻塞/非阻塞 </a></p>
+        <meta name="referrer" content="no-referrer">
+
+<p>了解java的NIO，需要先了解同步异步以及阻塞非阻塞的概念， <a href="https://blog.csdn.net/u013805360/article/details/79393252" target="_blank" rel="noopener"> 同步/异步，阻塞/非阻塞 </a></p>
 <p>NIO就是采用的同步非阻塞这种组合方式。或简单一点，采用的是IO复用的策略，可以使用一个线程管理多个IO连接。 </p>
 <h1 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h1><h2 id="常见使用方式"><a href="#常见使用方式" class="headerlink" title="常见使用方式"></a>常见使用方式</h2><p>传统的BIO是同步阻塞的方式，因此，在服务器中常见的使用方式是： </p>
 <ul>
@@ -798,15 +800,7 @@ public int selectNow() throws IOException {
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -879,7 +873,31 @@ public int selectNow() throws IOException {
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

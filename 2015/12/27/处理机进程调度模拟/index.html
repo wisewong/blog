@@ -96,19 +96,20 @@
 
 
 
-  <meta name="description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后备队">
+  <meta name="description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后">
+<meta name="keywords" content="进程调度">
 <meta property="og:type" content="article">
 <meta property="og:title" content="处理机进程调度模拟">
 <meta property="og:url" content="http://yoursite.com/2015/12/27/处理机进程调度模拟/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后备队">
+<meta property="og:description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201512/740591-20151226232820624-2017574130.jpg">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201512/740591-20151227125724249-984927919.jpg">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.818Z">
+<meta property="og:updated_time" content="2019-02-17T13:16:12.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="处理机进程调度模拟">
-<meta name="twitter:description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后备队">
+<meta name="twitter:description" content="一、进程调度  无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。  处理机调度分为三个层次：  高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后">
 <meta name="twitter:image" content="http://images2015.cnblogs.com/blog/740591/201512/740591-20151226232820624-2017574130.jpg">
 
 
@@ -402,11 +403,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:16:12" itemprop="dateModified" datetime="2019-02-17T21:16:12+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/OS/" itemprop="url" rel="index"><span itemprop="name">OS</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -436,7 +455,9 @@
       
 
       
-        <p>一、进程调度 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>一、进程调度 </p>
 <p>无论是在批处理还是分时系统中，用户进程数一般都多于处理机数、这将导致它们互相争夺处理机。另外，系统进程也同样需要使用处理机。这就要求进程调度程序按一定的策略，动态地把处理机分配给处于就绪队列中的某一个进程，以使之执行。进程调度属于处理机调度。 </p>
 <p>处理机调度分为三个层次： </p>
 <p>高级调度  ：(High-Level Scheduling)又称为长程调度、作业调度，它决定把外存上处于后备队列中的作业调入内存运行，为他们创建进程、分配必要的资源，放入就绪队列 </p>
@@ -1104,6 +1125,12 @@ public class Dispatcher {
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/进程调度/" rel="tag"># 进程调度</a>
+          
+        </div>
+      
 
       
       
@@ -1267,15 +1294,7 @@ public class Dispatcher {
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1348,7 +1367,31 @@ public class Dispatcher {
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

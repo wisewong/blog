@@ -96,18 +96,19 @@
 
 
 
-  <meta name="description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20x2">
+  <meta name="description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20">
+<meta name="keywords" content="算法设计与分析,LCS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动态规划之矩阵连乘">
 <meta property="og:url" content="http://yoursite.com/2015/10/31/动态规划之矩阵连乘/index.html">
 <meta property="og:site_name" content="八行书">
-<meta property="og:description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20x2">
+<meta property="og:description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images2015.cnblogs.com/blog/740591/201510/740591-20151031095459950-1921522384.jpg">
-<meta property="og:updated_time" content="2019-02-17T07:04:30.706Z">
+<meta property="og:updated_time" content="2019-02-17T13:16:12.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动态规划之矩阵连乘">
-<meta name="twitter:description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20x2">
+<meta name="twitter:description" content="给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。  例如：  A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20">
 <meta name="twitter:image" content="http://images2015.cnblogs.com/blog/740591/201510/740591-20151031095459950-1921522384.jpg">
 
 
@@ -401,11 +402,29 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 15:04:30" itemprop="dateModified" datetime="2019-02-17T15:04:30+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 21:16:12" itemprop="dateModified" datetime="2019-02-17T21:16:12+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/算法设计与分析/" itemprop="url" rel="index"><span itemprop="name">算法设计与分析</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -435,7 +454,9 @@
       
 
       
-        <p>给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。 </p>
+        <meta name="referrer" content="no-referrer">
+
+<p>给定n个矩阵｛A  1  ,A  2  ,…,A  n  ｝，其中Ai与A  i+1  是可乘的，i=1,2 ,…,n-1。如何确定计算矩阵连乘积的计算次序，使得依此次序计算矩阵连乘积需要的数乘次数最少。 </p>
 <p>例如： </p>
 <p>A  1  ={30x35} ; A  2  ={35x15} ;A  3  ={15x5} ;A  4  ={5x10} ;A  5  ={10x20} ;A  6  ={20x25} ; </p>
 <p>结果为：((A  1  (A  2  A  3  ))((A  4  A  5  )A  6  ))  最小的乘次为15125。 </p>
@@ -529,6 +550,14 @@ print(result)
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法设计与分析/" rel="tag"># 算法设计与分析</a>
+          
+            <a href="/tags/LCS/" rel="tag"># LCS</a>
+          
+        </div>
       
 
       
@@ -693,15 +722,7 @@ print(result)
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -774,7 +795,31 @@ print(result)
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

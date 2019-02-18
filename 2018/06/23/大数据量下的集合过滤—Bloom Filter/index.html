@@ -107,7 +107,7 @@
 <meta property="og:image" content="https://img-blog.csdn.net/20180623182039604?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180623182122573?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
 <meta property="og:image" content="https://img-blog.csdn.net/20180623182152961?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM4MDUzNjA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70">
-<meta property="og:updated_time" content="2019-02-17T15:44:04.897Z">
+<meta property="og:updated_time" content="2019-02-18T03:22:06.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大数据量下的集合过滤—Bloom Filter">
 <meta name="twitter:description" content="算法背景如果想判断一个元素是不是在一个集合里，一般想到的是将集合中所有元素保存起来，然后通过比较确定。  链表  、  树  、  散列表  （又叫哈希表，Hash table）等等数据结构都是这种思路，存储位置要么是磁盘，要么是内存。很多时候要么是以时间换空间，要么是以空间换时间。  在响应时间要求比较严格的情况下，如果我们存在内里，那么随着集合中元素的增加，我们需要的存储空间越来越大，以及">
@@ -404,7 +404,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-17 23:44:04" itemprop="dateModified" datetime="2019-02-17T23:44:04+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-18 11:22:06" itemprop="dateModified" datetime="2019-02-18T11:22:06+08:00">2019-02-18</time>
               
             
           </span>
@@ -477,7 +477,7 @@
 <li>存在误判，可能要查到的元素并没有在容器中，但是hash之后得到的k个位置上值都是1。如果bloom filter中存储的是黑名单，那么可以通过建立一个白名单来存储可能会误判的元素。 </li>
 </ul>
 <ul>
-<li>删除困难。一个放入容器的元素映射到bit数组的k个位置上是1，删除的时候不能简单的直接置为0，可能会影响其他元素的判断。可以采用 <a href="http://wiki.corp.qunar.com/confluence/download/attachments/199003276/US9740797.pdf?version=1&amp;modificationDate=1526538500000&amp;api=v2" target="_blank" rel="noopener"> Counting Bloom Filter </a></li>
+<li>删除困难。一个放入容器的元素映射到bit数组的k个位置上是1，删除的时候不能简单的直接置为0，可能会影响其他元素的判断。可以采用 Counting Bloom Filter </li>
 </ul>
 <h1 id="Bloom-Filter-实现"><a href="#Bloom-Filter-实现" class="headerlink" title="Bloom Filter 实现"></a>Bloom Filter 实现</h1><p>布隆过滤器有许多实现与优化，Guava中就提供了一种Bloom Filter的实现。 </p>
 <p>在使用bloom filter时，绕不过的两点是预估数据量n以及期望的误判率fpp， </p>
@@ -559,7 +559,7 @@ static int optimalNumOfHashFunctions(long n, long m) {
 }
 </code></pre><p>判断元素是否在bloom filter中的方法mightContain与上面的实现基本一致，不再赘述。 </p>
 <h1 id="Bloom-Filter的使用"><a href="#Bloom-Filter的使用" class="headerlink" title="Bloom Filter的使用"></a>Bloom Filter的使用</h1><p>简单写个demo，用法很简单，类似HashMap </p>
-<pre><code>package com.qunar.sage.wang.common.bloom.filter;
+<pre><code>package com.sage.wang.common.bloom.filter;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.BloomFilter;

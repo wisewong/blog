@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="八行书">
 <meta property="og:description" content="常见的几种问题：  swap高 load高 cpu使用率 磁盘报警  几种case可能独立出现，也可能有因果关系的导致先后、同时出现。 说一下一般的排查、处理思路 CPU使用率高这个查起来很方便，直接使用top命令，查看CPU使用最高的进程，查找该进程中CPU占用最高的线程，再进行具体排查。 对于web应用来说，CPU使用率变高，很大可能是因为程序的问题CPU过高一般是有如下原因造成的：  ja">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-18T12:31:29.266Z">
+<meta property="og:updated_time" content="2019-02-18T12:55:46.879Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux性能瓶颈分析">
 <meta name="twitter:description" content="常见的几种问题：  swap高 load高 cpu使用率 磁盘报警  几种case可能独立出现，也可能有因果关系的导致先后、同时出现。 说一下一般的排查、处理思路 CPU使用率高这个查起来很方便，直接使用top命令，查看CPU使用最高的进程，查找该进程中CPU占用最高的线程，再进行具体排查。 对于web应用来说，CPU使用率变高，很大可能是因为程序的问题CPU过高一般是有如下原因造成的：  ja">
@@ -400,7 +400,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-18 20:31:29" itemprop="dateModified" datetime="2019-02-18T20:31:29+08:00">2019-02-18</time>
+                <time title="修改时间：2019-02-18 20:55:46" itemprop="dateModified" datetime="2019-02-18T20:55:46+08:00">2019-02-18</time>
               
             
           </span>
@@ -498,7 +498,7 @@
 <p>load异常变高的的场景，排查问题的方向始终来源于load值本身的算法，load增高必然是因为任务过多导致cpu队列堆积，以此为思路就可以展开排查，从cpu使用率、io、绑核等常见原因入手。</p>
 <h1 id="swap增高"><a href="#swap增高" class="headerlink" title="swap增高"></a>swap增高</h1><p>swap高的原因，直接原因就是内存不够用，导致内存中的数据换出到磁盘上，而这样同时会导致写磁盘的IO增高</p>
 <p>swap增高通常的原因可以检查一下进程是否有内存泄露。</p>
-<p>可以看:<a href="/2018/04/28/Swap使用情况/" title="Swap使用情况">Swap使用情况</a> </p>
+<p>可以看:<a href="/2018/04/28/Swap使用情况/" title="Swap使用情况">Swap使用情况</a> <a href="/2018/03/08/内存问题排查思路/" title="内存问题排查思路">内存问题排查思路</a></p>
 <h1 id="磁盘报警"><a href="#磁盘报警" class="headerlink" title="磁盘报警"></a>磁盘报警</h1><p>磁盘报警目前常见的基本两类：磁盘被写满、inode用尽</p>
 <h2 id="磁盘写满"><a href="#磁盘写满" class="headerlink" title="磁盘写满"></a>磁盘写满</h2><p>问题很直接，直接查找一下系统中持续增长的大文件，删减就ok。  不过这背后的原因需要深究。</p>
 <p>一般来说，web服务器出现这样的情况，是因为日志文件过大导致的，所以需要思考一下日志输出是否合理、日志文件的压缩时机是否合适。</p>
@@ -629,7 +629,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">92</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -819,7 +819,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">55</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

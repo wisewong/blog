@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="事务的四个特性，ACID。来聊一聊一致性。 并发与一致性的关系并发的任务对同一个临界资源进行操作，如果不采取措施，可能导致不一致，故必须进行并发控制 常用手段通过并发控制保证数据一致性的常见手段有：  锁（Locking） 数据多版本（Multi Versioning）  锁锁的演化思路 串行的排它锁，并发性能不高 锁的读写分离，X锁和S锁，即排它锁和共享锁，提高并发性能。但这里读还是会受到写">
+<meta name="keywords" content="Mysql,锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Innodb的锁与MVCC">
+<meta property="og:url" content="http://yoursite.com/2018/08/20/Innodb的锁与MVCC/index.html">
+<meta property="og:site_name" content="八行书">
+<meta property="og:description" content="事务的四个特性，ACID。来聊一聊一致性。 并发与一致性的关系并发的任务对同一个临界资源进行操作，如果不采取措施，可能导致不一致，故必须进行并发控制 常用手段通过并发控制保证数据一致性的常见手段有：  锁（Locking） 数据多版本（Multi Versioning）  锁锁的演化思路 串行的排它锁，并发性能不高 锁的读写分离，X锁和S锁，即排它锁和共享锁，提高并发性能。但这里读还是会受到写">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-18T05:29:30.537Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Innodb的锁与MVCC">
+<meta name="twitter:description" content="事务的四个特性，ACID。来聊一聊一致性。 并发与一致性的关系并发的任务对同一个临界资源进行操作，如果不采取措施，可能导致不一致，故必须进行并发控制 常用手段通过并发控制保证数据一致性的常见手段有：  锁（Locking） 数据多版本（Multi Versioning）  锁锁的演化思路 串行的排它锁，并发性能不高 锁的读写分离，X锁和S锁，即排它锁和共享锁，提高并发性能。但这里读还是会受到写">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/20/Innodb的锁与MVCC/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Innodb的锁与MVCC | 八行书</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">八行书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/20/Innodb的锁与MVCC/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sage wong">
+      <meta itemprop="description" content="技术碎碎念">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="八行书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Innodb的锁与MVCC
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-20 21:46:00" itemprop="dateCreated datePublished" datetime="2018-08-20T21:46:00+08:00">2018-08-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-18 13:29:30" itemprop="dateModified" datetime="2019-02-18T13:29:30+08:00">2019-02-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<p>事务的四个特性，ACID。来聊一聊一致性。</p>
+<h1 id="并发与一致性的关系"><a href="#并发与一致性的关系" class="headerlink" title="并发与一致性的关系"></a>并发与一致性的关系</h1><p>并发的任务对同一个临界资源进行操作，如果不采取措施，可能导致不一致，故必须进行并发控制</p>
+<h1 id="常用手段"><a href="#常用手段" class="headerlink" title="常用手段"></a>常用手段</h1><p>通过并发控制保证数据一致性的常见手段有：</p>
+<ul>
+<li>锁（Locking）</li>
+<li>数据多版本（Multi Versioning）</li>
+</ul>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="锁的演化思路"><a href="#锁的演化思路" class="headerlink" title="锁的演化思路"></a>锁的演化思路</h2><ol>
+<li>串行的排它锁，并发性能不高</li>
+<li>锁的读写分离，X锁和S锁，即排它锁和共享锁，提高并发性能。但这里读还是会受到写锁的影响，并没有真正的将读和写分离，而是实现的读和读的并发。</li>
+</ol>
+<h2 id="共享锁与排他锁的玩法"><a href="#共享锁与排他锁的玩法" class="headerlink" title="共享锁与排他锁的玩法"></a>共享锁与排他锁的玩法</h2><ol>
+<li>共享锁之间不互斥，所以可认为读读可以并行</li>
+<li>排他锁与任何锁互斥，所以可认为写读，写写不可以并行</li>
+</ol>
+<p>可以看到，一旦写数据的任务没有完成，数据是不能被其他任务读取的，这对并发度有较大的影响。对应到数据库，可以理解为，写事务没有提交，读相关数据的select也会被阻塞。</p>
+<p>此时，提高性能的关键就是，如何让读和写可以并行，以此来提高并发性能。</p>
+<h1 id="多版本并发控制"><a href="#多版本并发控制" class="headerlink" title="多版本并发控制"></a>多版本并发控制</h1><p>可以想到的一个操作是，当一个事务进行写操作的时候，把要操作的数据存一份，作为一个版本，其他事务进行读操作的时候，读取的数据是原有数据的版本，这样读操作并没有没已存在的写操作阻塞住，从而提高了并发度。</p>
+<p>这样带来的一个结果就是，一个读事务，读到的要么是其他写事务提交之后的数据，要么是其他写事务未提交时修改前的数据。这样在提高并发性能的同时也避免了脏读。</p>
+<p>那么多版本并发控制是怎么做呢？</p>
+<ul>
+<li><p>数据库事务未提交时，会将事务修改数据的镜像（即修改前的旧版本）存放到undo日志里，当事务回滚时，或者数据库奔溃时，可以利用undo日志，即旧版本数据，撤销未提交事务对数据库产生的影响。</p>
+</li>
+<li><p>undo日志存在回滚段里，多版本并发控制就是通过读取回滚段的旧版本数据来实现的。</p>
+</li>
+<li><p>回滚段里的数据，其实是历史数据的快照（snapshot），这些数据是不会被修改，select可以肆无忌惮的并发读取他们。</p>
+</li>
+<li><p>快照读（Snapshot Read），这种一致性不加锁的读（Consistent Nonlocking Read），就是InnoDB并发如此之高的核心原因之一。</p>
+</li>
+</ul>
+<blockquote>
+<p>这里的一致性是指，事务读取到的数据，要么是事务开始前就已经存在的数据（当然，是其他已提交事务产生的），要么是事务自身插入或者修改的数据。</p>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>常见并发控制保证数据一致性的方法有锁，数据多版本；</li>
+<li>普通锁串行，读写锁读读并行，数据多版本读写并行；</li>
+<li>redo日志保证已提交事务的ACID特性，设计思路是，通过顺序写替代随机写，提高并发；</li>
+<li>undo日志用来回滚未提交的事务，它存储在回滚段里；</li>
+<li>InnoDB是基于MVCC的存储引擎，它利用了存储在回滚段里的undo日志，即数据的旧版本，提高并发；</li>
+<li>InnoDB之所以并发高，快照读不加锁；</li>
+<li>InnoDB所有普通select都是快照读；</li>
+</ul>
+<p>参考文章：</p>
+<p><a href="https://mp.weixin.qq.com/s/R3yuitWpHHGWxsUcE0qIRQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/R3yuitWpHHGWxsUcE0qIRQ</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i> Mysql</a>
+          
+            <a href="/tags/锁/" rel="tag"><i class="fa fa-tag"></i> 锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/12/线上大日志文件的删除/" rel="next" title="线上大日志文件的删除">
+                <i class="fa fa-chevron-left"></i> 线上大日志文件的删除
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/13/BigDecimal精度与相等比较的坑/" rel="prev" title="BigDecimal精度与相等比较的坑">
+                BigDecimal精度与相等比较的坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="sage wong">
+            
+              <p class="site-author-name" itemprop="name">sage wong</p>
+              <p class="site-description motion-element" itemprop="description">技术碎碎念</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wisewong" title="GitHub &rarr; https://github.com/wisewong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:z941030@163.com" title="E-Mail &rarr; mailto:z941030@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/z941030" title="Weibo &rarr; https://weibo.com/z941030" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发与一致性的关系"><span class="nav-number">1.</span> <span class="nav-text">并发与一致性的关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用手段"><span class="nav-number">2.</span> <span class="nav-text">常用手段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁"><span class="nav-number">3.</span> <span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁的演化思路"><span class="nav-number">3.1.</span> <span class="nav-text">锁的演化思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享锁与排他锁的玩法"><span class="nav-number">3.2.</span> <span class="nav-text">共享锁与排他锁的玩法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多版本并发控制"><span class="nav-number">4.</span> <span class="nav-text">多版本并发控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sage wong</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+</html>

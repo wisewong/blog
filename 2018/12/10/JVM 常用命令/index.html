@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="常见命令 jps  JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程  jstat   JVM statistics Monitoring  是用于监视虚拟机运行时状态信息的命令，它可以显示出虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据  jmap   JVM Memory Map  命令用于查看内存使用情况,生成heap dump文件">
+<meta name="keywords" content="Java,JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM 常用命令">
+<meta property="og:url" content="http://yoursite.com/2018/12/10/JVM 常用命令/index.html">
+<meta property="og:site_name" content="八行书">
+<meta property="og:description" content="常见命令 jps  JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程  jstat   JVM statistics Monitoring  是用于监视虚拟机运行时状态信息的命令，它可以显示出虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据  jmap   JVM Memory Map  命令用于查看内存使用情况,生成heap dump文件">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-18T06:00:19.096Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM 常用命令">
+<meta name="twitter:description" content="常见命令 jps  JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程  jstat   JVM statistics Monitoring  是用于监视虚拟机运行时状态信息的命令，它可以显示出虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据  jmap   JVM Memory Map  命令用于查看内存使用情况,生成heap dump文件">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/10/JVM 常用命令/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JVM 常用命令 | 八行书</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">八行书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/10/JVM 常用命令/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sage wong">
+      <meta itemprop="description" content="技术碎碎念">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="八行书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM 常用命令
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-10 15:19:00" itemprop="dateCreated datePublished" datetime="2018-12-10T15:19:00+08:00">2018-12-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-18 14:00:19" itemprop="dateModified" datetime="2019-02-18T14:00:19+08:00">2019-02-18</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<h1 id="常见命令"><a href="#常见命令" class="headerlink" title="常见命令"></a>常见命令</h1><ul>
+<li><p>jps  JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程</p>
+</li>
+<li><p>jstat   JVM statistics Monitoring  是用于监视虚拟机运行时状态信息的命令，它可以显示出虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据</p>
+</li>
+<li><p>jmap   JVM Memory Map  命令用于查看内存使用情况,生成heap dump文件</p>
+</li>
+<li><p>jhat    JVM Heap Analysis Tool   命令是与jmap搭配使用，用来分析jmap生成的dump</p>
+</li>
+<li><p>jstack    用于生成java虚拟机当前时刻的线程快照</p>
+</li>
+</ul>
+<h1 id="jstat-用法"><a href="#jstat-用法" class="headerlink" title="jstat 用法"></a>jstat 用法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstat [option] LVMID [interval] [count]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>[option] : 操作参数</li>
+<li>LVMID : 本地虚拟机进程ID</li>
+<li>[interval] : 连续输出的时间间隔</li>
+<li>[count] : 连续输出的次数</li>
+</ul>
+<h2 id="查看选项"><a href="#查看选项" class="headerlink" title="查看选项"></a>查看选项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ jstat -options</span><br><span class="line">-class</span><br><span class="line">-compiler</span><br><span class="line">-gc</span><br><span class="line">-gccapacity</span><br><span class="line">-gccause</span><br><span class="line">-gcmetacapacity</span><br><span class="line">-gcnew</span><br><span class="line">-gcnewcapacity</span><br><span class="line">-gcold</span><br><span class="line">-gcoldcapacity</span><br><span class="line">-gcutil</span><br><span class="line">-printcompilation</span><br></pre></td></tr></table></figure>
+<h2 id="查看gc状况"><a href="#查看gc状况" class="headerlink" title="查看gc状况"></a>查看gc状况</h2><p>对于进程1262, 每隔2000ms输出gc情况，一共输出20次</p>
+<pre><code>jstat -gc 1262 2000 20
+
+
+ S0C    S1C     S0U     S1U   EC       EU        OC         OU        PC       PU         YGC    YGCT    FGC    FGCT     GCT  
+26112.0 24064.0 6562.5  0.0   564224.0 76274.5   434176.0   388518.3  524288.0 42724.7    320    6.417   1      0.398    6.815
+</code></pre><p>输出参数的含义:</p>
+<ul>
+<li>单位KB</li>
+<li>所有后缀带C的,代表Capacity 总容量</li>
+<li>所有后缀带U的,代表Used 已使用的容量</li>
+<li>s0,s1和eden是新生代的区域,O是old老年带,P是perm永久带(方法区)</li>
+<li>YGC和FGC是gc次数,后面带T的是时间</li>
+</ul>
+<h1 id="jmap用法"><a href="#jmap用法" class="headerlink" title="jmap用法"></a>jmap用法</h1><p>类似jstat,输入不同的option</p>
+<pre><code>jmap [option] LVMID
+</code></pre><h2 id="dump堆快照"><a href="#dump堆快照" class="headerlink" title="dump堆快照"></a>dump堆快照</h2><p>dump 进程28920的对快照到文件dump.hprof,只dump存活的对象</p>
+<pre><code>jmap -dump:live,format=b,file=dump.hprof 28920
+  Dumping heap to /home/xxx/dump.hprof ...
+  Heap dump file created
+</code></pre><p>不指定live的话,默认是全部对象.</p>
+<h2 id="查看heap情况"><a href="#查看heap情况" class="headerlink" title="查看heap情况"></a>查看heap情况</h2><p>打印heap的概要信息，GC使用的算法，heap的配置及wise heap的使用情况,可以用此来判断内存目前的使用情况以及垃圾回收情况</p>
+<p>查看进程28920的heap情况:</p>
+<pre><code>$ jmap -heap 28920
+  Attaching to process ID 28920, please wait...
+  Debugger attached successfully.
+  Server compiler detected.
+  JVM version is 24.71-b01 
+
+  using thread-local object allocation.
+  Parallel GC with 4 thread(s)//GC 方式 
+
+  Heap Configuration: //堆内存初始化配置
+     MinHeapFreeRatio = 0 //对应jvm启动参数-XX:MinHeapFreeRatio设置JVM堆最小空闲比率(default 40)
+     MaxHeapFreeRatio = 100 //对应jvm启动参数 -XX:MaxHeapFreeRatio设置JVM堆最大空闲比率(default 70)
+     MaxHeapSize      = 2082471936 (1986.0MB) //对应jvm启动参数-XX:MaxHeapSize=设置JVM堆的最大大小
+     NewSize          = 1310720 (1.25MB)//对应jvm启动参数-XX:NewSize=设置JVM堆的‘新生代’的默认大小
+     MaxNewSize       = 17592186044415 MB//对应jvm启动参数-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小
+     OldSize          = 5439488 (5.1875MB)//对应jvm启动参数-XX:OldSize=&lt;value&gt;:设置JVM堆的‘老生代’的大小
+     NewRatio         = 2 //对应jvm启动参数-XX:NewRatio=:‘新生代’和‘老生代’的大小比率
+     SurvivorRatio    = 8 //对应jvm启动参数-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值
+     PermSize         = 21757952 (20.75MB)  //对应jvm启动参数-XX:PermSize=&lt;value&gt;:设置JVM堆的‘永生代’的初始大小
+     MaxPermSize      = 85983232 (82.0MB)//对应jvm启动参数-XX:MaxPermSize=&lt;value&gt;:设置JVM堆的‘永生代’的最大大小
+     G1HeapRegionSize = 0 (0.0MB) 
+
+  Heap Usage://堆内存使用情况
+  PS Young Generation
+  Eden Space://Eden区内存分布
+     capacity = 33030144 (31.5MB)//Eden区总容量
+     used     = 1524040 (1.4534378051757812MB)  //Eden区已使用
+     free     = 31506104 (30.04656219482422MB)  //Eden区剩余容量
+     4.614088270399305% used //Eden区使用比率
+  From Space:  //其中一个Survivor区的内存分布
+     capacity = 5242880 (5.0MB)
+     used     = 0 (0.0MB)
+     free     = 5242880 (5.0MB)
+     0.0% used
+  To Space:  //另一个Survivor区的内存分布
+     capacity = 5242880 (5.0MB)
+     used     = 0 (0.0MB)
+     free     = 5242880 (5.0MB)
+     0.0% used
+  PS Old Generation //当前的Old区内存分布
+     capacity = 86507520 (82.5MB)
+     used     = 0 (0.0MB)
+     free     = 86507520 (82.5MB)
+     0.0% used
+  PS Perm Generation//当前的 “永生代” 内存分布
+     capacity = 22020096 (21.0MB)
+     used     = 2496528 (2.3808746337890625MB)
+     free     = 19523568 (18.619125366210938MB)
+     11.337498256138392% used 
+
+  670 interned Strings occupying 43720 bytes.
+</code></pre><h1 id="jstack用法"><a href="#jstack用法" class="headerlink" title="jstack用法"></a>jstack用法</h1><pre><code>jstack [option] LVMID
+</code></pre><p>option参数</p>
+<ul>
+<li>-F : 当正常输出请求不被响应时，强制输出线程堆栈</li>
+<li>-l : 除堆栈外，显示关于锁的附加信息</li>
+<li>-m : 如果调用到本地方法的话，可以显示C/C++的堆栈</li>
+</ul>
+<h2 id="查看线程快照"><a href="#查看线程快照" class="headerlink" title="查看线程快照"></a>查看线程快照</h2><p>查看进程11494的当前线程快照,并且显示关于锁的附加信息</p>
+<pre><code>jstack -l 11494|more
+2016-07-28 13:40:04
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (24.71-b01 mixed mode):
+
+&quot;Attach Listener&quot; daemon prio=10 tid=0x00007febb0002000 nid=0x6b6f waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+        - None
+
+&quot;http-bio-8005-exec-2&quot; daemon prio=10 tid=0x00007feb94028000 nid=0x7b8c waiting on condition [0x00007fea8f56e000]
+   java.lang.Thread.State: WAITING (parking)
+        at sun.misc.Unsafe.park(Native Method)
+        - parking to wait for  &lt;0x00000000cae09b80&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:186)
+        at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2043)
+        at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+        at org.apache.tomcat.util.threads.TaskQueue.take(TaskQueue.java:104)
+        at org.apache.tomcat.util.threads.TaskQueue.take(TaskQueue.java:32)
+        at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1068)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+        at java.lang.Thread.run(Thread.java:745)
+
+   Locked ownable synchronizers:
+        - None
+      .....
+</code></pre><p><a href="https://www.cnblogs.com/ityouknow/p/5714703.html" target="_blank" rel="noopener">jvm调优-命令大全（jps jstat jmap jhat jstack jinfo）</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/13/Spring Boot启动过程/" rel="next" title="Spring Boot启动过程">
+                <i class="fa fa-chevron-left"></i> Spring Boot启动过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="sage wong">
+            
+              <p class="site-author-name" itemprop="name">sage wong</p>
+              <p class="site-description motion-element" itemprop="description">技术碎碎念</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">27</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wisewong" title="GitHub &rarr; https://github.com/wisewong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:z941030@163.com" title="E-Mail &rarr; mailto:z941030@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/z941030" title="Weibo &rarr; https://weibo.com/z941030" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常见命令"><span class="nav-number">1.</span> <span class="nav-text">常见命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jstat-用法"><span class="nav-number">2.</span> <span class="nav-text">jstat 用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看选项"><span class="nav-number">2.1.</span> <span class="nav-text">查看选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看gc状况"><span class="nav-number">2.2.</span> <span class="nav-text">查看gc状况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jmap用法"><span class="nav-number">3.</span> <span class="nav-text">jmap用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dump堆快照"><span class="nav-number">3.1.</span> <span class="nav-text">dump堆快照</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看heap情况"><span class="nav-number">3.2.</span> <span class="nav-text">查看heap情况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jstack用法"><span class="nav-number">4.</span> <span class="nav-text">jstack用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看线程快照"><span class="nav-number">4.1.</span> <span class="nav-text">查看线程快照</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sage wong</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+</html>

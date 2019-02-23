@@ -428,6 +428,19 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2016/03/05/sql server存储过程编程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2016/03/05/sql server存储过程编程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -939,6 +952,10 @@ EXECUTE au_info @firstname = &apos;Ann&apos;, @lastname = &apos;Dull&apos;
           
 
   
+    <div class="comments" id="comments">
+    </div>
+
+  
 
 
 
@@ -1390,6 +1407,35 @@ EXECUTE au_info @firstname = &apos;Ann&apos;, @lastname = &apos;Dull&apos;
 
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'SdxM9835pE8m70FN5wSG7nsS-gzGzoHsz',
+    appKey: '41QfEorrIjnq2avuNP7fGe0E',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
 
 
   

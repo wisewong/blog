@@ -124,15 +124,40 @@
    4. 布尔 boolean 1
    5. 字节 byte 1
 - Java引用 原理 强软弱虚
-   1. 不回收
-   2. 内存不足时回收
-   3. 发现就回收
-   4. 相当于不存在
+   1. 强：不回收
+   2. 软：内存不足时回收
+   3. 弱：发现就回收
+   4. 虚：相当于不存在
+   5. 引用在栈中，指向堆区，堆区里面需要实现能找到这个指向的对象以及它的类数据。堆区维护这两者的方式有两种：句柄和直接指针
+      + 句柄：堆区维护一个句柄池，引用指向一个句柄，句柄存储了堆区对象池中的具体对象数据，以及方法区的类型数据。好处：对象被移动时，只改变句柄的指针，栈里面的引用不改变
+      + 直接指针：引用即直接指向了对象的地址，但是对象的布局中需要考虑如何存放类型数据。 好处：一次定位，速度快
 
 - Object对象的方法 
    + equals hashcode  wait notify toString
 
 - hashmap concurrentHashMap 1.7 1.8
+
+- hashMap
+   1. put逻辑：hash到table的位置，查找是否存在key==或者key.equals的方法元素，有就替换，没有就新加
+   2. put新元素之后，判断阈值，是否扩容
+   2. 7和8的区别
+      + 链表过长时采用红黑树
+      + 7是在链表头部添加新元素，8是在链表尾部添加新元素
+      + 7是先扩容再插入，8是先插入再扩容
+
+- concurrentHashMap 1.7
+   1. 分段加锁，每一段都可以存放一个table，支持扩容，默认分段16个
+   2. 每个端Segment同时继承了ReentrantLock，实现并发控制
+
+
+- concurrentHashMap 1.8
+   1. 第一次put操作时，才会初始化table
+   3. 抛弃分段的设计，使用循环+CAS操作尝试获取sizeCtl的控制权，以达到线程同步的目的，不同的sizeCtl值代表不同的状态
+      + -1：table[]正在初始化
+      + -N：表示有N-1个线程正在进行扩容操作
+      + 非负：如果table[]未初始化，则表示table需要初始化的大小。
+      + 非负：如果初始化完成，则表示table扩容的阀值，默认是table容量的0.75 倍。
+   4. put时，table[i]==null时，CAS设置值；否则，对当前链表首个元素table[i]加锁，实现该链表中元素值的替换，或者队尾添加元素操作
 
 - hashmap resize 死循环
 
@@ -174,6 +199,9 @@
    1. 保证数据可见性
    2. 防止指令重排
    3. 对于数组和对象，只能保证其引用的可见性，不保证引用中各个元素的可见性
+      + 数组可以使用Unsafe.getObjectVolatile来解决
+      + 对象可以将字段也设置为volatile
+      + 之所以数组存在元素可见性的问题，是因为Java数组在元素层面的元数据设计上的缺失，无法表达元素是final、volatile等语义
    > http://yuanlei.me/2017/11/17/can-we-make-array-volatile-in-java/
 
    > https://guojohnny.com/2016/05/23/%E4%BD%BF%E7%94%A8volatile%E5%85%B3%E9%94%AE%E5%AD%97%E5%A3%B0%E6%98%8E%E5%BC%95%E7%94%A8%E5%8F%AF%E4%BB%A5%E4%BF%9D%E8%AF%81%E5%BC%95%E7%94%A8%E6%89%80%E6%8C%87%E5%AF%B9%E8%B1%A1%E5%AE%89%E5%85%A8%E5%90%97/
@@ -272,7 +300,26 @@
 ### JVM相关
 - 运行时数据区
 - 内存模型
-- 垃圾回收算法
+- 垃圾回收器
+   1. Partial GC：并不收集整个GC堆的模式：Young GC，Old GC(只有CMS才只收集老年代)，Mixed GC(收集整个young gen以及部分old gen,只有G1)
+   2. Full GC：收集整个堆，包括young gen、old gen、perm gen
+   3. 触发条件
+      + young gc:eden空间不足触发young gc
+      + full gc:young gc时发现老年代空间不足时；perm gen空间不足时；System.gc()时；heap dump时；
+   4. Parallel Scavenge默认是在要触发full GC前先执行一次young GC，并且两次GC之间能让应用程序稍微运行一小下，以期降低full GC的暂停时间
+   > https://www.cnblogs.com/jenkov/p/full_gc_old_gc_cms_gc.html
+   5. 组合使用
+      + 计算密集型的应用可能会考虑计算的吞吐量，在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge加Parallel Old收集器
+      + 在要求低延时、系统停顿时间最短的场景下，可以使用ParNew + CMS,CMS可以满足与用户线程并发执行，所以需要在老年代还有一定空间的时候就执行回收。而且使用的是标记清除算法，会产生碎片导致可能因为大对象触发更多full gc
+   6. 并行与并发
+      + Parallel 的是并行的，可以同时利用多个cpu
+      + Concurrent 是并发的，gc线程和用户线程可以交替并发执行
+   7. stop the world
+      + Serial, ParNew, Parallel Scanvange, Parallel Old, Serial Old全程都会Stop the world，JVM这时候只运行GC线程，不运行用户线程
+      + CMS主要分为 initial Mark, Concurrent Mark, ReMark, Concurrent Sweep等阶段，initial Mark和Remark占整体的时间比较较小，它们会Stop the world. Concurrent Mark和Concurrent Sweep会和用户线程一起运行。
+      > https://blog.csdn.net/iter_zc/article/details/41746265
+   > https://www.jianshu.com/p/50d5c88b272d
+
 - 调优 问题排查
 
 

@@ -106,7 +106,7 @@
 <meta property="og:site_name" content="八行书">
 <meta property="og:description" content="常见的几种问题：  swap高 load高 cpu使用率 磁盘报警  几种case可能独立出现，也可能有因果关系的导致先后、同时出现。 说一下一般的排查、处理思路 CPU使用率高这个查起来很方便，直接使用top命令，查看CPU使用最高的进程，查找该进程中CPU占用最高的线程，再进行具体排查。 对于web应用来说，CPU使用率变高，很大可能是因为程序的问题CPU过高一般是有如下原因造成的：  ja">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-18T12:55:46.879Z">
+<meta property="og:updated_time" content="2019-02-25T09:38:30.090Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux性能瓶颈分析">
 <meta name="twitter:description" content="常见的几种问题：  swap高 load高 cpu使用率 磁盘报警  几种case可能独立出现，也可能有因果关系的导致先后、同时出现。 说一下一般的排查、处理思路 CPU使用率高这个查起来很方便，直接使用top命令，查看CPU使用最高的进程，查找该进程中CPU占用最高的线程，再进行具体排查。 对于web应用来说，CPU使用率变高，很大可能是因为程序的问题CPU过高一般是有如下原因造成的：  ja">
@@ -431,7 +431,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-18 20:55:46" itemprop="dateModified" datetime="2019-02-18T20:55:46+08:00">2019-02-18</time>
+                <time title="修改时间：2019-02-25 17:38:30" itemprop="dateModified" datetime="2019-02-25T17:38:30+08:00">2019-02-25</time>
               
             
           </span>
@@ -544,9 +544,18 @@
 <p>swap增高通常的原因可以检查一下进程是否有内存泄露。</p>
 <p>可以看:<a href="/2018/04/28/Swap使用情况/" title="Swap使用情况">Swap使用情况</a> <a href="/2018/03/08/内存问题排查思路/" title="内存问题排查思路">内存问题排查思路</a></p>
 <h1 id="磁盘报警"><a href="#磁盘报警" class="headerlink" title="磁盘报警"></a>磁盘报警</h1><p>磁盘报警目前常见的基本两类：磁盘被写满、inode用尽</p>
-<h2 id="磁盘写满"><a href="#磁盘写满" class="headerlink" title="磁盘写满"></a>磁盘写满</h2><p>问题很直接，直接查找一下系统中持续增长的大文件，删减就ok。  不过这背后的原因需要深究。</p>
+<h2 id="磁盘写满"><a href="#磁盘写满" class="headerlink" title="磁盘写满"></a>磁盘写满</h2><p>问题很直接，直接查找一下系统中持续增长的大文件，删减就ok。删除方法：<a href="/2018/08/12/线上大日志文件的删除/" title="线上大日志文件的删除">线上大日志文件的删除</a>。不过这背后的原因需要深究。</p>
 <p>一般来说，web服务器出现这样的情况，是因为日志文件过大导致的，所以需要思考一下日志输出是否合理、日志文件的压缩时机是否合适。</p>
 <h2 id="inode用尽"><a href="#inode用尽" class="headerlink" title="inode用尽"></a>inode用尽</h2><p>inode用尽通常是因为小文件过多导致将有限的inode资源用尽，所以可能磁盘使用率并不高</p>
+<p>使用df -ih查看使用情况:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[sage.wang@machine /path]$ df -ih</span><br><span class="line">Filesystem            Inodes   IUsed   IFree IUse% Mounted on</span><br><span class="line">/dev/vda2               640K     41K    600K    7% /</span><br><span class="line">tmpfs                  1000K       4   1000K    1% /dev/shm</span><br><span class="line">/dev/vda1                50K      39     50K    1% /boot</span><br><span class="line">/dev/vda6                63K    1.4K     62K    3% /home</span><br><span class="line">/dev/vda7               3.9M     3.8M    20k    99% /home/xxx</span><br><span class="line">/dev/vda5               256K    1.6K    255K    1% /var</span><br></pre></td></tr></table></figure></p>
+<p>可以看到<code>/home/xxx</code>下面的inode使用了99%,接下来就是看一下具体哪个目录里使用的最多了，按照上面的目录一层一层的找下，查找的方法用下面的脚本：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[sage.wang@machine /home/xxx/www/webserver]$ <span class="keyword">for</span> i <span class="keyword">in</span> ./*; <span class="keyword">do</span> <span class="built_in">echo</span> <span class="variable">$i</span>; find <span class="variable">$i</span> | wc -l; <span class="keyword">done</span></span><br><span class="line">./conf</span><br><span class="line">9</span><br><span class="line">./logs</span><br><span class="line">2365048904</span><br><span class="line">./webapps</span><br><span class="line">2349</span><br><span class="line">./work</span><br><span class="line">9</span><br></pre></td></tr></table></figure></p>
+<p>这里就能看出来，比较多的文件其实是log文件和webapps下面的类文件   </p>
+<blockquote>
+<p>PS：上面的文件个数是我随便写的</p>
+</blockquote>
+<blockquote>
+<p>关键用法：<code>for i in ./*; do echo $i; find $i | wc -l; done</code> 查找当前目录下的目录有多少个文件 </p>
+</blockquote>
 
       
     </div>

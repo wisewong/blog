@@ -276,6 +276,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[内存问题排查思路]]></title>
+    <url>%2F2018%2F03%2F08%2F%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF%2F</url>
+    <content type="text"><![CDATA[内存泄漏的判断判断系统是否存在内存泄漏的依据是： 如果系统存在内存泄漏， 那么完全垃圾回收完之后的内存值应该持续上升。 如果在现场能观察到这个现象， 说明系统存在内存泄漏。 当怀疑一个系统存在内存泄漏的时候， 首先使用FULL GC信息对内存泄漏进行一个初步确认， 确认系统是否存在内存泄漏。 只检查完全垃圾回收后的可用内存值是否一直再增大， 步骤如下: 首先截取系统稳定运行以后的GC信息 过滤出FULL GC的行。 只有FULL GC的行才有分析价值。 因为完全GC后的内存是当前Java对象真正使用的内存数量 如果完全垃圾回收后的内存持续增长， 大有一直增长到Xmx设定值的趋势， 那么这个时候基本上就可以断定系统存在内存泄漏。如果当前完全垃圾回收后内存增长到一个值之后， 又能回落， 总体上处于一个动态平衡， 那么内存泄漏基本可以排除。 内存泄露的原因直接内存native区域内存泄露的原因可能有三： 如果系统中存在JNI调用， 本地内存泄漏可能存在于JNI代码中。 JDK的Bug. 操作系统的Bug. 本地内存泄露也可能会引发OOM，但如果出现的是Exception in thread “main” java.lang.OutOfMemoryError: unable to create new native thread这个异常，则往往是创建的线程过多或者堆内存过大导致的 主要原因可能有三： 系统当前有过多的线程， 操作系统无法再创建更多的线程 swap分区不足 在32位的系统下， 过大的堆内存设置， 导致本地内存不足。32位操作系统下一个进程的内存空间是有限的，当设置的heap大小+perm大小比较大时，势必会挤压native的大小。解决方式：(a) 减少Xmx或者PermSize的设置 (b) 如果系统需要的堆内存确实很大， 无法减少Xmx的设置， 可以通过设置-Xss强行将每个线程堆栈的尺寸设小， 一旦线程堆栈过长， 则自动截断， 从而可以让线程堆栈占用的内存不过渡膨胀。 但这个效果往往有限的。 Perm在使用大量反射、jsp、jar包、动态代理的情况下，加载的class很多，就有可能会OOM。 查看swap使用情况可以参见：Swap使用情况 内存泄漏的定位 jmap -histo &gt; objhist.log, 可以打印出当前对象的个数和大小 如果系统已经OutOfMemory异常并停止工作， 可以通过jmap -heap:format=b 获取内存信息 在启动期间增加-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=”具体的路径”， 当系统一旦OutOfMemory之后， 就会将内存信息和堆信息收集下来。]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>内存</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[curl命令踩的坑]]></title>
     <url>%2F2018%2F03%2F08%2Fcurl%E5%91%BD%E4%BB%A4%E8%B8%A9%E7%9A%84%E5%9D%91%2F</url>
     <content type="text"><![CDATA[使用curl命令执行get请求，带多个参数： curl localhost:8080/user/binding/query?userId=123456&amp;wrapperId=123&amp;from=test [1] 8937 [2] 8938 {&quot;ver&quot;:&quot;1.0.0&quot;,&quot;status&quot;:1,&quot;message&quot;:&quot;Required String parameter &apos;wrapperId&apos; is not present&quot;,&quot;data&quot;:null,&quot;ok&quot;:false} [1]- Done curl localhost:8080/user/binding/query?userId=123456 [2]+ Done wrapperId=123 返回结果提示缺少参数wrapperId，但是上述url中的确有wrapperId。 看最后两行的结果，发现是url被&amp;号截开，在shell中被当做两条命令来执行的。 解决方案 在url外面加上引号： curl &quot;localhost:8080/user/binding/query?userId=123456&amp;wrapperId=123&amp;from=test&quot;]]></content>
@@ -286,18 +298,6 @@
       <tags>
         <tag>linux</tag>
         <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[内存问题排查思路]]></title>
-    <url>%2F2018%2F03%2F08%2F%E5%86%85%E5%AD%98%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF%2F</url>
-    <content type="text"><![CDATA[内存泄漏的判断判断系统是否存在内存泄漏的依据是： 如果系统存在内存泄漏， 那么完全垃圾回收完之后的内存值应该持续上升。 如果在现场能观察到这个现象， 说明系统存在内存泄漏。 当怀疑一个系统存在内存泄漏的时候， 首先使用FULL GC信息对内存泄漏进行一个初步确认， 确认系统是否存在内存泄漏。 只检查完全垃圾回收后的可用内存值是否一直再增大， 步骤如下: 首先截取系统稳定运行以后的GC信息 过滤出FULL GC的行。 只有FULL GC的行才有分析价值。 因为完全GC后的内存是当前Java对象真正使用的内存数量 如果完全垃圾回收后的内存持续增长， 大有一直增长到Xmx设定值的趋势， 那么这个时候基本上就可以断定系统存在内存泄漏。如果当前完全垃圾回收后内存增长到一个值之后， 又能回落， 总体上处于一个动态平衡， 那么内存泄漏基本可以排除。 内存泄露的原因直接内存native区域内存泄露的原因可能有三： 如果系统中存在JNI调用， 本地内存泄漏可能存在于JNI代码中。 JDK的Bug. 操作系统的Bug. 本地内存泄露也可能会引发OOM，但如果出现的是Exception in thread “main” java.lang.OutOfMemoryError: unable to create new native thread这个异常，则往往是创建的线程过多或者堆内存过大导致的 主要原因可能有三： 系统当前有过多的线程， 操作系统无法再创建更多的线程 swap分区不足 在32位的系统下， 过大的堆内存设置， 导致本地内存不足。32位操作系统下一个进程的内存空间是有限的，当设置的heap大小+perm大小比较大时，势必会挤压native的大小。解决方式：(a) 减少Xmx或者PermSize的设置 (b) 如果系统需要的堆内存确实很大， 无法减少Xmx的设置， 可以通过设置-Xss强行将每个线程堆栈的尺寸设小， 一旦线程堆栈过长， 则自动截断， 从而可以让线程堆栈占用的内存不过渡膨胀。 但这个效果往往有限的。 Perm在使用大量反射、jsp、jar包、动态代理的情况下，加载的class很多，就有可能会OOM。 查看swap使用情况可以参见：Swap使用情况 内存泄漏的定位 jmap -histo &gt; objhist.log, 可以打印出当前对象的个数和大小 如果系统已经OutOfMemory异常并停止工作， 可以通过jmap -heap:format=b 获取内存信息 在启动期间增加-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=”具体的路径”， 当系统一旦OutOfMemory之后， 就会将内存信息和堆信息收集下来。]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-        <tag>内存</tag>
       </tags>
   </entry>
   <entry>

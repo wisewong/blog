@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="TnvVJCtd2d">
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="嘿嘿，今天继续来完成哥哥我的飞机订票系统。  废话不多说，先把主界面对话框窗口过程贴出来：  //主界面_窗口过程 BOOL CALLBACK MainDlgProc(HWND hMainDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){     switch (uMsg)     {     case WM_INITDIALOG:     {">
+<meta name="keywords" content="windows程序设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="windows API 开发飞机订票系统（三）">
+<meta property="og:url" content="https://wisewong.github.io/archives/eea85999.html">
+<meta property="og:site_name" content="八行书">
+<meta property="og:description" content="嘿嘿，今天继续来完成哥哥我的飞机订票系统。  废话不多说，先把主界面对话框窗口过程贴出来：  //主界面_窗口过程 BOOL CALLBACK MainDlgProc(HWND hMainDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){     switch (uMsg)     {     case WM_INITDIALOG:     {">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-01T16:21:54.484Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="windows API 开发飞机订票系统（三）">
+<meta name="twitter:description" content="嘿嘿，今天继续来完成哥哥我的飞机订票系统。  废话不多说，先把主界面对话框窗口过程贴出来：  //主界面_窗口过程 BOOL CALLBACK MainDlgProc(HWND hMainDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){     switch (uMsg)     {     case WM_INITDIALOG:     {">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wisewong.github.io/archives/eea85999.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>windows API 开发飞机订票系统（三） | 八行书</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">八行书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives menu-item-active">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wisewong.github.io/archives/eea85999.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sage wong">
+      <meta itemprop="description" content="技术碎碎念">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="八行书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">windows API 开发飞机订票系统（三）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-11-30 21:49:50" itemprop="dateCreated datePublished" datetime="2014-11-30T21:49:50+08:00">2014-11-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-02 00:21:54" itemprop="dateModified" datetime="2019-03-02T00:21:54+08:00">2019-03-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/windows程序设计/" itemprop="url" rel="index"><span itemprop="name">windows程序设计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/archives/eea85999.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/archives/eea85999.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<p>嘿嘿，今天继续来完成哥哥我的飞机订票系统。 </p>
+<p>废话不多说，先把主界面对话框窗口过程贴出来： </p>
+<pre><code>//主界面_窗口过程
+BOOL CALLBACK MainDlgProc(HWND hMainDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+    switch (uMsg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (hIcon)
+            SendMessage(hMainDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }//WM_INITDIALOG
+        return TRUE;
+
+    case WM_CLOSE:
+    {
+        //关闭程序时将信息保存                                                
+        if (WriteOrderData(hMainDlg) &amp;&amp; WriteAccountData(hMainDlg) &amp;&amp; WriteFlightData(hMainDlg))
+            EndDialog(hMainDlg, 0);
+        else
+            MessageBox(hMainDlg, TEXT(&quot;保存信息错误！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+    }//WM_CLOSE
+        return TRUE;
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_SEARCH:
+        {
+            SearchFlight(hMainDlg);                        //查找航班    
+            break;
+        }
+        case IDC_TICKET:
+        {
+            BookTickets(hMainDlg);                        //订票
+            break;
+        }
+        case IDC_RETURNTICKET:
+        {
+            ReturnTickets(hMainDlg);                    //退票
+            break;
+        }
+        case IDC_ENTRY:
+        {                                                //录入航班对话框
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ENTRY), NULL, (DLGPROC)EntryFlightProc);
+            break;
+        }
+        case IDC_MODIFYFLIGHT:
+        {                                                //修改航班信息对话框
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_MODIFYFLT), NULL, (DLGPROC)ModifyFlightProc);
+            break;
+        }
+        }//switch
+    }//WM_COMMAND
+        return TRUE;
+    }//switch
+    return FALSE;
+}//MainDlgProc()
+</code></pre><p>如上述代码所示，点击查找、订票、退票、航班录入、修改航班信息按钮都会调用相应的函数。下面来看实现各个功能的代码： </p>
+<pre><code>//查找航班
+BOOL SearchFlight(HWND hMainDlg){
+    int flag1 = 0;                                                    //if(flag1==0) 出发地、目的地查询航班，else：航班号查航班
+    int flag2 = 0;
+    Flight *p;
+    TCHAR szBuffer[256] = {TEXT(&quot;\0&quot;)};
+    TCHAR szDeparture[16], szDestination[16], szFltNum[16], szDate[16];
+
+    HWND hEdit = GetDlgItem(hMainDlg, IDC_INFORMATION);
+
+    GetDlgItemText(hMainDlg, IDC_DEPARTURE, szDeparture, 15);        //获取用户输入出发地
+    GetDlgItemText(hMainDlg, IDC_DESTINATION, szDestination, 15);    //获取用户输入目的地
+    GetDlgItemText(hMainDlg, IDC_FLIGHTNUM, szFltNum, 15);            //获取用户输入航班号
+    GetDlgItemText(hMainDlg, IDC_DATE, szDate, 15);                    //获取用户选择航班时间
+
+    SetDlgItemText(hMainDlg, IDC_INFORMATION, szBuffer);            //清空航班信息区域文本
+
+
+    if (lstrlen(szFltNum) || (!(lstrlen(szDeparture)) &amp;&amp; !(lstrlen(szDestination))))
+        flag1++;
+    else if (!(lstrlen(szDeparture))){
+        MessageBox(hMainDlg, TEXT(&quot;请输入出发地！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+    else if (!(lstrlen(szDestination))){
+        MessageBox(hMainDlg, TEXT(&quot;请输入目的地！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+    if (flag1 &amp;&amp; !(lstrlen(szFltNum))){
+        MessageBox(hMainDlg, TEXT(&quot;请输入出发地、目的地或航班号以查询航班！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    p = flightlink.head;
+    while (p){                                            //查找航班并输出
+        if (flag1){                                        //按航班号查找
+            if (!lstrcmp(p-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(p-&gt;Date,szDate)){//查找到符合航班，输出
+                if (!flag2){                            //若该航班为第一班符合条件的航班
+                    _stprintf(szBuffer, TEXT(&quot;航班号\t出发地\t目的地\t起飞时间\t降落时间\t余座\t价格\t折扣\t出发日期\n&quot;));
+                    SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+                    SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+                }//if
+                flag2++;
+                PrintFlight(hMainDlg, p);                //输出航班信息
+            }//if
+        }//if
+        else{                                            //按出发地、目的地查找
+            if (!lstrcmp(p-&gt;Departure, szDeparture) &amp;&amp; !lstrcmp(p-&gt;Destination, szDestination) &amp;&amp; !lstrcmp(p-&gt;Date, szDate)){//查找到符合航班，输出
+                if (!flag2){                            //若该航班为第一班符合条件的航班
+                    _stprintf(szBuffer, TEXT(&quot;航班号\t出发地\t目的地\t起飞时间\t降落时间\t余座\t价格\t折扣\t出发日期\n&quot;));
+                    SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+                    SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+                }//if
+                flag2++;
+                PrintFlight(hMainDlg, p);                //输出航班信息
+            }//if
+        }//else
+        p = p-&gt;Next;
+    }//while
+    if (!flag2)
+        MessageBox(hMainDlg, TEXT(&quot;对不起，没有符合您要求的航班&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+    return TRUE;
+}//SearchFlight()
+
+
+
+
+
+
+//将所查航班信息输出
+BOOL PrintFlight(HWND hwndDlg,Flight *p){
+    TCHAR szBuffer[256];
+    HWND hEdit = GetDlgItem(hwndDlg, IDC_INFORMATION);
+
+    _stprintf(szBuffer, TEXT(&quot;\n%s\t%s\t%s\t%s\t%s\t%d\t%.2lf\t%s\t%s\n\n&quot;),
+        p-&gt;Flight_Number,                //航班号
+        p-&gt;Departure,                    //出发地
+        p-&gt;Destination,                    //目的地
+        p-&gt;TakeOff_Time,                //起飞时间
+        p-&gt;Landing_Time,                //降落时间
+        p-&gt;Vacant_Seat,                    //余座
+        p-&gt;Fare,                        //价格
+        p-&gt;Discount,                    //折扣
+        p-&gt;Date);                        //出发日期
+
+    SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+    SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));    
+
+    return TRUE;
+}
+
+
+
+
+
+//订票
+BOOL BookTickets(HWND hMainDlg){
+    int tickets_num;
+    Flight *p;
+    TCHAR szFltNum[16], szDate[16];
+
+    GetDlgItemText(hMainDlg, IDC_FLIGHTNUM, szFltNum, 15);            //获取用户输入航班号
+    GetDlgItemText(hMainDlg, IDC_DATE, szDate, 15);                    //获取用户选择航班时间
+
+    if (!lstrlen(szFltNum)){
+        MessageBox(hMainDlg, TEXT(&quot;请输入航班号以订票！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    DialogBox(hInst, MAKEINTRESOURCE(IDD_FLTNUM), NULL, (DLGPROC)FlightNumDlgProc);    //获取订票数目
+
+    if (!lstrlen(szBuffer))
+        return FALSE;
+
+    tickets_num = _ttoi(szBuffer);                                    //订票数目
+
+    p = flightlink.head;
+    while (p){                                                        //查找航班并订票
+        if (!lstrcmp(p-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(p-&gt;Date, szDate))        //查找到符合航班
+            _Book_Tickets(hMainDlg,p,tickets_num);
+        p = p-&gt;Next;
+    }//while
+    return TRUE;
+}//BookTickets()     
+
+
+//订票
+BOOL _Book_Tickets(HWND hwndDlg,Flight *p,int Tickets_Num){
+    OrderForm *new_order = (OrderForm *)malloc(sizeof(OrderForm));
+    if (!new_order){
+        MessageBox(hwndDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+
+    if (Tickets_Num &gt; p-&gt;Vacant_Seat){                    //余票不足，给出建议航班
+        Recommend(hwndDlg,p,Tickets_Num);
+        return FALSE;
+    }
+
+    new_order-&gt;Order_Number = ++allorder.AllOrderNum;    //新订单信息，总订单数+1
+    new_order-&gt;Tickets_Num = Tickets_Num;
+    lstrcpy(new_order-&gt;IdNum, passenger-&gt;IdNum);
+    lstrcpy(new_order-&gt;Flight_Number, p-&gt;Flight_Number);
+    lstrcpy(new_order-&gt;Departure, p-&gt;Departure);
+    lstrcpy(new_order-&gt;Destination, p-&gt;Destination);
+    lstrcpy(new_order-&gt;Date, p-&gt;Date);
+    lstrcpy(new_order-&gt;TakeOff_Time, p-&gt;TakeOff_Time);
+    lstrcpy(new_order-&gt;Landing_Time, p-&gt;Landing_Time);
+    new_order-&gt;Next = NULL;
+    new_order-&gt;psgNext = NULL;
+
+    if (allorder.head == NULL)                            //将结点添至订单链表末尾
+        allorder.head = new_order;
+    else
+        allorder.tail-&gt;Next = new_order;
+    allorder.tail = new_order;
+
+    if (passenger-&gt;OrderLink.head == NULL)                //将结点添至用户订单链表末尾
+        passenger-&gt;OrderLink.head = new_order;
+    else
+        passenger-&gt;OrderLink.tail-&gt;psgNext = new_order;
+    passenger-&gt;OrderLink.tail = new_order;
+    passenger-&gt;OrderLink.OrderNum++;
+    passenger-&gt;TicketNum += Tickets_Num;
+
+    p-&gt;Vacant_Seat -= Tickets_Num;                        //航班余票-1
+
+    MessageBox(hwndDlg, TEXT(&quot;订票成功！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+
+    return TRUE;
+}//_Book_Tickets()
+
+
+
+
+
+//给出建议航班
+BOOL Recommend(HWND hwndDlg, Flight *p,int Tickets_Num){
+    SetDlgItemText(hwndDlg, IDC_INFORMATION, TEXT(&quot;\0&quot;));    //清空航班信息栏
+
+    int flag = 0;
+    TCHAR szBuffer[256] = {TEXT(&quot;\0&quot;)};
+    HWND hEdit = GetDlgItem(hwndDlg, IDC_INFORMATION);
+    Flight *q;
+
+    q = flightlink.head;
+    while (q){
+        if (!(lstrcmp(p-&gt;Departure, q-&gt;Departure)) &amp;&amp; 
+            !(lstrcmp(p-&gt;Destination, q-&gt;Destination)) &amp;&amp; 
+            lstrcmp(p-&gt;Flight_Number, q-&gt;Flight_Number) &amp;&amp; 
+            Tickets_Num&lt;=q-&gt;Vacant_Seat)
+        {
+            if (!flag){
+                wsprintf(szBuffer, TEXT(&quot;您所订航班余票不足，以下为建议航班:\n&quot;));
+                SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+                SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+                wsprintf(szBuffer, TEXT(&quot;\n&quot;));
+                SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+                SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+                wsprintf(szBuffer, TEXT(&quot;航班号\t出发地\t目的地\t起飞时间\t降落时间\t余座\t价格\t折扣\t出发日期\n&quot;));
+                SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+                SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+                ++flag;
+            }//if
+            PrintFlight(hwndDlg, q);
+        }//if
+        q = q-&gt;Next;
+    }//while
+
+    if (!flag){
+        wsprintf(szBuffer, TEXT(&quot;对不起，您所订航班余票不足，当天也其它没有符合条件的航班...\n&quot;));
+        SendMessage(hEdit, EM_SETSEL, LOWORD(-1), HIWORD(-1));
+        SendMessage(hEdit, EM_REPLACESEL, 0, (LPARAM)(szBuffer));
+    }
+    return TRUE;
+}//Recommend()
+
+
+
+
+
+//退票
+BOOL ReturnTickets(HWND hwndDlg){
+    int flag = 0;
+    int num=0,tickets_num;
+    Flight *flight;
+    OrderForm *p,*q,*s,*prePoint;
+    TCHAR szFltNum[16], szDate[16];
+
+    GetDlgItemText(hwndDlg, IDC_FLIGHTNUM, szFltNum, 15);        //获取用户输入航班号
+    GetDlgItemText(hwndDlg, IDC_DATE, szDate, 15);                //获取用户选择航班时间
+
+    if (!lstrlen(szFltNum)){                                    //未输入航班号
+        MessageBox(hwndDlg, TEXT(&quot;请输入航班号！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    DialogBox(hInst, MAKEINTRESOURCE(IDD_FLTNUM), NULL, (DLGPROC)FlightNumDlgProc);    //获取退票数目
+
+    if (!lstrlen(szBuffer))
+        return FALSE;
+
+    tickets_num = _ttoi(szBuffer);                                //退票数
+
+    p = passenger-&gt;OrderLink.head;
+    prePoint = p;
+    if (!p){                                                    //用户无订单
+        MessageBox(hwndDlg, TEXT(&quot;当前用户没有已订票&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    while (p){                                                    //退票航班订票总数
+        if (!lstrcmp(p-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(p-&gt;Date, szDate))
+            num += p-&gt;Tickets_Num;
+        p = p-&gt;psgNext;
+    }
+    if (tickets_num &gt; num){                                        //退票数大于该航班已订票数
+        wsprintf(szBuffer, TEXT(&quot;对不起，该航班您只订了%d张机票，请重新填写退票张数&quot;), num);
+        MessageBox(hwndDlg, szBuffer, TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }//if
+
+    p = passenger-&gt;OrderLink.head;
+    while (p){                                                    //退票
+        if (!lstrcmp(p-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(p-&gt;Date, szDate) ){
+            if (tickets_num &gt;= p-&gt;Tickets_Num){                    //当退票数大于等于当前订单内票数
+
+                s = p-&gt;psgNext;
+                passenger-&gt;TicketNum -= p-&gt;Tickets_Num;            //用户订票数减少
+                allorder.AllOrderNum--;                            //总订单数减少
+                passenger-&gt;OrderLink.OrderNum--;                //用户订单数减少
+                tickets_num -= p-&gt;Tickets_Num;                    //需要退票数减少  若需要退票数为0，则退出，否则继续循环
+
+                if (passenger-&gt;OrderLink.head == p){            //若p为头结点，删除头结点
+                    passenger-&gt;OrderLink.head = p-&gt;psgNext;        //头指针指向下一个结点
+                    if (!p-&gt;psgNext)                            //若p同时为尾结点，则尾指针指向NULL
+                        passenger-&gt;OrderLink.tail = NULL;
+                }
+                else if (!p-&gt;psgNext)                            //若p非头结点但为尾结点，尾指针指向前一个结点
+                    passenger-&gt;OrderLink.tail = prePoint;
+                prePoint-&gt;psgNext = p-&gt;psgNext;                    //链表删除结点p
+
+                flight = flightlink.head;
+                while (flight){                                    //航班余座增加
+                    if (!lstrcmp(flight-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(flight-&gt;Date, szDate)){
+                        flight-&gt;Vacant_Seat += p-&gt;Tickets_Num;
+                        break;
+                    }
+                    flight = flight-&gt;Next;
+                }//while
+
+                q = allorder.head;
+                prePoint = q;
+                while (q){                                        //删除订单链表中订单结点
+                    if (q == p){                                //找到订单结点
+                        if (allorder.head == p){                //若p为头结点，删除头结点
+                            allorder.head = p-&gt;Next;            //头指针指向下一个结点
+                            if (!q-&gt;Next)                        //若q同时为尾结点，则尾指针指向NULL
+                                allorder.tail = NULL;
+                        }
+                        else if (!q-&gt;Next)                        //若q非头结点但为尾结点，尾指针指向前一个结点
+                            allorder.tail = prePoint;
+                        prePoint-&gt;Next = q-&gt;Next;                //链表删除结点q     
+                        free(p); break;                            //释放p结点内存
+                    }//if
+                    prePoint = q;
+                    q = q-&gt;Next;
+                }//while
+
+                if (tickets_num){                                //若退票数非0，则继续退票
+                    p = s; continue;
+                }
+
+                MessageBox(hwndDlg, TEXT(&quot;退票成功！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+                return TRUE;
+            }//if
+            else{                                                //退票数小于该订单订票数
+                p-&gt;Tickets_Num -= tickets_num;                    //订单订票数减少
+                passenger-&gt;TicketNum -= tickets_num;            //用户订票数减少
+
+                flight = flightlink.head;
+                while (flight){                                    
+                    if (!lstrcmp(flight-&gt;Flight_Number, szFltNum) &amp;&amp; !lstrcmp(flight-&gt;Date, szDate)){
+                        flight-&gt;Vacant_Seat += tickets_num;        //航班余票增加
+                        break;
+                    }
+                    flight = flight-&gt;Next;
+                }//while
+
+                MessageBox(hwndDlg, TEXT(&quot;退票成功！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+                return TRUE;                                    //退票成功
+            }//else
+        }//if
+        prePoint = p;
+        p = p-&gt;psgNext;
+    }//while
+
+    wsprintf(szBuffer, TEXT(&quot;对不起，您没有订该航班机票，请确认退票航班&quot;));
+    MessageBox(hwndDlg, szBuffer, TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+    return FALSE;
+}//ReturnTickets()
+</code></pre><p>点击订票或退票按钮时，会弹出一个对话框来让用户输入订票或退票数目，对话框窗口过程如下： </p>
+<pre><code>//获取用户输入机票数量_窗口过程
+BOOL CALLBACK FlightNumDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+    switch (uMsg)
+    {
+
+    case WM_INITDIALOG:
+    {
+        if (hIcon)
+            SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }//WM_INITDIALOG
+    return TRUE;
+
+    case WM_CLOSE:
+    {
+        wsprintf(szBuffer, TEXT(&quot;\0&quot;));
+        EndDialog(hwndDlg, FALSE);
+    }//WM_CLOSE
+    return TRUE;
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            wsprintf(szBuffer, TEXT(&quot;\0&quot;));
+            GetDlgItemText(hwndDlg, IDC_TICKETNUM, szBuffer, 256);
+            EndDialog(hwndDlg, TRUE);
+            break;
+        }//switch
+    }//WM_COMMAND
+    return TRUE;
+
+    }//switch
+    return FALSE;
+}
+</code></pre><p>接下来是航班录入和修改航班信息功能的实现，分别对应一个对话框，窗口过程分别如下: </p>
+<pre><code>//录入航班_窗口过程
+BOOL CALLBACK EntryFlightProc(HWND hEntryDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+    switch (uMsg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (hIcon)
+            SendMessage(hEntryDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }
+    return TRUE;
+
+    case WM_CLOSE:
+    {
+        EndDialog(hEntryDlg, 0);
+    }//WM_CLOSE
+    return TRUE;
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_ADDFLT:
+        {
+            EntryFlight(hEntryDlg);                        //录入航班
+            break;
+        }//GETNAME
+        case IDC_QUIT:
+        {
+            EndDialog(hEntryDlg, FALSE);
+            break;
+        }//GETNAMECANCEL
+
+        }//stitch
+
+    }//WM_COMMAND
+    return TRUE;
+
+    }//stitch
+
+    return FALSE;
+}
+
+
+//修改航班信息_窗口过程
+BOOL CALLBACK ModifyFlightProc(HWND hModifyDlg, UINT uMsg, WPARAM wParam, LPARAM lParam){
+    switch (uMsg)
+    {
+    case WM_INITDIALOG:
+    {
+        if (hIcon)
+            SendMessage(hModifyDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+    }
+    return TRUE;
+
+    case WM_CLOSE:
+    {
+        EndDialog(hModifyDlg, 0);
+    }//WM_CLOSE
+    return TRUE;
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_MODIFY:
+        {
+            ModifyFlight(hModifyDlg);                    //修改航班信息
+            break;
+        }//GETNAME
+        case IDC_QUIT:
+        {
+            EndDialog(hModifyDlg, FALSE);
+            break;
+        }//GETNAMECANCEL
+
+        }//stitch
+
+    }//WM_COMMAND
+    return TRUE;
+    }//stitch
+
+    return FALSE;
+}//ModifyFlightProc()
+</code></pre><p>具体功能实现代码： </p>
+<pre><code>//录入航班
+BOOL EntryFlight(HWND hEntryDlg){
+
+    TCHAR szDiscount[16];
+    TCHAR szFare[16],szSeat_Number[16];
+    TCHAR szFlight_Number[16], szDate[16];
+    TCHAR szDeparture[16], szDestination[16];
+    TCHAR szTakeOff_Time[16], szLanding_Time[16];
+
+    Flight *p = (Flight *)malloc(sizeof(Flight)),*q;
+    if (!p){
+        MessageBox(hEntryDlg, TEXT(&quot;内存申请错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+
+    GetDlgItemText(hEntryDlg, IDC_DEPARTURE, szDeparture, 16);            //获取录入航班信息
+    GetDlgItemText(hEntryDlg, IDC_DESTINATION, szDestination, 16);
+    GetDlgItemText(hEntryDlg, IDC_FLTNUM, szFlight_Number, 16);
+    GetDlgItemText(hEntryDlg, IDC_FARE, szFare, 16);
+    GetDlgItemText(hEntryDlg, IDC_TAKEOFFTIME, szTakeOff_Time, 16);
+    GetDlgItemText(hEntryDlg, IDC_LANDINGTIME, szLanding_Time, 16);
+    GetDlgItemText(hEntryDlg, IDC_SEATNUM, szSeat_Number, 16);
+    GetDlgItemText(hEntryDlg, IDC_DISCOUNT, szDiscount, 16);
+    GetDlgItemText(hEntryDlg, IDC_DATE, szDate, 16);
+
+    if (!lstrlen(szDeparture) || !lstrlen(szDestination) ||
+        !lstrlen(szFlight_Number) || !lstrlen(szFare) ||
+        !lstrlen(szTakeOff_Time) || !lstrlen(szLanding_Time) ||
+        !lstrlen(szSeat_Number))
+    {
+        MessageBox(hEntryDlg, TEXT(&quot;请您填写完整航班信息！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    q = flightlink.head;
+    while (q){
+        if (!lstrcmp(q-&gt;Flight_Number, szFlight_Number) &amp;&amp; !lstrcmp(q-&gt;Date,szDate)){
+            MessageBox(hEntryDlg, TEXT(&quot;对不起，同一航班在一天内只能有一班&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+            free(p);
+            return FALSE;
+        }
+        q = q-&gt;Next;
+    }//while
+
+    lstrcpy(p-&gt;Date, szDate);                            //填入录入航班结点信息
+    lstrcpy(p-&gt;Discount, szDiscount);
+    lstrcpy(p-&gt;Departure, szDeparture);
+    lstrcpy(p-&gt;Destination, szDestination);
+    lstrcpy(p-&gt;TakeOff_Time, szTakeOff_Time);
+    lstrcpy(p-&gt;Landing_Time, szLanding_Time);
+    lstrcpy(p-&gt;Flight_Number, szFlight_Number);
+    p-&gt;Fare = _ttof(szFare);
+    p-&gt;Seat_Number = _ttoi(szSeat_Number);
+    p-&gt;Vacant_Seat = p-&gt;Seat_Number;
+    p-&gt;Next = NULL;
+
+    if (flightlink.head == NULL)                        //将新结点添至航班链表
+        flightlink.head = p;
+    else
+        flightlink.tail-&gt;Next = p;
+    flightlink.tail = p;
+    flightlink.Flight_Number++;                            //航班数目增加
+
+    MessageBox(hEntryDlg, TEXT(&quot;航班录入成功！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+
+    return TRUE;
+}//EntryFlight()
+
+
+
+
+
+//修改航班信息
+BOOL ModifyFlight(HWND hModifyDlg){
+    int seat_num;
+    TCHAR szDiscount[16];
+    TCHAR szFare[16], szSeat_Number[16];
+    TCHAR szTakeOff_Time[16], szLanding_Time[16];
+    TCHAR Mdf_flt_num[16], Mdf_flt_date[16];
+
+    OrderForm *q;
+    Flight *p;
+
+    GetDlgItemText(hModifyDlg, IDC_MDFFLTNUM, Mdf_flt_num, 16);                //获取要修改的航班
+    GetDlgItemText(hModifyDlg, IDC_MDFDATE, Mdf_flt_date, 16);
+
+    if (!lstrlen(Mdf_flt_num)){
+        MessageBox(hModifyDlg, TEXT(&quot;请输入所要修改信息的航班号&quot;), TEXT(&quot;信息&quot;), MB_OK | MB_ICONINFORMATION);
+        return FALSE;
+    }
+
+    GetDlgItemText(hModifyDlg, IDC_FARE, szFare, 16);                        //获取要修改的信息
+    GetDlgItemText(hModifyDlg, IDC_DISCOUNT, szDiscount, 16);
+    GetDlgItemText(hModifyDlg, IDC_SEATNUM, szSeat_Number, 16);
+    GetDlgItemText(hModifyDlg, IDC_TAKEOFFTIME, szTakeOff_Time, 16);
+    GetDlgItemText(hModifyDlg, IDC_LANDINGTIME, szLanding_Time, 16);
+
+    p = flightlink.head;
+    while (p){                                                                //查找要修改的航班
+        if (!lstrcmp(Mdf_flt_num, p-&gt;Flight_Number) &amp;&amp; !lstrcmp(Mdf_flt_date, p-&gt;Date)){
+            if (lstrlen(szFare))                                            //改变航班票价
+                p-&gt;Fare = _ttof(szFare);
+            if (lstrlen(szDiscount))                                        //改变航班折扣
+                wsprintf(p-&gt;Discount, szDiscount);
+            if (lstrlen(szSeat_Number)){
+                seat_num = _ttoi(szSeat_Number);
+                if ((p-&gt;Seat_Number - seat_num) &gt; p-&gt;Vacant_Seat){            //余座数量&gt;=0
+                    MessageBox(hModifyDlg, TEXT(&quot;对不起，座位数过少，请重新填写&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+                    return FALSE;
+                }
+                p-&gt;Vacant_Seat -= p-&gt;Seat_Number - seat_num;                //改变余票数量
+                p-&gt;Seat_Number = seat_num;                                    //改变座位数
+            }//if
+            if (lstrlen(szTakeOff_Time)){                                    //改变航班起飞时间
+                wsprintf(p-&gt;TakeOff_Time, szTakeOff_Time);
+                q = allorder.head;                                            //改变该航班所有订单出发时间
+                while (q){
+                    if (!lstrcmp(q-&gt;Flight_Number, p-&gt;Flight_Number) &amp;&amp; !lstrcmp(q-&gt;Date, p-&gt;Date))
+                        wsprintf(q-&gt;TakeOff_Time, szTakeOff_Time);
+                    q = q-&gt;Next;
+                } 
+            }//if
+            if (lstrlen(szLanding_Time)){                                    //改变航班降落时间
+                wsprintf(p-&gt;Landing_Time, szLanding_Time);
+                q = allorder.head;                                            //改变该航班所有订单降落时间
+                while (q) {
+                    if (!lstrcmp(q-&gt;Flight_Number, p-&gt;Flight_Number) &amp;&amp; !lstrcmp(q-&gt;Date, p-&gt;Date))
+                        wsprintf(q-&gt;Landing_Time, szLanding_Time);
+                    q = q-&gt;Next;
+                }
+            }//if
+            MessageBox(hModifyDlg, TEXT(&quot;修改成功！&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+            return TRUE;
+        }//if
+        p = p-&gt;Next;
+    }//while
+
+    MessageBox(hModifyDlg, TEXT(&quot;对不起，您所要修改的航班尚未录入。&quot;), TEXT(&quot;提示&quot;), MB_OK | MB_ICONINFORMATION);
+    return FALSE;                                                            
+
+}//ModifyFlight()
+</code></pre><p>至此，订票系统的功能已经基本全部实现了，剩下的问题就是在程序退出时将账户、航班、订单数据写进文件里。 </p>
+<p>具体实现起来很简单，代码如下： </p>
+<pre><code>//保存账户资料
+BOOL WriteAccountData(HWND hMainDlg){
+    Passenger *p;
+    FILE *fp;
+    if ((fp = fopen(&quot;.\\AccountData.txt&quot;, &quot;w&quot;)) == NULL){
+        MessageBox(hMainDlg, TEXT(&quot;账户信息保存出现错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+
+    p = psglink.head;
+    while (p){
+        fprintf(fp, &quot;%s\n%s\n%s\n&quot;, p-&gt;Name, p-&gt;IdNum, p-&gt;PassWord);
+        p = p-&gt;Next;
+    }//while
+
+    fclose(fp);
+    return TRUE;
+}//WriteAccountData
+
+
+//保存订单信息
+BOOL WriteOrderData(HWND hMainDlg){
+    OrderForm *p;
+    FILE *fp;
+    if ((fp = fopen(&quot;.\\OrderForm.txt&quot;, &quot;w&quot;)) == NULL){
+        MessageBox(hMainDlg, TEXT(&quot;订单信息保存出现错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+    p = allorder.head;
+    while (p){
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;IdNum);
+        fprintf(fp, &quot;%d\n&quot;, p-&gt;Order_Number);
+        fprintf(fp, &quot;%d\n&quot;, p-&gt;Tickets_Num);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Flight_Number);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Departure);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Destination);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Date);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;TakeOff_Time);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Landing_Time);
+        p = p-&gt;Next;
+    }//while
+    fclose(fp);
+    return TRUE;
+}//WriteOrderData()
+
+
+//保存航班信息
+BOOL WriteFlightData(HWND hMainDlg){
+    Flight *p;
+    FILE *fp;
+    if ((fp = fopen(&quot;.\\FlightData.txt&quot;, &quot;w&quot;)) == NULL){
+        MessageBox(hMainDlg, TEXT(&quot;航班信息保存出现错误!&quot;), TEXT(&quot;错误&quot;), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
+    p = flightlink.head;
+    while (p){
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Flight_Number);
+        fprintf(fp, &quot;%.2lf\n&quot;, p-&gt;Fare);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Discount);
+        fprintf(fp, &quot;%d\n%d\n&quot;, p-&gt;Seat_Number, p-&gt;Vacant_Seat);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Departure);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Destination);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Date);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;TakeOff_Time);
+        fprintf(fp, &quot;%s\n&quot;, p-&gt;Landing_Time);
+        p = p-&gt;Next;
+    }//while
+    fclose(fp);
+    return TRUE;
+}//WriteFlight()
+</code></pre><p>至此，我的处女作就算是完成了，其中还是有很多不足之处。查找算法只是简单的遍历链表，数据结构也只是采用了单链表，倒是订单用上了十字链表来存储。查找起来效率不高，一旦数据量变大，便会很耗费时间，不过考虑到这只是一个课程设计，数据量很小，查找起来时间耗费上没有多少差别，姑且就这样吧。 </p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="sage wong 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="sage wong 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows程序设计/" rel="tag"><i class="fa fa-tag"></i> windows程序设计</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/a3b6facb.html" rel="next" title="windows API 开发飞机订票系统（二）">
+                <i class="fa fa-chevron-left"></i> windows API 开发飞机订票系统（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/b7f92696.html" rel="prev" title="jdbc基础 (一) MySQL的简单使用">
+                jdbc基础 (一) MySQL的简单使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="sage wong">
+            
+              <p class="site-author-name" itemprop="name">sage wong</p>
+              <p class="site-description motion-element" itemprop="description">技术碎碎念</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wisewong" title="GitHub &rarr; https://github.com/wisewong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:z941030@163.com" title="E-Mail &rarr; mailto:z941030@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/z941030" title="Weibo &rarr; https://weibo.com/z941030" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/mr_xlz" title="Twitter &rarr; https://twitter.com/mr_xlz" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://meihuakaile.github.io/" title="https://meihuakaile.github.io/" rel="noopener" target="_blank">卖姑娘的小火柴</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sage wong</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'SdxM9835pE8m70FN5wSG7nsS-gzGzoHsz',
+    appKey: '41QfEorrIjnq2avuNP7fGe0E',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+</html>

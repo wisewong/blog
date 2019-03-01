@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="TnvVJCtd2d">
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
+<meta name="keywords" content="Tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat启动过程源码解读">
+<meta property="og:url" content="https://wisewong.github.io/archives/7cd749e.html">
+<meta property="og:site_name" content="八行书">
+<meta property="og:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20180307193533551">
+<meta property="og:updated_time" content="2019-03-01T16:21:54.468Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat启动过程源码解读">
+<meta name="twitter:description" content="根据Tomcat源码来看一下Tomcat启动过程都做了什么  部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程  先来一张启动过程时序图，了解一下启动顺序         Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main  main方法是整个tomcat启动时的入口。在main方法中，使用bootst">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180307193533551">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wisewong.github.io/archives/7cd749e.html">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Tomcat启动过程源码解读 | 八行书</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">八行书</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives menu-item-active">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wisewong.github.io/archives/7cd749e.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sage wong">
+      <meta itemprop="description" content="技术碎碎念">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="八行书">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tomcat启动过程源码解读
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-03-07 19:37:56" itemprop="dateCreated datePublished" datetime="2018-03-07T19:37:56+08:00">2018-03-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-02 00:21:54" itemprop="dateModified" datetime="2019-03-02T00:21:54+08:00">2019-03-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Tomcat/" itemprop="url" rel="index"><span itemprop="name">Tomcat</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/archives/7cd749e.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/archives/7cd749e.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <meta name="referrer" content="no-referrer">
+
+<p>根据Tomcat源码来看一下Tomcat启动过程都做了什么 </p>
+<p>部分代码为主要流程代码，删去了try-catch以及一些校验逻辑，方便理解主流程 </p>
+<p>先来一张启动过程时序图，了解一下启动顺序    </p>
+<p><img src="https://img-blog.csdn.net/20180307193533551" alt="">   </p>
+<p>Tomcat启动的入口类：org.apache.catalina.startup.Bootstrap#main </p>
+<p>main方法是整个tomcat启动时的入口。在main方法中，使用bootstrap.init()来初始化类加载器和创建Catalina实例，然后再启动Catalina线程。 </p>
+<p><code>public</code> <code>static</code> <code>void</code> <code>main(String args[]) {</code></p>
+<p><code></code> <code>if</code> <code>(daemon ==</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>// Don&#39;t set daemon until init() has completed</code></p>
+<p><code></code> <code>Bootstrap bootstrap =</code> <code>new</code> <code>Bootstrap();</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>bootstrap.init();</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(Throwable t) {</code></p>
+<p><code></code> <code>handleThrowable(t);</code></p>
+<p><code></code> <code>t.printStackTrace();</code></p>
+<p><code></code> <code>return</code> <code>;</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>daemon = bootstrap;</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>{</code></p>
+<p><code></code> <code>// When running as a service the call to stop will be on a new</code></p>
+<p><code></code> <code>// thread so make sure the correct class loader is used to prevent</code></p>
+<p><code></code> <code>// a range of class not found exceptions.</code></p>
+<p><code></code> <code>Thread.currentThread().setContextClassLoader(daemon.catalinaLoader);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>String command =</code> <code>&quot;start&quot;</code> <code>;</code></p>
+<p><code></code> <code>if</code> <code>(args.length &gt;</code> <code>0</code> <code>) {</code></p>
+<p><code></code> <code>command = args[args.length -</code> <code>1</code> <code>];</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>if</code> <code>(command.equals(</code> <code>&quot;startd&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>args[args.length -</code> <code>1</code> <code>] =</code> <code>&quot;start&quot;</code> <code>;</code></p>
+<p><code></code> <code>daemon.load(args);</code></p>
+<p><code></code> <code>daemon.start();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(command.equals(</code> <code>&quot;stopd&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>args[args.length -</code> <code>1</code> <code>] =</code> <code>&quot;stop&quot;</code> <code>;</code></p>
+<p><code></code> <code>daemon.stop();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(command.equals(</code> <code>&quot;start&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>daemon.setAwait(</code> <code>true</code> <code>);</code></p>
+<p><code></code> <code>daemon.load(args);</code></p>
+<p><code></code> <code>daemon.start();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(command.equals(</code> <code>&quot;stop&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>daemon.stopServer(args);</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(command.equals(</code> <code>&quot;configtest&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>daemon.load(args);</code></p>
+<p><code></code> <code>if</code> <code>(</code> <code>null</code> <code>==daemon.getServer()) {</code></p>
+<p><code></code> <code>System.exit(</code> <code>1</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>System.exit(</code> <code>0</code> <code>);</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>{</code></p>
+<p><code></code> <code>log.warn(</code> <code>&quot;Bootstrap: command \&quot;&quot;</code> <code>+ command +</code> <code>&quot;\&quot; does not exist.&quot;</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(Throwable t) {</code></p>
+<p><code></code> <code>// Unwrap the Exception for clearer error reporting</code></p>
+<p><code></code> <code>if</code> <code>(t</code> <code>instanceof</code> <code>InvocationTargetException &amp;&amp;</code></p>
+<p><code></code> <code>t.getCause() !=</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>t = t.getCause();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>handleThrowable(t);</code></p>
+<p><code></code> <code>t.printStackTrace();</code></p>
+<p><code></code> <code>System.exit(</code> <code>1</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>bootstrap.init()方法，用于初始化容器相关，首先创建类加载器，然后通过反射创建org.apache.catalina.startup.Catalina实例： </p>
+<p><code>public</code> <code>void</code> <code>init()</code> <code>throws</code> <code>Exception {</code></p>
+<p><code></code> <code>initClassLoaders();</code></p>
+<p><code></code> <code>Thread.currentThread().setContextClassLoader(catalinaLoader);</code></p>
+<p><code></code> <code>SecurityClassLoad.securityClassLoad(catalinaLoader);</code></p>
+<p><code></code> <code>// Load our startup class and call its process() method</code></p>
+<p><code></code> <code>if</code> <code>(log.isDebugEnabled())</code></p>
+<p><code></code> <code>log.debug(</code> <code>&quot;Loading startup class&quot;</code> <code>);</code></p>
+<p><code></code> <code>Class&lt;?&gt; startupClass =</code></p>
+<p><code></code> <code>catalinaLoader.loadClass</code></p>
+<p><code></code> <code>(</code> <code>&quot;org.apache.catalina.startup.Catalina&quot;</code> <code>);</code></p>
+<p><code></code> <code>Object startupInstance = startupClass.newInstance();</code></p>
+<p><code></code> <code>// Set the shared extensions class loader</code></p>
+<p><code></code> <code>if</code> <code>(log.isDebugEnabled())</code></p>
+<p><code></code> <code>log.debug(</code> <code>&quot;Setting startup class properties&quot;</code> <code>);</code></p>
+<p><code></code> <code>String methodName =</code> <code>&quot;setParentClassLoader&quot;</code> <code>;</code></p>
+<p><code></code> <code>Class&lt;?&gt; paramTypes[] =</code> <code>new</code> <code>Class[</code> <code>1</code> <code>];</code></p>
+<p><code></code> <code>paramTypes[</code> <code>0</code> <code>] = Class.forName(</code> <code>&quot;java.lang.ClassLoader&quot;</code> <code>);</code></p>
+<p><code></code> <code>Object paramValues[] =</code> <code>new</code> <code>Object[</code> <code>1</code> <code>];</code></p>
+<p><code></code> <code>paramValues[</code> <code>0</code> <code>] = sharedLoader;</code></p>
+<p><code></code> <code>Method method =</code></p>
+<p><code></code> <code>startupInstance.getClass().getMethod(methodName, paramTypes);</code></p>
+<p><code></code> <code>method.invoke(startupInstance, paramValues);</code></p>
+<p><code></code> <code>catalinaDaemon = startupInstance;</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>之后Bootstrap的demon.start()方法就会调用Catalina的start方法。 </p>
+<p>Catalina实例执行start方法。这里有两个点，一个是load()加载server.xml配置、初始化Server的过程，一个是getServer().start()开启服务、初始化并开启一系列组件、子容器的过程。 </p>
+<p><strong>org.apache.catalina.startup.Catalina#start</strong></p>
+<p><code>public</code> <code>void</code> <code>start() {</code></p>
+<p><code></code> <code>if</code> <code>(getServer() ==</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>load();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>if</code> <code>(getServer() ==</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>log.fatal(</code> <code>&quot;Cannot start server. Server instance is not configured.&quot;</code> <code>);</code></p>
+<p><code></code> <code>return</code> <code>;</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>long</code> <code>t1 = System.nanoTime();</code></p>
+<p><code></code> <code>// Start the new server</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>getServer().start();</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(LifecycleException e) {</code></p>
+<p><code></code> <code>log.fatal(sm.getString(</code> <code>&quot;catalina.serverStartFail&quot;</code> <code>), e);</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>getServer().destroy();</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(LifecycleException e1) {</code></p>
+<p><code></code> <code>log.debug(</code> <code>&quot;destroy() failed for failed Server &quot;</code> <code>, e1);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>return</code> <code>;</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>long</code> <code>t2 = System.nanoTime();</code></p>
+<p><code></code> <code>if</code> <code>(log.isInfoEnabled()) {</code></p>
+<p><code></code> <code>log.info(</code> <code>&quot;Server startup in &quot;</code> <code>+ ((t2 - t1) /</code> <code>1000000</code> <code>) +</code> <code>&quot; ms&quot;</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>// Register shutdown hook</code></p>
+<p><code></code> <code>if</code> <code>(useShutdownHook) {</code></p>
+<p><code></code> <code>if</code> <code>(shutdownHook ==</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>shutdownHook =</code> <code>new</code> <code>CatalinaShutdownHook();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>Runtime.getRuntime().addShutdownHook(shutdownHook);</code></p>
+<p><code></code> <code>// If JULI is being used, disable JULI&#39;s shutdown hook since</code></p>
+<p><code></code> <code>// shutdown hooks run in parallel and log messages may be lost</code></p>
+<p><code></code> <code>// if JULI&#39;s hook completes before the CatalinaShutdownHook()</code></p>
+<p><code></code> <code>LogManager logManager = LogManager.getLogManager();</code></p>
+<p><code></code> <code>if</code> <code>(logManager</code> <code>instanceof</code> <code>ClassLoaderLogManager) {</code></p>
+<p><code></code> <code>((ClassLoaderLogManager) logManager).setUseShutdownHook(</code></p>
+<p><code></code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>if</code> <code>(await) {</code></p>
+<p><code></code> <code>await();</code></p>
+<p><code></code> <code>stop();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>load方法解析server.xml配置文件，并加载Server、Service、Connector、Container、Engine、Host、Context、Wrapper一系列的容器。加载完成后，调用getServer().start()来开启一个新的Server。 </p>
+<p>下面先看load方法怎么加载组件和容器的： </p>
+<p><code>/**</code></p>
+<p><code></code> <code>* Start a new server instance.</code></p>
+<p><code></code> <code>*/</code></p>
+<p><code></code> <code>public</code> <code>void</code> <code>load() {</code></p>
+<p><code></code> <code>long</code> <code>t1 = System.nanoTime();</code></p>
+<p><code></code> <code>initDirs();</code></p>
+<p><code></code> <code>// Before digester - it may be needed</code></p>
+<p><code></code> <code>initNaming();</code></p>
+<p><code></code> <code>// Create and execute our Digester</code></p>
+<p><code></code> <code>Digester digester = createStartDigester();</code></p>
+<p><code></code> <code>InputSource inputSource =</code> <code>null</code> <code>;</code></p>
+<p><code></code> <code>InputStream inputStream =</code> <code>null</code> <code>;</code></p>
+<p><code></code> <code>File file =</code> <code>null</code> <code>;</code></p>
+<p><code></code> <code>file = configFile();</code></p>
+<p><code></code> <code>inputStream =</code> <code>new</code> <code>FileInputStream(file);</code></p>
+<p><code></code> <code>inputSource =</code> <code>new</code> <code>InputSource(file.toURI().toURL().toString());</code></p>
+<p><code></code> <code>inputSource.setByteStream(inputStream);</code></p>
+<p><code></code> <code>digester.push(</code> <code>this</code> <code>);</code></p>
+<p><code></code> <code>digester.parse(inputSource);</code></p>
+<p><code></code></p>
+<p><code></code> <code>getServer().setCatalina(</code> <code>this</code> <code>);</code></p>
+<p><code></code> <code>getServer().setCatalinaHome(Bootstrap.getCatalinaHomeFile());</code></p>
+<p><code></code> <code>getServer().setCatalinaBase(Bootstrap.getCatalinaBaseFile());</code></p>
+<p><code></code> <code>// Stream redirection</code></p>
+<p><code></code> <code>initStreams();</code></p>
+<p><code></code> <code>// Start the new server</code></p>
+<p><code></code> <code>getServer().init();</code></p>
+<p><code></code> <code>}</code>  </p>
+<hr>
+<p>首先利用Digester类解析server.xml文件，得到容器的配置，并创建相应的对象，并关联父子容器。依次创建的是StandardServer、StandardService、StandardEngine、StandardHost。 </p>
+<p>然后拿到StandardServer实例调用init()方法初始化Tomcat容器的一系列组件。一些容器初始化的的时候，都会调用其子容器的init()方法，初始化它的子容器。顺序是StandardServer、StandardService、StandardEngine、Connector。每个容器都在初始化自身相关设置的同时，将子容器初始化。 </p>
+<p>这里插入一个Tomcat中生命周期的概念。在初始化、开启一系列组件、容器的过程中，由tomcat’管理的组件和容器，都有一个共同的特点，都实现了org.apache.catalina.Lifecycle接口，由Tomcat管理其生命周期。Lifecycle提供一种统一的管理对象生命周期的接口。通过Lifecycle、LifecycleListener、LifecycleEvent，Catalina实现了对tomcat各种组件、容器统一的启动和停止的方式。 </p>
+<p>在Tomcat服务开启过程中启动的一些列组件、容器，都继承了org.apache.catalina.util.LifecycleBase这个抽象类，其中的init()、start() 方法、stop() 方法，为其子类实现了统一的start和stop管理。方法中具体的initInternal()、startInternal() 和stopInternal() 方法，交由子类自己实现。 </p>
+<p>看一下LifecycleBase的init()和start()的实现吧： </p>
+<p><strong>org.apache.catalina.util.LifecycleBase#start</strong></p>
+<p><code>public</code> <code>final</code> <code>synchronized</code> <code>void</code> <code>init()</code> <code>throws</code> <code>LifecycleException {</code></p>
+<p><code></code> <code>if</code> <code>(!state.equals(LifecycleState.NEW)) {</code></p>
+<p><code></code> <code>invalidTransition(Lifecycle.BEFORE_INIT_EVENT);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.INITIALIZING,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>initInternal();</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.INITIALIZED,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(Throwable t) {</code></p>
+<p><code></code> <code>ExceptionUtils.handleThrowable(t);</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.FAILED,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>throw</code> <code>new</code> <code>LifecycleException(</code></p>
+<p><code></code> <code>sm.getString(</code> <code>&quot;lifecycleBase.initFail&quot;</code> <code>,toString()), t);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code></p>
+<p><code>public</code> <code>final</code> <code>synchronized</code> <code>void</code> <code>start()</code> <code>throws</code> <code>LifecycleException {</code></p>
+<p><code></code> <code>if</code> <code>(LifecycleState.STARTING_PREP.equals(state) || LifecycleState.STARTING.equals(state) ||</code></p>
+<p><code></code> <code>LifecycleState.STARTED.equals(state)) {</code></p>
+<p><code></code> <code>if</code> <code>(log.isDebugEnabled()) {</code></p>
+<p><code></code> <code>Exception e =</code> <code>new</code> <code>LifecycleException();</code></p>
+<p><code></code> <code>log.debug(sm.getString(</code> <code>&quot;lifecycleBase.alreadyStarted&quot;</code> <code>, toString()), e);</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(log.isInfoEnabled()) {</code></p>
+<p><code></code> <code>log.info(sm.getString(</code> <code>&quot;lifecycleBase.alreadyStarted&quot;</code> <code>, toString()));</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>return</code> <code>;</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>if</code> <code>(state.equals(LifecycleState.NEW)) {</code></p>
+<p><code></code> <code>init();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(state.equals(LifecycleState.FAILED)) {</code></p>
+<p><code></code> <code>stop();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(!state.equals(LifecycleState.INITIALIZED) &amp;&amp;</code></p>
+<p><code></code> <code>!state.equals(LifecycleState.STOPPED)) {</code></p>
+<p><code></code> <code>invalidTransition(Lifecycle.BEFORE_START_EVENT);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.STARTING_PREP,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>startInternal();</code></p>
+<p><code></code> <code>if</code> <code>(state.equals(LifecycleState.FAILED)) {</code></p>
+<p><code></code> <code>stop();</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>if</code> <code>(!state.equals(LifecycleState.STARTING)) {</code></p>
+<p><code></code> <code>invalidTransition(Lifecycle.AFTER_START_EVENT);</code></p>
+<p><code></code> <code>}</code> <code>else</code> <code>{</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.STARTED,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(Throwable t) {</code></p>
+<p><code></code> <code>ExceptionUtils.handleThrowable(t);</code></p>
+<p><code></code> <code>setStateInternal(LifecycleState.FAILED,</code> <code>null</code> <code>,</code> <code>false</code> <code>);</code></p>
+<p><code></code> <code>throw</code> <code>new</code> <code>LifecycleException(sm.getString(</code> <code>&quot;lifecycleBase.startFail&quot;</code> <code>, toString()), t);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>可以看到，init()和start()方法里，调用了initInternal()方法、startInternal()方法和stop()方法，这三者最终会走子类的具体实现。 </p>
+<p>上面的StandardServer的初始化过程就是一个活生生的例子。在Catalina的load过程中，getServer().init()方法就是LifecycleBase中的init()方法，调用initInternal()时是走的StandardServer的实现，StandardServer的initInternal()中会调用StandardServer的init()方法，进行子容器的初始化。然后依次初始化。 </p>
+<p>看一下代码，了解一下StandardServer中的initInternal()实现。 </p>
+<p><code>/**</code></p>
+<p><code></code> <code>* Invoke a pre-startup initialization. This is used to allow connectors</code></p>
+<p><code></code> <code>* to bind to restricted ports under Unix operating environments.</code></p>
+<p><code></code> <code>*/</code></p>
+<p><code>@Override</code></p>
+<p><code>protected</code> <code>void</code> <code>initInternal()</code> <code>throws</code> <code>LifecycleException {</code></p>
+<p><code></code> <code>super</code> <code>.initInternal();</code></p>
+<p><code></code> <code>// Register global String cache</code></p>
+<p><code></code> <code>// Note although the cache is global, if there are multiple Servers</code></p>
+<p><code></code> <code>// present in the JVM (may happen when embedding) then the same cache</code></p>
+<p><code></code> <code>// will be registered under multiple names</code></p>
+<p><code></code> <code>onameStringCache = register(</code> <code>new</code> <code>StringCache(),</code> <code>&quot;type=StringCache&quot;</code> <code>);</code></p>
+<p><code></code> <code>// Register the MBeanFactory</code></p>
+<p><code></code> <code>MBeanFactory factory =</code> <code>new</code> <code>MBeanFactory();</code></p>
+<p><code></code> <code>factory.setContainer(</code> <code>this</code> <code>);</code></p>
+<p><code></code> <code>onameMBeanFactory = register(factory,</code> <code>&quot;type=MBeanFactory&quot;</code> <code>);</code></p>
+<p><code></code> <code>// Register the naming resources</code></p>
+<p><code></code> <code>globalNamingResources.init();</code></p>
+<p><code></code> <code>// Populate the extension validator with JARs from common and shared</code></p>
+<p><code></code> <code>// class loaders</code></p>
+<p><code></code> <code>if</code> <code>(getCatalina() !=</code> <code>null</code> <code>) {</code></p>
+<p><code></code> <code>ClassLoader cl = getCatalina().getParentClassLoader();</code></p>
+<p><code></code> <code>// Walk the class loader hierarchy. Stop at the system class loader.</code></p>
+<p><code></code> <code>// This will add the shared (if present) and common class loaders</code></p>
+<p><code></code> <code>while</code> <code>(cl !=</code> <code>null</code> <code>&amp;&amp; cl != ClassLoader.getSystemClassLoader()) {</code></p>
+<p><code></code> <code>if</code> <code>(cl</code> <code>instanceof</code> <code>URLClassLoader) {</code></p>
+<p><code></code> <code>URL[] urls = ((URLClassLoader) cl).getURLs();</code></p>
+<p><code></code> <code>for</code> <code>(URL url : urls) {</code></p>
+<p><code></code> <code>if</code> <code>(url.getProtocol().equals(</code> <code>&quot;file&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>try</code> <code>{</code></p>
+<p><code></code> <code>File f =</code> <code>new</code> <code>File (url.toURI());</code></p>
+<p><code></code> <code>if</code> <code>(f.isFile() &amp;&amp;</code></p>
+<p><code></code> <code>f.getName().endsWith(</code> <code>&quot;.jar&quot;</code> <code>)) {</code></p>
+<p><code></code> <code>ExtensionValidator.addSystemResource(f);</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(URISyntaxException e) {</code></p>
+<p><code></code> <code>// Ignore</code></p>
+<p><code></code> <code>}</code> <code>catch</code> <code>(IOException e) {</code></p>
+<p><code></code> <code>// Ignore</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>cl = cl.getParent();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>// Initialize our defined Services</code></p>
+<p><code></code> <code>for</code> <code>(</code> <code>int</code> <code>i =</code> <code>0</code> <code>; i &lt; services.length; i++) {</code></p>
+<p><code></code> <code>services[i].init();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>再举一个具体的例子: </p>
+<p>回到刚才的启动过程中，getServer().start()开启服务的方法，实际就是上面提到的LifecycleBase中的start()方法。其中，会调用org.apache.catalina.core.StandardServer#initInternal方法，初始化Server并调用Service的init方法。org.apache.catalina.core.StandardServer在其实现的startInternal() 中，开启naming resources和services，调用service的start方法，开启所有service，调用其service的startInternal()方法。 </p>
+<p>下面分别看一下StandardServer中的initInternal()和startInternal()的实现： </p>
+<p><strong>org.apache.catalina.core.StandardServer#startInternal</strong></p>
+<p><code>protected</code> <code>void</code> <code>startInternal()</code> <code>throws</code> <code>LifecycleException {</code></p>
+<p><code></code> <code>fireLifecycleEvent(CONFIGURE_START_EVENT,</code> <code>null</code> <code>);</code></p>
+<p><code></code> <code>setState(LifecycleState.STARTING);</code></p>
+<p><code></code> <code>globalNamingResources.start();</code></p>
+<p><code></code> <code>// Start our defined Services</code></p>
+<p><code></code> <code>synchronized</code> <code>(servicesLock) {</code></p>
+<p><code></code> <code>for</code> <code>(</code> <code>int</code> <code>i =</code> <code>0</code> <code>; i &lt; services.length; i++) {</code></p>
+<p><code></code> <code>services[i].start();</code></p>
+<p><code></code> <code>}</code></p>
+<p><code></code> <code>}</code></p>
+<p><code>}</code>  </p>
+<hr>
+<p>这里的service，是org.apache.catalina.core.StandardService的实例。 </p>
+<p>总结一下启动的Tomcat启动的过程 </p>
+<p>在Catalina的load方法里，就已经调用了StandardServer里的init方法，一层一层初始化了globalNamingResources，StandardService–》StandardEngine，executors，MapperListener，Connector–》CoyoteAdapter，protocolHandler。至此就将tomcat的catalina中的组件、容器初始化完成。 接下来就是调用start方法一层一层开启，StandardServer的startInternal方法，按层次start：globalNamingResources，StandardService–》StandardEngine，executors，MapperListener，Connector–》StandardHost，StandardContext，protocolHandler。顺序基本同init过程。StandardEngine在start时，会init子容器，并调用子容器的start方法。子容器依次这样init、start，就开启了StandardHost和StandardContext。 </p>
+<p>参考文章： </p>
+<p><a href="http://wely.iteye.com/blog/2295171" target="_blank" rel="noopener"> tomcat源码分析-Connector初始化与启动 </a></p>
+<p><a href="http://wely.iteye.com/blog/2295222" target="_blank" rel="noopener"> tomcat源码分析-Container初始化与加载 </a></p>
+<p><a href="http://wely.iteye.com/blog/2295240" target="_blank" rel="noopener"> tomcat源码分析-http请求在Container中的执行路线 </a></p>
+<p><a href="http://blog.csdn.net/x87648510/article/details/51750550" target="_blank" rel="noopener"> tomcat源码解析(一)–启动与Server.xml文件的解析 </a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&quot;QR&quot;); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="sage wong 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="sage wong 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tomcat/" rel="tag"><i class="fa fa-tag"></i> Tomcat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/archives/b7b06014.html" rel="next" title="同步 异步，阻塞 非阻塞">
+                <i class="fa fa-chevron-left"></i> 同步 异步，阻塞 非阻塞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/archives/e46e0be6.html" rel="prev" title="HTTPS握手">
+                HTTPS握手 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="sage wong">
+            
+              <p class="site-author-name" itemprop="name">sage wong</p>
+              <p class="site-description motion-element" itemprop="description">技术碎碎念</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">61</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/wisewong" title="GitHub &rarr; https://github.com/wisewong" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:z941030@163.com" title="E-Mail &rarr; mailto:z941030@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://weibo.com/z941030" title="Weibo &rarr; https://weibo.com/z941030" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/mr_xlz" title="Twitter &rarr; https://twitter.com/mr_xlz" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://meihuakaile.github.io/" title="https://meihuakaile.github.io/" rel="noopener" target="_blank">卖姑娘的小火柴</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sage wong</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'SdxM9835pE8m70FN5wSG7nsS-gzGzoHsz',
+    appKey: '41QfEorrIjnq2avuNP7fGe0E',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js'; 
+      }
+      else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+</body>
+</html>

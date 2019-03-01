@@ -101,8 +101,8 @@
   <meta name="description" content="概述前段时间公司开源了内部的QMQ消息中间件,这里简单根据开源文档来看一下QMQ的实现原理,同时与kafka做一个对比.  QMQ github地址   余昭辉大佬的文章 :去哪儿网消息队列设计与实现  消息中间件的设计一个消息中间件的设计需要考虑哪些问题呢?  高可用(服务与数据投递) 消息的存储模型 不同消费组消费隔离  上面是实现一个消息中间件需要考虑的基础问题,同时可以考虑的是一些其他功能">
 <meta name="keywords" content="QMQ,kafka,消息队列">
 <meta property="og:type" content="article">
-<meta property="og:title" content="谈谈QMQ与kafka的区别">
-<meta property="og:url" content="https://wisewong.github.io/2019/02/17/谈谈QMQ与kafka的区别/index.html">
+<meta property="og:title" content="谈谈QMQ的实现">
+<meta property="og:url" content="https://wisewong.github.io/2019/02/17/谈谈QMQ的实现/index.html">
 <meta property="og:site_name" content="八行书">
 <meta property="og:description" content="概述前段时间公司开源了内部的QMQ消息中间件,这里简单根据开源文档来看一下QMQ的实现原理,同时与kafka做一个对比.  QMQ github地址   余昭辉大佬的文章 :去哪儿网消息队列设计与实现  消息中间件的设计一个消息中间件的设计需要考虑哪些问题呢?  高可用(服务与数据投递) 消息的存储模型 不同消费组消费隔离  上面是实现一个消息中间件需要考虑的基础问题,同时可以考虑的是一些其他功能">
 <meta property="og:locale" content="zh-CN">
@@ -116,9 +116,9 @@
 <meta property="og:image" content="https://wisewong.github.io/images/qmq9.png">
 <meta property="og:image" content="https://wisewong.github.io/images/qmq10.png">
 <meta property="og:image" content="https://wisewong.github.io/images/qmq7.png">
-<meta property="og:updated_time" content="2019-02-19T08:15:30.151Z">
+<meta property="og:updated_time" content="2019-03-01T07:37:25.767Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="谈谈QMQ与kafka的区别">
+<meta name="twitter:title" content="谈谈QMQ的实现">
 <meta name="twitter:description" content="概述前段时间公司开源了内部的QMQ消息中间件,这里简单根据开源文档来看一下QMQ的实现原理,同时与kafka做一个对比.  QMQ github地址   余昭辉大佬的文章 :去哪儿网消息队列设计与实现  消息中间件的设计一个消息中间件的设计需要考虑哪些问题呢?  高可用(服务与数据投递) 消息的存储模型 不同消费组消费隔离  上面是实现一个消息中间件需要考虑的基础问题,同时可以考虑的是一些其他功能">
 <meta name="twitter:image" content="https://wisewong.github.io/images/qmq1.png">
 
@@ -127,7 +127,7 @@
 
 
 
-  <link rel="canonical" href="https://wisewong.github.io/2019/02/17/谈谈QMQ与kafka的区别/">
+  <link rel="canonical" href="https://wisewong.github.io/2019/02/17/谈谈QMQ的实现/">
 
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>谈谈QMQ与kafka的区别 | 八行书</title>
+  <title>谈谈QMQ的实现 | 八行书</title>
   
 
 
@@ -382,7 +382,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wisewong.github.io/2019/02/17/谈谈QMQ与kafka的区别/">
+    <link itemprop="mainEntityOfPage" href="https://wisewong.github.io/2019/02/17/谈谈QMQ的实现/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="sage wong">
@@ -399,7 +399,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">谈谈QMQ与kafka的区别
+          <h1 class="post-title" itemprop="name headline">谈谈QMQ的实现
 
               
             
@@ -442,7 +442,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-19 16:15:30" itemprop="dateModified" datetime="2019-02-19T16:15:30+08:00">2019-02-19</time>
+                <time title="修改时间：2019-03-01 15:37:25" itemprop="dateModified" datetime="2019-03-01T15:37:25+08:00">2019-03-01</time>
               
             
           </span>
@@ -478,8 +478,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/02/17/谈谈QMQ与kafka的区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/17/谈谈QMQ与kafka的区别/" itemprop="commentCount"></span>
+                <a href="/2019/02/17/谈谈QMQ的实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/02/17/谈谈QMQ的实现/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -580,10 +580,15 @@
 <p>而qmq的实现方案是,为每个消费组分配一个actor，那么来自这个消费组的所有拉请求都会进入对应actor的信箱(队列)，然后这些actor再被调度。<br><img src="/images/qmq10.png" alt=""></p>
 <p>这些actor在一个线程池里被调度，当有拉请求进入对应actor的信箱时，该actor的状态变为runnable，进入线程池的队列等待被执行，当执行到该actor时，该actor的信箱里可能存在多个拉请求，那么我们并不是将该拉请求全部执行完毕，而是给每个actor分配了一个最大执行时间(时间片)，如果该时间片耗完，即使它的信箱里仍然有拉请求还是会不再执行该actor，这个时候会将该actor放到线程池队列的末尾。那么就能够确保每个actor都有执行的机会，并且请求多的actor也不会挤占其他actor的资源。</p>
 <h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>分别从两个角度提供高可用能力：<code>分片</code>和<code>复制</code></p>
-<p>首先因为QMQ不是基于partition的，所以很容易通过添加更多的机器就能提高一个subject的可用性，<code>消息按照一定的负载均衡策略分布在不同的机器上，某台机器离线后producer将不再将消息发送给该Server。</code></p>
-<p>除此之外，<code>QMQ通过主从复制来提高单机可用性。</code>QMQ将服务端集群划分为多个group，每个group包含一个master和一个slave。消息的发送和消费全部指向master，slave只为保证可用性。</p>
+<h3 id="分片"><a href="#分片" class="headerlink" title="分片"></a>分片</h3><p>首先因为QMQ不是基于partition的，所以很容易通过添加更多的机器就能提高一个subject的可用性，<code>消息按照一定的负载均衡策略分布在不同的机器上，某台机器离线后producer将不再将消息发送给该Server。</code></p>
+<h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><p>除此之外，<code>QMQ通过主从复制来提高单机可用性。</code>QMQ将服务端集群划分为多个group，每个group包含一个master和一个slave。消息的发送和消费全部指向master，slave只为保证可用性。</p>
 <p><code>目前当master离线后，不提供自动切换功能，需要人工启动master。</code>当slave离线后，该group不再提供接收消息服务，只提供消息消费服务。当master出现故障，导致消息丢失时，可以将其切换为slave，原来的slave切换为master，slave将从master同步数据，同步完成后提供服务。</p>
 <h3 id="provider发送消息"><a href="#provider发送消息" class="headerlink" title="provider发送消息"></a>provider发送消息</h3><p><code>当provider消息发送给master后，slave会从master同步消息，只有消息同步到slave后master才会返回成功的响应给producer，这就保证了master和slave上都有一致的消息。</code>当master和slave之间的延迟增大时，会标记该group为readonly状态，这个时候将不再接收消息，只提供消息消费服务。下图为消息发送和主从同步示意图:<br><img src="/images/qmq7.png" alt=""></p>
+<h3 id="consumer消费消息"><a href="#consumer消费消息" class="headerlink" title="consumer消费消息"></a>consumer消费消息</h3><ul>
+<li>ack机制(消费完返回ack,ack可包含异常信息)</li>
+<li>重试机制(消费异常,默认每隔5s重试一次)</li>
+<li><a href="https://github.com/qunarcorp/qmq/blob/master/docs/cn/exactlyonce.md" target="_blank" rel="noopener">幂等Exactly once消费</a></li>
+</ul>
 <h3 id="服务降级"><a href="#服务降级" class="headerlink" title="服务降级"></a>服务降级</h3><p>因为每个消费组都是隔离的,所以每个消费组的pull请求都在各自的队列里，那么如果前面处理慢了，就会拖慢整个队列，最后导致整个队列都是做无用功，整个系统的大量资源都被消耗了,因此就要考虑服务降级了.</p>
 <h4 id="服务端降级"><a href="#服务端降级" class="headerlink" title="服务端降级"></a>服务端降级</h4><p>QMQ在收到每个请求，根据请求的超时参数，都赋予了一个deadline，在该请求在actor里被执行的时候，会首先对deadline进行判断，如果觉得这个请求在deadline之前根本是无法执行完成的，那么我们就直接丢弃这个请求。那么这样就有两个作用：</p>
 <ul>
@@ -1050,7 +1055,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息中间件的设计"><span class="nav-number">2.</span> <span class="nav-text">消息中间件的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QMQ的实现"><span class="nav-number">3.</span> <span class="nav-text">QMQ的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务架构"><span class="nav-number">3.1.</span> <span class="nav-text">服务架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实时消息的存储"><span class="nav-number">3.2.</span> <span class="nav-text">实时消息的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储模型"><span class="nav-number">3.2.1.</span> <span class="nav-text">存储模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计初衷"><span class="nav-number">3.2.2.</span> <span class="nav-text">设计初衷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时消息的存储"><span class="nav-number">3.3.</span> <span class="nav-text">延时消息的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储模型-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">存储模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消费隔离"><span class="nav-number">3.4.</span> <span class="nav-text">消费隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用"><span class="nav-number">3.5.</span> <span class="nav-text">高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#provider发送消息"><span class="nav-number">3.5.1.</span> <span class="nav-text">provider发送消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务降级"><span class="nav-number">3.5.2.</span> <span class="nav-text">服务降级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端降级"><span class="nav-number">3.5.2.1.</span> <span class="nav-text">服务端降级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端降级"><span class="nav-number">3.5.2.2.</span> <span class="nav-text">客户端降级</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息中间件的设计"><span class="nav-number">2.</span> <span class="nav-text">消息中间件的设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QMQ的实现"><span class="nav-number">3.</span> <span class="nav-text">QMQ的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务架构"><span class="nav-number">3.1.</span> <span class="nav-text">服务架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实时消息的存储"><span class="nav-number">3.2.</span> <span class="nav-text">实时消息的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储模型"><span class="nav-number">3.2.1.</span> <span class="nav-text">存储模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计初衷"><span class="nav-number">3.2.2.</span> <span class="nav-text">设计初衷</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时消息的存储"><span class="nav-number">3.3.</span> <span class="nav-text">延时消息的存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储模型-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">存储模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消费隔离"><span class="nav-number">3.4.</span> <span class="nav-text">消费隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用"><span class="nav-number">3.5.</span> <span class="nav-text">高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分片"><span class="nav-number">3.5.1.</span> <span class="nav-text">分片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制"><span class="nav-number">3.5.2.</span> <span class="nav-text">复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#provider发送消息"><span class="nav-number">3.5.3.</span> <span class="nav-text">provider发送消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#consumer消费消息"><span class="nav-number">3.5.4.</span> <span class="nav-text">consumer消费消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务降级"><span class="nav-number">3.5.5.</span> <span class="nav-text">服务降级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端降级"><span class="nav-number">3.5.5.1.</span> <span class="nav-text">服务端降级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端降级"><span class="nav-number">3.5.5.2.</span> <span class="nav-text">客户端降级</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>

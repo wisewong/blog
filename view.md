@@ -105,7 +105,8 @@
 
 ### 网络相关
 - http协议,握手挥手
-   1. 三次握手：为什么不是两次握手或四次握手?防止失效的连接请求报文段被服务端接受，从而产生错误。
+   1. 三次握手：为什么不是两次握手或四次握手?
+      + 防止失效的连接请求报文段被服务端接受，从而产生错误。
    2. 四次挥手：等待2MSL的原因：
       + 防止最后一个ACK包对方没有收到；
       + 防止已经失效的连接请求报文出现在连接中
@@ -114,11 +115,22 @@
 
 - https 握手非对称加密,传输对称加密
 - cookie与session、token 应用+分布式一致性问题
+   1. 服务端生成token,给客户端
+   2. 客户端带着token来,服务端使用相同的算法,验证token的有效性
+   3. 不需要单独的服务器存储会话
 
 ### Linux相关
 - 文件的权限和操作
+   1. 权限 拥有者-用户组-其他人 chmod 666 file ;chmod +x file;chown use file
 - 常用命令,top awk netstat sort uniq
+   1. top -H -p pid
+   2. awk -F ' ' '{pring $1}'
+   3. uniq -c 每个出现的数量
+   4. sort -nr 按数字从大到校排序
 - 线上日志文件的删除和清空
+   1. du -sh * |grep G
+   2. echo ' ' > file
+   3. echo " " | sudo tee f.txt 
 - 性能瓶颈 load cpu swap 磁盘
 - shell脚本
 
@@ -167,6 +179,7 @@
    4. put时，table[i]==null时，CAS设置值；否则，对当前链表首个元素table[i]加锁，实现该链表中元素值的替换，或者队尾添加元素操作
 
 - hashmap resize 死循环
+   1. 在一个线程记录了e和next的情况下,另一个线程完成了链表逆序的扩容,这个线程再扩容的时候就可能出现环
 
 - Overload和Override的区别 
    1. Overload是重载，重载的方法参数列表不同 
@@ -234,9 +247,14 @@
    > https://blog.csdn.net/f641385712/article/details/83546803
 
 - 模拟实现一个死锁
+   1. A线程  lock1.lock()   sleep(1000) lock2.lock()    lock2.unlock lock2.unlock
+   2. B线程  lock2.lock()   sleep(1000) lock1.lock()    lock1.unlock lock2.unlock
+   3. 加锁顺序不同可能导致产生死锁
+
 - 线程池 构造方法参数含义 阻塞队列 任务满了 原理和机制
    1. 高并发、任务执行时间短的业务，线程池线程数可以设置为CPU核数+1，减少线程上下文的切换 
    2. 并发不高、任务执行时间长的业务，根据CPU密集型和IO密集型设置不同的线程池大小
+
 - java的线程调度算法
    + 使用系统调用创建线程，因此实际的线程模型和调度算法依赖于操作系统
 
@@ -303,6 +321,22 @@
    1. synchronized是JVM级别的，lock是代码级别的实现
    2. lock粒度更细，支持读写锁分离和公平锁/非公平锁
    3. lock使用了CAS，必须再finally手动释放锁
+   4. lock使用condition来通信,实现object的wait notify的等待唤醒,并且可以多条件隔离的等待唤醒
+
+- 如何正确退出一个线程
+   1. 通过interrupt()设置中断标记,代码里适当的地方判断线程中断状态,return或break等操作退出;对于处于 wait sleep join状态的线程,中断标记将会被清除,并抛出InterruptedException异常
+   2. 使用boolean值的volatile标志位,通过判断标记来终止线程,但无法解决阻塞和sleep状态下的线程
+   3. stop()方法，立即停止,已被弃用
+   > https://blog.csdn.net/qq_24693837/article/details/71601044
+   > https://blog.csdn.net/Smile_Miracle/article/details/71550548
+
+- AQS
+   1. 为线程同步,提供了一种通用机制和方法,具有获取锁,释放锁,进入阻塞队列以及唤醒操作的功能,可以方便的利用这些工具实现自己定制化的锁,比如可重入锁,公平非公平锁
+   2. AQS本质是采用CHL模型完成了一个先进先出的队列。用volatile修饰共享变量state，线程通过CAS去改变状态值，成功则获取锁成功，失败则进入等待队列，等待被唤醒。
+   3. 对于入队，采用CAS操作，每次比较尾节点是否一致，然后插入到尾节点中。对于出队列，等待释放锁的唤醒
+
+- ReadWriteLock
+   + 读写分离，在没有写锁的情况下，读锁是无阻塞的，提高了执行效率，它是一种共享锁
 
 ### JVM相关
 - 运行时数据区
@@ -355,8 +389,51 @@
    2. 构造器注入的方式，每一个bean的实例化都依赖下一个bean的实例化，所以就导致这个循环的的bean都无法实例化，所以才会异常
    3. setter注入的方式，是在bean实例化之后，设置属性的阶段操作的，此时对象已经存在了，因此只需要依次设置引用即可
 
+- bean在spring中以BeanDefinition的形式存在
+- ApplicationContext作为spring的ioc容器,标识一个应用环境,创建bean,维护bean的关系
+
+- aop
+   1. 动态代理
+   2. cglib与jdk的区别   前者生成代理对象的子类,生成速度慢,执行速度快.后者实现代理对象的所有接口,生成速度快,执行速度慢
+   3. 有接口实现的话,默认走jdk代理,否则走cglib
+
+- spring mvc工作流程
+   1. DispatcherServlet->HandlerMapping(根据url查找对应的处理链+HandlerAdapter)
+   2. DispatcherServlet->执行处理链-> HandlerAdapter->调用Handler(其实是Controller)->返回ModelAndView
+
+
+- spring boot自动配置的原理
+   1. spring.factories文件中配置上自己时间的配置类,spring容积就会在启动的时候把这个自动配置的类加载进来,执行配置类中的自定义配置逻辑org.springframework.boot.autoconfigure.EnableAutoConfiguration=qunar.tc.qmq.consumer.annotation.QmqConsumerAutoConfiguration
+
+- spring boot与tomcat的整合
+   1. 内嵌tomcat  启动boot进程的时候,调用内嵌tomcat的方法,启动tomcat各种组件,并通过代码的方式,动态添加原web.xml中配置的servlet filter等(servlet 3.0支持)
+   2. boot程序打war包放到tomcat中执行.war包中自带ServletContainerInitializer实现,tomcat容器启动时,会依次调用所有的SCI,此时实现spring的dispatcherServlet的加载和spring容器的初始化
+
 ## Mybatis
 ## Dubbo
+- 服务的暴露
+   1. 监听spring容器初始化完成后发布的`刷新容器事件`,Dubbo 会调用 ServiceBean的 父类 ServiceConfig 的 export 方法，而该方法真正实现了服务的（异步或者非异步）发布
+
+- 服务提供者能实现失效踢出是什么原理
+   1. 基于zk的临时节点,与客户端的连接终端超过一定的超时时间之后,会删除临时节点
+
+- 安全机制:token机制,防止调用方绕过注册中心调用
+
+- 通讯协议:dubbo,hessian,http,rmi
+
+- 为什么使用zk做注册中心
+   + Zookeeper的数据模型很简单，zk将全量数据存储在内存中，性能高，而且支持集群，高可用，能保证数据的一致性和可靠性,能有效的作为一个发布订阅的注册中心
+
+- 遇到的bug
+   + 不算bug,dubbo默认数据量限制8m.一个服务同步另一个服务的缓存数据,超过限制,抛异常了
+   
+- dubbo协议
+   + 单连接,长连接,基于tcp,nio,Hessian序列化
+
+
+   
+
+
 ## 消息队列
 ## 调度框架
 
@@ -412,6 +489,19 @@
 ## servlet原理 jsp原理
 ## Tomcat原理
 
+### NIO
+- Connector负责对外的连接
+- Connector中的protocolHandler维护协议,IO方式
+- NIO控制逻辑在Connector的NioEndpoint中
+- Acceptor接受连接请求,Poller轮询channel,都是用的selector,不过前者是阻塞,后者是非阻塞
+- acceptor阻塞的接收到请求,封装channel到一个PollerEvent事件里面,把事件加入Poller线程的events列表里
+- poller线程不停的轮询事件列表,把注册的事件注册到他的selector读上面,当有读事件接入,就尝试读取数据,若数据没有读完,继续下次循环;若数据读取完毕,则封装成一个SocketProcessor,交给线程池去执行
+
+### os的 select(),poll(),epoll()
+
+- poll() 得到有就绪的IO时，需要遍历去查询哪些IO是已就绪的，然后返回给用户线程去读写。
+- select() 同上,但是fd数量比较小,限制的io的数量
+- epoll() 如果有IO已经就绪，不需要遍历,就可以直接给用户线程返回所有就绪的事件，可以对这个就绪的IO通道进行读写。
 
 
 
@@ -421,9 +511,3 @@
 会出现违背双亲委派机制的情况吗?  tomcat
 
 
-- 如何正确退出一个线程
-   1. 通过interrupt()设置中断标记,代码里适当的地方判断线程中断状态,return或break等操作退出;对于处于 wait sleep join状态的线程,中断标记将会被清除,并抛出InterruptedException异常
-   2. 使用boolean值的volatile标志位,通过判断标记来终止线程,但无法解决阻塞和sleep状态下的线程
-   3. stop()方法，立即停止,已被弃用
-   > https://blog.csdn.net/qq_24693837/article/details/71601044
-   > https://blog.csdn.net/Smile_Miracle/article/details/71550548

@@ -318,12 +318,22 @@
    5. 组合使用
       + 计算密集型的应用可能会考虑计算的吞吐量，在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge加Parallel Old收集器
       + 在要求低延时、系统停顿时间最短的场景下，可以使用ParNew + CMS,CMS可以满足与用户线程并发执行，所以需要在老年代还有一定空间的时候就执行回收。而且使用的是标记清除算法，会产生碎片导致可能因为大对象触发更多full gc
+      + CPU总执行时间=用户线程时间+gc线程总时间,而吞吐量是指用户线程时间占cpu总时间的多少
+      + gc的目标是`吞吐量高 或者 停顿时间短`
+         1. gc总时间=每次gc时间的总和
+         2. 由于每次gc都会带来cpu上下文切换等开销,因此通过减少gc次数,来减少总的gc时间开销;由于偶尔才会gc一次,所以gc回收率也相对较高,可能比多次gc所花的时间效率上更高
+         3. 若想达到每次停顿比较短,那可以通过增加gc的次数,使每次回收的垃圾比较少,来减少停顿时间
+         4. Parallel组合的方式满足第二点的`gc次数少`和`gc效率高`,以使得系统吞吐量比较高
+         5. ParNew和CMS组合,满足第三点的`gc次数相对频繁` 和 `gc停顿时间短`,同时由于CMS其中两个阶段是可以`和用户线程并发执行`的,所以`进一步缩短了停顿时间`
+         > http://ifeve.com/useful-jvm-flags-part-6-throughput-collector/
+      
    6. 并行与并发
-      + Parallel 的是并行的，可以同时利用多个cpu
-      + Concurrent 是并发的，gc线程和用户线程可以交替并发执行
+      + Parallel 的是并行的，可以同时利用多个cpu.并行指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态
+      + Concurrent 是并发的，gc线程和用户线程可以交替并发执行.指用户线程与垃圾收集线程同时执行（但不一定是并行的，可能会交替执行）
+      > https://crowhawk.github.io/2017/08/15/jvm_3/
    7. stop the world
       + Serial, ParNew, Parallel Scanvange, Parallel Old, Serial Old全程都会Stop the world，JVM这时候只运行GC线程，不运行用户线程
-      + CMS主要分为 initial Mark, Concurrent Mark, ReMark, Concurrent Sweep等阶段，initial Mark和Remark占整体的时间比较较小，它们会Stop the world. Concurrent Mark和Concurrent Sweep会和用户线程一起运行。
+      + CMS主要分为 `初始标记,并发标记,重新标记,并发清除`等阶段，`初始标记`和`重新标记`占整体的时间比较较小，它们会Stop the world. `并发标记 和 并发清楚` 会和用户线程一起运行。
       > https://blog.csdn.net/iter_zc/article/details/41746265
    > https://www.jianshu.com/p/50d5c88b272d
 
@@ -342,7 +352,7 @@
 
 - 解决循环依赖的问题
    1. 两种注入方式，构造器注入，setter注入，前者循环依赖抛异常，后者可以利用三级缓存实现注入，但只能解决单例作用域的Bean循环依赖
-   2. 构造器注入的方式，每一个bean的实例化都依赖下一个bean的实例化，所以就导致这个循环的的bean都无法实例化，所以蔡虎抛异常
+   2. 构造器注入的方式，每一个bean的实例化都依赖下一个bean的实例化，所以就导致这个循环的的bean都无法实例化，所以才会异常
    3. setter注入的方式，是在bean实例化之后，设置属性的阶段操作的，此时对象已经存在了，因此只需要依次设置引用即可
 
 ## Mybatis
@@ -401,3 +411,19 @@
 # 容器相关
 ## servlet原理 jsp原理
 ## Tomcat原理
+
+
+
+
+
+类加载器可以被继承
+三个类加载器是继承的关系吗
+会出现违背双亲委派机制的情况吗?  tomcat
+
+
+- 如何正确退出一个线程
+   1. 通过interrupt()设置中断标记,代码里适当的地方判断线程中断状态,return或break等操作退出;对于处于 wait sleep join状态的线程,中断标记将会被清除,并抛出InterruptedException异常
+   2. 使用boolean值的volatile标志位,通过判断标记来终止线程,但无法解决阻塞和sleep状态下的线程
+   3. stop()方法，立即停止,已被弃用
+   > https://blog.csdn.net/qq_24693837/article/details/71601044
+   > https://blog.csdn.net/Smile_Miracle/article/details/71550548

@@ -142,6 +142,12 @@
    3. 字符 char 2
    4. 布尔 boolean 1
    5. 字节 byte 1
+
+- string
+   1. String s = new String("abc");       "abc"在常量池中创建一个,new 在堆区创建一个  创建2个
+   2. String s1 = "abc";    直接在常量池创建
+   3. String s = new String("abc");  String s2 = new String("abc");     先按1中创建两个,后面再创建一个
+
 - Java引用 原理 强软弱虚
    1. 强：不回收
    2. 软：内存不足时回收
@@ -460,6 +466,12 @@
 # 数据库相关
 
 ## Mysql
+
+### MVCC
+- 当一个事务进行写操作的时候，把要操作的数据存一份，作为一个版本，其他事务进行读操作的时候，读取的数据是原有数据的版本，这样读操作并没有没已存在的写操作阻塞住，从而提高了并发度。
+
+
+
 ## ES
 ## 缓存 redis memcache
 
@@ -535,3 +547,48 @@
 - 手百 削峰处理,异步调用
 - 延迟任务
 - provider与consumer解耦,比如下单离店发送积分
+
+
+
+
+
+
+
+
+- 线程池 什么时候销毁线程 
+   + 大于coreSize的,超过保活时间的,会销毁
+
+- Spring切面通知执行的顺序
+   + 执行doAround方法，doBefore方法。然后执行method方法,doAfter、doAfterReturn
+
+- 事务的传播机制,隔离级别
+- mybatis的执行过程
+
+- ACID和脏读 
+
+
+- spring cloud
+- 微服务和soa的区别
+
+
+- redis 持久化机制  作用,异同点
+   + RDB,定时吧数据库内容写到磁盘文件上,fork一个进程,复制一份数据,写到磁盘上,然后替换原来的文件.数据量大或者写入频繁的话,可能会导致内存开销比较大,磁盘io升高
+   + AOF,有写库操作或者定时去写,追加到磁盘文件上.文件变大会有重写机制
+
+
+- redis支持事务吗?怎么实现的?跟传统数据库的区别
+
+
+
+- zk节点类型哪几种
+- pa.. 协议
+- zk如何加锁
+   1. zk创建 删除临时节点,若宕机离线会自动删除节点 没抢到锁的可以注册监听器,不需要等待轮询
+   2. redis需要考虑setnx和expire的原子性,以及delete和判断value的原子性,以及集群master未同步就宕机的问题,客户端没取到锁还需要等待重试
+   3. zk的加锁比较简单
+   > https://blog.csdn.net/A_BlackMoon/article/details/85834810is
+
+- 替换文件里的字符  sed  vim
+
+
+- 设计模式
